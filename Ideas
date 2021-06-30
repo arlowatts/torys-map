@@ -1,0 +1,12 @@
+Plot
+ - The player has to find or deliver an object
+ - The player has to learn something and return to the starting location
+ - The player has to destroy a villain
+ - The player is a villain?
+
+World generation
+ - Noise functions to generate the terrain of the world, which can inform the placement of towns, points of interest, ruins, and so on
+
+NPCs
+ - A very simple neural network could maybe be used as the personalities for the NPCs to choose the words they say and how they feel when you say certain things to them
+ - A text parser to try to determine if what the player is saying is positive or negative relative to the NPC (i.e. is the player being polite, rude, insulting, impatient, etc.)
