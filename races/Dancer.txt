@@ -16,7 +16,7 @@ Game Statistics
 	Alignment - Dancers have very loose morals, and so normally tend towards chaos. Good Dancers may find the world generally amusing, while Evil Dancers may believe it to be insignificant and beneath them.
 	Size - Dancers are tall but slender, ranging from 5 to 6 and a half feet tall. Your size is medium.
 	Speed - Your base walking speed is 30 feet, and you have a flying speed of 60 feet.
-	Ritual Magic - You have the ability to perform certain magical rituals. Each ritual takes 1 hour to perform, and you can perform one each day. You must also be able to sing and dance freely throghout the entire hour.
+	Ritual Magic - You have the ability to perform certain magical rituals. Each ritual takes 1 hour to perform, and you can perform one each day. You must also be able to sing and dance freely throughout the entire hour.
 		The Weather Dance
 			You have the ability to control the weather to a mild degree. To perform the ritual, you must be entirely outside for the full hour and must be able to see the sky. If you are blinded you cannot perform the ritual.
 			When you complete the ritual, you can change the weather in one of the following ways:
