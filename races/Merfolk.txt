@@ -1,6 +1,6 @@
 Merfolk
 
-	Merfolk are aquatic humanoids with webbed hands and feet and can breathe in air or water. They live in shallow lakes and near the shore in oceans.. Merfolk hunt with spears and nets, and compose riddles of deadly cunning.
+	Merfolk are aquatic humanoids with webbed hands and feet and can breathe in air or water. They live in shallow lakes and near the shore in oceans. Merfolk hunt with spears and nets, and compose riddles of deadly cunning.
 
 	Merfolk live in stone houses on the sea floor or lake bed, built simply from piled stones. They have no doors, and enter through windows small enough to keep predators out. Aside from their weapons, each Merfolk keeps very few possessions. They might have tokens or charms made of bone, shell, or stone, but rarely much else. Their spears are usually stone or wood, but they sometimes trade with Humans for metal equipment. Merfolk are very aware of the natural environment they live in, and when they hunt, they are always careful to maintain a healthy population of their prey for the next generation.  They do the same for the kelp and algea they also eat.
 
@@ -14,7 +14,7 @@ Game Statistics
 
 	Ability Score Increase - Your Intelligence score increases by 2, and your Strength score increases by 1.
 	Age - Merfolk mature at the same rate humans do, and normally live to be about 90 years old.
-	Alignment - Merfolk are are frequently Neutral and can be Good, Neutral, or Evil.
+	Alignment - Merfolk are frequently Neutral and can be Good, Neutral, or Evil.
 	Size - Merfolk stand between 5 and 6 feet tall and have a slender build. Your size is medium.
 	Speed - Your base walking speed is 25 feet, and you have a swimming speed of 35 feet.
 	Amphibious - You can breathe in both air and water.
