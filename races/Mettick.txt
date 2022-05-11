@@ -17,7 +17,7 @@ Game Statistics
 	Alignment - Metticks are are usually Lawful, and tend to be Neutral or Evil instead of Good.
 	Size - Metticks stand between 6 and a half and 8 feet tall. Your size is medium.
 	Speed - Your base walking speed is 30 feet.
-	Metalworking Mastery - You are proficient with smiths' tools, and you can add double your proficiency bonus to any checks you make to use smiths' tools instead of any profiency bonus you would normally apply.
+	Metalworking Mastery - You are proficient with smiths' tools, and you can add double your proficiency bonus to any checks you make to use smiths' tools instead of any proficiency bonus you would normally apply.
 	Poison Resistance - You have advantage on Constitution saving throws against poison. Additionally, whenever you roll a number less than 15 on the d20 for a Constitution saving throw against an airborne poison or some other airborne toxin, you can reroll the die.
 	Superior Strength - You have advantage on Strength (Athletics) checks.
 	Languages - You can speak, read, and write Common and Dwarvish.

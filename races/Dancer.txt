@@ -24,9 +24,9 @@ Game Statistics
 				- Increase or decrease the wind speed by up to 10 miles per hour within one mile of you
 				- Halve or double the level of precipitation within one mile of you
 				- Disperse or conjure a small patch of cloud directly above you
-			The change is effective for 1 hour after you complete the ritual, when the weather reverts to its previous condition.
+			The change is effective for 1 hour after you complete the ritual, then the weather reverts to its previous condition.
 		The Whisper Dance
-			At fifth level, you gain the ability to send a message through the wind that only one person can hear. When you complete the ritual, you can cast the Sending spell once requiring no material components, with the additional following restrictions:
+			At third level, you gain the ability to send a message through the wind that only one person can hear. When you complete the ritual, you can cast the Sending spell once requiring no material components, with the additional following restrictions:
 				- You and the target must both be on the same plane of existence
 				- You and the target must both be outside when the spell is cast
 	Claws - You lack opposable thumbs, and so your digital dexterity is greatly decreased. You must use both hands to wield any one-handed weapon, and you cannot wield two-handed weapons.
