@@ -1,0 +1,21 @@
+Ruemin Cavern
+
+	Ruemin Cavern is the main library of the Ruemins, the largest Booksmith colony on Arnsdale. Its ceiling is over 100 feet high and spotted with glowing gemstones of varying color.
+
+	Ruemin Cavern has been inhabited by the Ruemins for thousands of years. It boasts Arnsdale's most comprehensive collection of histories, from the foundation of Mettick cities to the changes in handwriting styles among Merfolk. The bookshelves stretch from floor to ceiling in labyrinthine paths thousands of feet long. Indeed, there is a very real danger of losing oneself among the books; the sheer density of knowledge in the area, both magical and not, distorts memory and perception in all but the most trained minds.
+
+Finding Books
+	In a library as vast as Ruemin Cavern, finding books on a particular subject, let alone a particular book, is very challenging. There are organizational methods in place that keep the books in a very strict order, but they are so complex that it requires a successful DC 20 Intelligence check to be able to understand how the books are sorted.
+
+Navigating the Labyrinth
+	The shelves in the cavern form a formidable labyrinth that suppresses memory and reasoning as a side effect of the volume of knowledge stored in the room. If you have a particular destination in mind, you must make a successful DC 14 Intelligence check to make your way there. If you fail, you become lost in the labyrinth. If you have no particular destination, you immediately become lost in the labyrinth. While you are lost in the labyrinth, you may make a DC 14 Intelligence check to reorient yourself once at the end of every hour. If the check fails, roll once on the random encounter table. If the check succeeds, you find yourself at a random point you have been at before when you weren't lost.
+
+Random Encounter Table
+d100
+Nothing			1-50
+A Booksmith Skeleton	51-65
+An Animated Booksmith
+Skeleton		66-70
+An Animated Book	71-85
+A Gelatinous Cube	86-95
+A Falling Gemstone	96-00

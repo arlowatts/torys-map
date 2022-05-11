@@ -2,6 +2,16 @@ Sibal
 
 	Sibal is a centre for commerce among all the races of Arnsdale, and is inhabited year-round by Humans. It lies in the centre of the Morane plateau, a flat grassland with 1700 feet of elevation.
 
-	People travel from very distant places to trade in Sibal, so whatever can't be purchased in the bustling streets and markets can always be found in a back alley or cellar. Sibal is supposedly governed by a council of ten Humans who are supposed to collect taxes and enforce some kind of order in the city, but the quantity and diversity of the inhabitants makes it nearly impossible. Trade occurs in many different kinds of mediums here; coins of any currency are accepted, but it is just as common to exchange goods based on their expected value. The year-round shopkeepers are adept at sweetening their words to sound truthful, and equally sensitive to the smallest exaggeration of value. Newcomers may find themselves swindled out of their socks if they're not careful. Literal robbery is also common in Sibal and nearly one in ten people on the street will pick your pocket if they think they can get away with it.
+	People travel from very distant places to trade in Sibal, so whatever can't be purchased in the bustling streets and markets can always be found in a back alley or cellar. Sibal is supposedly governed by a council of ten Humans who are supposed to collect taxes and enforce some kind of order in the city, but the quantity and diversity of the inhabitants makes it nearly impossible. Trade occurs in many different kinds of mediums here; coins of any currency are accepted, but it is just as common to exchange goods based on their expected value. The year-round shopkeepers are adept at sweetening their words to sound truthful, and equally sensitive to the smallest exaggeration of value. Newcomers may find themselves swindled out of their socks if they're not careful. Literal robbery is also common in Sibal; nearly one in ten people on the street will pick your pocket if they think they can get away with it.
 
-	Since the Morane plateau is situated on the outside of Arnsdale, Sibal gets lots of direct sunlight in the summer.
+Random Encounter Table
+d100			Street		Alley
+Pickpocket		1-20		1-40
+Obnoxious Salesperson	21-30		-
+Side Quest		31-40		41-50
+Magic Item Seller	41-45		51-55
+Armed Guards		46-60		-
+Brawl/Riot		61-65		56-60
+Dye Splash		66-75		-
+Swarm of Rats		-		61-75
+Nothing			76-00		76-00
