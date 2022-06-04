@@ -1,0 +1,9 @@
+Arnsdale Physical Properties:
+Large Radius: 9.16x10^6 m
+Small Radius: 1.41x10^5 m
+Rotation Period: 8.00x10^4 s
+Surface Area: 5.10x10^13 m^2
+
+The Heart Physical Properties:
+Radius: 1.60x10^3 m
+Mass: 7.10x10^22 kg
