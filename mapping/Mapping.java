@@ -6,11 +6,11 @@ import java.awt.image.ComponentSampleModel;
 import java.awt.image.DataBuffer;
 import java.awt.Point;
 
-public class TorusMap {
+public class Mapping {
 	public static final int NUM_BANDS = 1;
 	
 	private static JFrame frame;
-	private static WritableRaster map;
+	private static Map map;
 	
 	public static void main (String[] args) {
 		if (args.length == 1) {
@@ -22,18 +22,17 @@ public class TorusMap {
 			int width = Integer.parseInt(args[0]);
 			int height = Integer.parseInt(args[1]);
 			
-			ComponentSampleModel sample = new ComponentSampleModel(DataBuffer.TYPE_BYTE, width, height, 0, 0, new int[NUM_BANDS]);
-			
-			map = Raster.createWritableRaster(sample, new Point());
+			map = new Map(width, height, NUM_BANDS);
 		}
 		else {
 			System.out.println("To create a new map, pass a width and height as arguments");
 			return;
 		}
 		
-		for (int x = 0; x < map.getWidth(); x++) {
-			for (int y = 0; y < map.getHeight(); y++) {
-				System.out.print(map.getSample(x, y, 0) + " ");
+		for (int y = 0; y < map.getHeight(); y++) {
+			for (int x = 0; x < map.getWidth(); x++) {
+				map.setSample(x, y, 0, Math.random() * 1000);
+				System.out.print(map.getSample(x, y, 0) + "\t");
 			}
 			System.out.println();
 		}
