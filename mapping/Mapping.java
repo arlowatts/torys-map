@@ -1,4 +1,7 @@
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
 
 import java.awt.image.WritableRaster;
 import java.awt.image.Raster;
@@ -10,6 +13,7 @@ public class Mapping {
 	public static final int NUM_BANDS = 1;
 	
 	private static JFrame frame;
+	private static BufferedImage image;
 	private static Map map;
 	
 	public static void main (String[] args) {
@@ -36,5 +40,15 @@ public class Mapping {
 			}
 			System.out.println();
 		}
+		
+		image = map.toImage();
+		JLabel label = new JLabel(new ImageIcon(image));
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(label);
+		
+		frame = new JFrame("The Heart of a Dead Star");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
 }

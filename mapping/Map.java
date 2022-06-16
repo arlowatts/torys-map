@@ -10,10 +10,6 @@ public class Map {
 		raster = WritableRaster.createBandedRaster(DataBuffer.TYPE_INT, width, height, numBands, new Point());
 	}
 	
-	public BufferedImage createImage() {
-		return new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-	}
-	
 	public BufferedImage toImage() {
 		return toImage(createImage());
 	}
@@ -23,11 +19,16 @@ public class Map {
 		return image;
 	}
 	
+	public BufferedImage createImage() {
+		return new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+	}
+	
 	public void toFile(String fileName) {
-		byte[] bytes = new byte[0];
+		return;
 	}
 	
 	public int getSample(int x, int y, int band) {return raster.getSample(x, y, band);}
+	
 	public void setSample(int x, int y, int band, double val) {raster.setSample(x, y, band, val);}
 	
 	public WritableRaster getRaster() {return raster;}
