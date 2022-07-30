@@ -43,23 +43,26 @@ public class Mapping {
 		frame.getContentPane().add(label);
 		frame.pack();
 		
-		int R = 1000;
-		int r = 400;
+		int R = 100;
+		int r = 50;
 		
-		for (int phi = 0; phi < map.getWidth(); phi++) {
-			for (int theta = 0; theta < map.getHeight(); theta++) {
-				int x = (int)(Math.sin((double)phi / map.getWidth() * Math.PI) * (R + Math.cos((double)theta / map.getHeight() * Math.PI) * r)) + R + r;
-				int y = (int)(Math.cos((double)theta / map.getHeight() * Math.PI) * r) + r;
-				int z = (int)(Math.cos((double)phi / map.getWidth() * Math.PI) * (R + Math.cos((double)theta / map.getHeight() * Math.PI) * r)) + R + r;
+		for (int a = 0; a < map.getWidth(); a++) {
+			for (int b = 0; b < map.getHeight(); b++) {
+				double phi = (double)a / map.getWidth() * Math.PI * 2;
+				double theta = (double)b / map.getHeight() * Math.PI * 2;
 				
-				map.setSample(phi, theta, 0, (int)(Noise.getNoise(20, map.getWidth(), map.getHeight(), x, y, z) * 256));
+				int x = (int)(Math.sin(phi) * (R - Math.cos(theta) * r)) + R + r;
+				int y = (int)(Math.sin(theta) * r) + r;
+				int z = (int)(Math.cos(phi) * (R - Math.cos(theta) * r)) + R + r;
+				
+				map.setSample(a, b, 0, (int)(Noise.getNoise(25, map.getWidth(), map.getHeight(), x, y, z) * 256));
 			}
 		}
 		
 		map.toImage(image);
 		label.updateUI();
 		
-		try {ImageIO.write(image, "png", new File("torus_texture.png"));}
+		try {ImageIO.write(image, "png", new File("noise.png"));}
 		catch (IOException e) {System.out.println(e);}
 	}
 }
