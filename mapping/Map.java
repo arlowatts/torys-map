@@ -29,7 +29,7 @@ public class Map {
 	
 	public int getSample(int x, int y, int band) {return raster.getSample(x, y, band);}
 	
-	public void setSample(int x, int y, int band, double val) {raster.setSample(x, y, band, val);}
+	public void setSample(int x, int y, int band, int val) {raster.setSample(x, y, band, val);}
 	
 	public WritableRaster getRaster() {return raster;}
 	public int getWidth() {return raster.getWidth();}
