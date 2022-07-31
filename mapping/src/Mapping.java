@@ -43,7 +43,7 @@ public class Mapping {
 		frame.getContentPane().add(label);
 		frame.pack();
 		
-		/*int R = 100;
+		int R = 100;
 		int r = 50;
 		
 		for (int a = 0; a < map.getWidth(); a++) {
@@ -55,38 +55,35 @@ public class Mapping {
 				int y = (int)(Math.sin(theta) * r) + r;
 				int z = (int)(Math.cos(phi) * (R - Math.cos(theta) * r)) + R + r;
 				
-				map.setSample(a, b, 0, (int)(Noise.getNoise(25, map.getWidth(), map.getHeight(), x, y, z) * 256));
-			}
-		}*/
-		
-		int angleResolution = 100;
-		int lengthResolution = 50;
-		double lengthRange = 50;
-		
-		for (int x = 0; x < map.getWidth(); x++) {
-			for (int y = 0; y < map.getHeight(); y++) {
-				int a = x;
-				int b = y;
-				
-				double theta = Noise.getNoise(angleResolution, map.getWidth(), a, b) * Math.PI * 2;
-				double r = Noise.getNoise(lengthResolution, map.getWidth(), a, b) * lengthRange;
-				
-				a = (int)(a + Math.sin(theta) * r + lengthRange);
-				b = (int)(b + Math.cos(theta) * r + lengthRange);
-				
-				map.setSample(x, y, 0, (int)(Noise.getNoise(25, map.getWidth(), a, b) * 256));
-				
-				a = (int)(a + Math.sin(theta) * r + lengthRange);
-				b = (int)(b + Math.cos(theta) * r + lengthRange);
-				
-				map.setSample(x, y, 1, (int)(Noise.getNoise(25, map.getWidth(), a, b) * 256));
-				
-				a = (int)(a + Math.sin(theta) * r + lengthRange);
-				b = (int)(b + Math.cos(theta) * r + lengthRange);
-				
-				map.setSample(x, y, 2, (int)(Noise.getNoise(25, map.getWidth(), a, b) * 256));
+				map.setSample(a, b, 0, (int)(Noise.getNoise(0, map.getWidth(), map.getHeight(), x / 25.0, y / 25.0, z / 25.0) * 256));
 			}
 		}
+		
+		/*double angleResolution = 1.0 / 25;
+		double lengthResolution = 1.0 / 5;
+		double lengthRange = 0;
+		double colorResolution = 1.0 / 50;
+		
+		while (true) {
+			for (int x = 0; x < map.getWidth(); x++) {
+				for (int y = 0; y < map.getHeight(); y++) {
+					for (int i = 0; i < 3; i++) {
+						double theta = Noise.getNoise(0, map.getWidth() * angleResolution, x * angleResolution, y * angleResolution) * Math.PI * 2;
+						double r = Noise.getNoise(0, map.getWidth() * lengthResolution, x * lengthResolution, y * lengthResolution) * lengthRange;
+						
+						double a = x * colorResolution + Math.sin(theta) * r + map.getWidth();
+						double b = y * colorResolution + Math.cos(theta) * r + map.getHeight();
+						
+						map.setSample(x, y, i, (int)(Noise.getNoise(i, map.getWidth() * colorResolution, a, b) * 256));
+					}
+				}
+			}
+			
+			map.toImage(image);
+			label.updateUI();
+			
+			lengthRange += 0.25;
+		}*/
 		
 		map.toImage(image);
 		label.updateUI();
