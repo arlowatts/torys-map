@@ -1,14 +1,20 @@
 public class Noise {
-	public static double getNoise(int channel, double x) {
-		return lerp(random((long)x + randomLong(channel)), random((long)x + randomLong(channel) + 1), x % 1);
+	public static double getNoise(int channel, double resolution, double x) {
+		return lerp(random((long)(x / resolution) + randomLong(channel)),
+					random((long)(x / resolution) + randomLong(channel) + 1),
+					x / resolution % 1);
 	}
 	
-	public static double getNoise(int channel, double width, double x, double y) {
-		return lerp(getNoise(channel, x + (int)y * width), getNoise(channel, x + ((int)y + 1) * width), y % 1);
+	public static double getNoise(int channel, double resolution, double width, double x, double y) {
+		return lerp(getNoise(channel, resolution, x + (int)(y / resolution) * width),
+					getNoise(channel, resolution, x + ((int)(y / resolution) + 1) * width),
+					y / resolution % 1);
 	}
 	
-	public static double getNoise(int channel, double width, double height, double x, double y, double z) {
-		return lerp(getNoise(channel, width, x + (int)z * height * width, y), getNoise(channel, width, x + ((int)z + 1) * height * width, y), z % 1);
+	public static double getNoise(int channel, double resolution, double width, double height, double x, double y, double z) {
+		return lerp(getNoise(channel, resolution, width, x + (int)(z / resolution) * height * width, y),
+					getNoise(channel, resolution, width, x + ((int)(z / resolution) + 1) * height * width, y),
+					z / resolution % 1);
 	}
 	
 	public static double lerp(double a, double b, double t) {
