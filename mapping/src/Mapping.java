@@ -45,6 +45,7 @@ public class Mapping {
 		
 		double R = 5.05425;
 		double r = 1.31675;
+		double resolution = 1.5;
 		int layers = 5;
 		
 		for (int a = 0; a < map.getWidth(); a++) {
@@ -57,19 +58,24 @@ public class Mapping {
 				double z = Math.cos(phi) * (R - Math.cos(theta) * r) + R + r;
 				
 				double val = 0;
+				double factor = 1;
+				double scale = 0;
 				
 				for (int i = 0; i < layers; i++) {
-					double factor = 1.0 / Math.pow(2, (i + 1));
+					factor /= (i + 1);
+					scale += factor;
 					
-					val += Noise.getNoise(i, 1 * factor, map.getWidth(), map.getHeight(), x, y, z) * factor;
+					val += Noise.getNoise(i, resolution * factor, R, r, x, y, z) * factor;
 				}
 				
+				val /= scale;
+				
 				if (val < 0.5)
-					map.setSample(a, b, 2, (int)((val / 4 + 0.75) * 256));
+					map.setSample(a, b, 2, (int)((val / 2 + 0.3) * 256));
 				else if (val < 0.7)
 					map.setSample(a, b, 1, (int)(val * 256));
 				else {
-					for (int i = 0; i < 3; i++) map.setSample(a, b, i, 255);
+					for (int i = 0; i < 3; i++) map.setSample(a, b, i, (int)(val * 256));
 				}
 			}
 		}
