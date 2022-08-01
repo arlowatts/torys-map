@@ -1,1 +1,3 @@
-*.class
+mapping/build/
+mapping/*.png
+worldbuilding/images/
