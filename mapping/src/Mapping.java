@@ -45,8 +45,22 @@ public class Mapping {
 		
 		double R = 5.05425;
 		double r = 1.31675;
+		
 		double resolution = 1.5;
+		
 		int layers = 5;
+		
+		double factor = 1;
+		double scale = 0;
+		
+		double[] dimensions = {2 * (R + r), 2 * r, 2 * (R +  r)};
+		
+		for (int i = 0; i < layers; i++) {
+			factor /= (i + 1);
+			scale += factor;
+			
+			map.addNoiseLayer(new Noise(i, resolution * factor, factor, dimensions));
+		}
 		
 		for (int a = 0; a < map.getWidth(); a++) {
 			for (int b = 0; b < map.getHeight(); b++) {
@@ -58,14 +72,9 @@ public class Mapping {
 				double z = Math.cos(phi) * (R - Math.cos(theta) * r) + R + r;
 				
 				double val = 0;
-				double factor = 1;
-				double scale = 0;
 				
 				for (int i = 0; i < layers; i++) {
-					factor /= (i + 1);
-					scale += factor;
-					
-					val += Noise.getNoise(i, resolution * factor, R, r, x, y, z) * factor;
+					val += map.getNoiseLayer(i).getNoise(x, y, z);
 				}
 				
 				val /= scale;

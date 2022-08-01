@@ -1,5 +1,45 @@
 public class Noise {
-	public static double getNoise(int channel, double resolution, double x) {
+	private int channel, numDimensions;
+	private double resolution, scale;
+	private double[] dimensions;
+	
+	public Noise(int channel, double resolution, double scale, double[] dimensions) {
+		this.channel = channel;
+		this.resolution = resolution;
+		this.scale = scale;
+		this.numDimensions = dimensions.length;
+		this.dimensions = new double[numDimensions];
+		
+		for (int i = 0; i < numDimensions; i++) {
+			this.dimensions[i] = dimensions[i] / resolution;
+		}
+	}
+	
+	public double getNoise(double... coords) {
+		return getNoise(0, numDimensions, coords) * scale;
+	}
+	
+	private double getNoise(double a, int numDimensions, double[] coords) {
+		if (--numDimensions == 0) {
+			a = (a + coords[0]) / resolution;
+			
+			long c = (long)a + randomLong(channel);
+			
+			return lerp(random(c), random(c + 1), a % 1);
+		}
+		
+		double b = coords[numDimensions] / resolution;
+		
+		double prod = 1;
+		for (int i = 0; i < numDimensions; i++)
+			prod *= dimensions[i];
+		
+		return lerp(getNoise(a + (int)b * prod, numDimensions, coords),
+					getNoise(a + ((int)b + 1) * prod, numDimensions, coords),
+					b % 1);
+	}
+	
+	/*public static double getNoise(int channel, double resolution, double x) {
 		x /= resolution;
 		
 		return lerp(random((long)x + randomLong(channel)),
@@ -21,7 +61,7 @@ public class Noise {
 		return lerp(getNoise(channel, resolution, width, x + (int)z * height * width, y),
 					getNoise(channel, resolution, width, x + ((int)z + 1) * height * width, y),
 					z % 1);
-	}
+	}*/
 	
 	/*private static double getNoise(int channel, double resolution, double x, int numDimensions, double[] dimensions, double[] coords) {
 		double prod = 1;
