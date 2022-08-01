@@ -43,47 +43,36 @@ public class Mapping {
 		frame.getContentPane().add(label);
 		frame.pack();
 		
-		int R = 100;
-		int r = 50;
+		double R = 5.05425;
+		double r = 1.31675;
+		int layers = 5;
 		
 		for (int a = 0; a < map.getWidth(); a++) {
 			for (int b = 0; b < map.getHeight(); b++) {
 				double phi = (double)a / map.getWidth() * Math.PI * 2;
 				double theta = (double)b / map.getHeight() * Math.PI * 2;
 				
-				int x = (int)(Math.sin(phi) * (R - Math.cos(theta) * r)) + R + r;
-				int y = (int)(Math.sin(theta) * r) + r;
-				int z = (int)(Math.cos(phi) * (R - Math.cos(theta) * r)) + R + r;
+				double x = Math.sin(phi) * (R - Math.cos(theta) * r) + R + r;
+				double y = Math.sin(theta) * r + r;
+				double z = Math.cos(phi) * (R - Math.cos(theta) * r) + R + r;
 				
-				map.setSample(a, b, 0, (int)(Noise.getNoise(0, map.getWidth(), map.getHeight(), x / 25.0, y / 25.0, z / 25.0) * 256));
-			}
-		}
-		
-		/*double angleResolution = 1.0 / 25;
-		double lengthResolution = 1.0 / 5;
-		double lengthRange = 0;
-		double colorResolution = 1.0 / 50;
-		
-		while (true) {
-			for (int x = 0; x < map.getWidth(); x++) {
-				for (int y = 0; y < map.getHeight(); y++) {
-					for (int i = 0; i < 3; i++) {
-						double theta = Noise.getNoise(0, map.getWidth() * angleResolution, x * angleResolution, y * angleResolution) * Math.PI * 2;
-						double r = Noise.getNoise(0, map.getWidth() * lengthResolution, x * lengthResolution, y * lengthResolution) * lengthRange;
-						
-						double a = x * colorResolution + Math.sin(theta) * r + map.getWidth();
-						double b = y * colorResolution + Math.cos(theta) * r + map.getHeight();
-						
-						map.setSample(x, y, i, (int)(Noise.getNoise(i, map.getWidth() * colorResolution, a, b) * 256));
-					}
+				double val = 0;
+				
+				for (int i = 0; i < layers; i++) {
+					double factor = 1.0 / Math.pow(2, (i + 1));
+					
+					val += Noise.getNoise(i, 1 * factor, map.getWidth(), map.getHeight(), x, y, z) * factor;
+				}
+				
+				if (val < 0.5)
+					map.setSample(a, b, 2, (int)((val / 4 + 0.75) * 256));
+				else if (val < 0.7)
+					map.setSample(a, b, 1, (int)(val * 256));
+				else {
+					for (int i = 0; i < 3; i++) map.setSample(a, b, i, 255);
 				}
 			}
-			
-			map.toImage(image);
-			label.updateUI();
-			
-			lengthRange += 0.25;
-		}*/
+		}
 		
 		map.toImage(image);
 		label.updateUI();
