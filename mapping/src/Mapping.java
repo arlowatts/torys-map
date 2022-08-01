@@ -5,10 +5,6 @@ import java.awt.image.BufferedImage;
 
 import java.lang.Math;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.io.File;
-
 public class Mapping {
 	public static final int NUM_BANDS = 3;
 	
@@ -91,8 +87,5 @@ public class Mapping {
 		
 		map.toImage(image);
 		label.updateUI();
-		
-		try {ImageIO.write(image, "png", new File("noise.png"));}
-		catch (IOException e) {System.out.println(e);}
 	}
 }
