@@ -17,12 +17,12 @@ public class Noise {
 		}
 	}
 	
-	// Starter function for the iterative function
+	// Starter function for the recursive function
 	public double getNoise(double... coords) {
 		return getNoise(0, numDimensions, coords) * scale;
 	}
 	
-	// Iteratively creates simple smooth noise for any number of dimensions
+	// Recursively creates simple smooth noise for any number of dimensions
 	private double getNoise(double a, int numDimensions, double[] coords) {
 		// The end condition that lerps between two random values offset by the channel
 		if (--numDimensions == 0) {
