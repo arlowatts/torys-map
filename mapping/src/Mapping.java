@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.lang.Math;
 
 public class Mapping {
-	public static final int NUM_BANDS = 3;
+	public static final int NUM_BANDS = 1;
 	
 	private static JFrame frame;
 	private static BufferedImage image;
@@ -54,8 +54,15 @@ public class Mapping {
 		for (int i = 0; i < layers; i++) {
 			factor /= (i + 1);
 			scale += factor;
+		}
+		
+		factor = 1;
+		scale = 1 / scale;
+		
+		for (int i = 0; i < layers; i++) {
+			factor /= (i + 1);
 			
-			map.addNoiseLayer(new Noise(i, resolution * factor, factor, dimensions));
+			map.addNoiseLayer(0, new Noise(i, resolution * factor, factor * scale, dimensions));
 		}
 		
 		for (int a = 0; a < map.getWidth(); a++) {
@@ -70,22 +77,16 @@ public class Mapping {
 				double val = 0;
 				
 				for (int i = 0; i < layers; i++) {
-					val += map.getNoiseLayer(i).getNoise(x, y, z);
+					val += map.getNoiseLayer(0, i).getNoise(x, y, z);
 				}
 				
-				val /= scale;
-				
-				if (val < 0.5)
-					map.setSample(a, b, 2, (int)((val / 2 + 0.3) * 256));
-				else if (val < 0.7)
-					map.setSample(a, b, 1, (int)(val * 256));
-				else {
-					for (int i = 0; i < 3; i++) map.setSample(a, b, i, (int)(val * 256));
-				}
+				map.setSample(a, b, 0, (int)(val * 256));
 			}
 		}
 		
 		map.toImage(image);
 		label.updateUI();
+		
+		map.toFile("map.png");
 	}
 }
