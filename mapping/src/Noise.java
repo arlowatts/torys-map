@@ -47,7 +47,7 @@ public class Noise {
 	}
 	
 	// Linear interpolation
-	public static double lerp(double a, double b, double t) {
+	private static double lerp(double a, double b, double t) {
 		return a + t * (b - a);
 	}
 	
@@ -67,4 +67,13 @@ public class Noise {
 	public static double random(long x) {
 		return (double)(randomLong(x) >> 1) / Long.MAX_VALUE + 0.5;
 	}
+	
+	public int getChannel() {return channel;}
+	public int getNumDimensions() {return numDimensions;}
+	public double getResolution() {return resolution;}
+	public double getScale() {return scale;}
+	public double[] getDimensions() {return dimensions;}
+	
+	public void setChannel(int channel) {this.channel = channel;}
+	public void setScale(double scale) {this.scale = scale;}
 }
