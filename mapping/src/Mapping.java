@@ -70,9 +70,9 @@ public class Mapping {
 				double phi = (double)a / map.getWidth() * Math.PI * 2;
 				double theta = (double)b / map.getHeight() * Math.PI * 2;
 				
-				double x = Math.sin(phi) * (R - Math.cos(theta) * r) + R + r;
+				double x = Math.sin(phi) * (R + Math.cos(theta) * r) + R + r;
 				double y = Math.sin(theta) * r + r;
-				double z = Math.cos(phi) * (R - Math.cos(theta) * r) + R + r;
+				double z = Math.cos(phi) * (R + Math.cos(theta) * r) + R + r;
 				
 				double val = 0;
 				
