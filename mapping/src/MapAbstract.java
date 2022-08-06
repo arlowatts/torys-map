@@ -7,12 +7,12 @@ public abstract class MapAbstract {
 	public static final int GREEN_RANGE = 150;
 	public static final int SNOW_LINE = 190;
 	
-	private double width, height, zoom, currX, currY;
+	protected double zoom, currX, currY;
 	
-	private ArrayList<ArrayList<Noise>> altitudeNoise, temperatureNoise;
-	private ArrayList<Region> regions;
+	protected ArrayList<Noise> terrainNoise, temperatureNoise;
+	protected ArrayList<Region> regions;
 	
-	private boolean showContours;
+	protected boolean showContours;
 	
 	public abstract double getAltitude(double x, double y);
 	
@@ -22,9 +22,13 @@ public abstract class MapAbstract {
 	
 	public abstract double getAverageLight(double x, double y);
 	
+	public abstract double getAverageLight(double x, double y, double startTime, double endTime);
+	
 	public abstract double getTemperature(double x, double y, double time);
 	
 	public abstract double getAverageTemperature(double x, double y);
+	
+	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
 	
 	public abstract ArrayList<Region> getRegions(double x, double y);
 	
