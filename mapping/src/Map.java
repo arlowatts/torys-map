@@ -10,6 +10,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Map {
+	public static int SEA_LEVEL = 140;
+	public static int GREEN_RANGE = 150;
+	public static int SNOW_LINE = 190;
+	
 	private WritableRaster raster;
 	private ArrayList<ArrayList<Noise>> noise;
 	
@@ -29,14 +33,12 @@ public class Map {
 		
 		for (int x = 0; x < getWidth(); x++) {
 			for (int y = 0; y < getHeight(); y++) {
-				int val = raster.getSample(x, y, 0);
+				int val = raster.getSample(x, y, 0) / 10 * 10;
 				
 				boolean edge = false;
 				
 				for (int i = 0; i <= 1 && x + i < getWidth(); i++) {
 					for (int j = 0; j <= 1 && y + j < getHeight(); j++) {
-						//System.out.println(i + " " + j + " " + val / 10 + " " + getSample(x + i, y + j, 0) / 10);
-						
 						if (val / 10 != getSample(x + i, y + j, 0) / 10) {
 							edge = true;
 							break;
@@ -44,12 +46,12 @@ public class Map {
 					}
 				}
 				
-				if (val < 140) {
-					pixels[x + y * getWidth()] = val / 2 + 70;
+				if (val < SEA_LEVEL) {
+					pixels[x + y * getWidth()] = val;
 				}
-				else if (val < 190) {
+				else if (val < SNOW_LINE) {
 					if (edge) pixels[x + y * getWidth()] = 0;
-					else pixels[x + y * getWidth()] = val << 8;
+					else pixels[x + y * getWidth()] = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + GREEN_RANGE / 2) << 8;
 				}
 				else {
 					if (edge) pixels[x + y * getWidth()] = 0;
