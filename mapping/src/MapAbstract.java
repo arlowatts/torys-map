@@ -7,12 +7,11 @@ public abstract class MapAbstract {
 	public static final int GREEN_RANGE = 150;
 	public static final int SNOW_LINE = 190;
 	
-	protected double zoom, currX, currY;
+	protected double width, height, zoom, currX, currY;
+	protected boolean showContours;
 	
 	protected ArrayList<Noise> terrainNoise, temperatureNoise;
 	protected ArrayList<Region> regions;
-	
-	protected boolean showContours;
 	
 	public abstract double getAltitude(double x, double y);
 	
