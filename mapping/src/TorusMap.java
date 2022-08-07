@@ -11,6 +11,8 @@ public class TorusMap extends MapAbstract {
 		largeRadius = R;
 		smallRadius = r;
 		
+		width = 
+		
 		zoom = 1;
 		currX = 0;
 		currY = 0;
@@ -79,8 +81,8 @@ public class TorusMap extends MapAbstract {
 	public double[] getFullCoords(double x, double y) {
 		double[] coords = new double[3];
 		
-		double phi = (double)x / width * Math.PI * 2;
-		double theta = (double)y / height * Math.PI * 2;
+		double phi = x * Math.PI * 2;
+		double theta = y * Math.PI * 2;
 		
 		coords[0] = Math.sin(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius;
 		coords[1] = Math.sin(theta) * smallRadius + smallRadius;

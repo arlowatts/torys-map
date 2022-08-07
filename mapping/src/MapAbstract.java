@@ -7,7 +7,7 @@ public abstract class MapAbstract {
 	public static final int GREEN_RANGE = 150;
 	public static final int SNOW_LINE = 190;
 	
-	protected double width, height, zoom, currX, currY;
+	protected double zoom, currX, currY;
 	protected boolean showContours;
 	
 	protected ArrayList<Noise> terrainNoise, temperatureNoise;
@@ -45,7 +45,7 @@ public abstract class MapAbstract {
 		
 		for (int x = 0; x < imgWidth; x++) {
 			for (int y = 0; y < imgHeight; y++) {
-				int val = (int)(getAltitude(x, y) * 256);
+				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgHeight)) * 256);
 				
 				boolean edge = false;
 				
@@ -54,7 +54,7 @@ public abstract class MapAbstract {
 					
 					for (int i = 0; i <= 1 && x + i < imgWidth; i++) {
 						for (int j = 0; j <= 1 && y + j < imgHeight; j++) {
-							if ((i != 0 || j != 0) && val != (int)(getAltitude(x + i, y + j) * 25.6)) {
+							if ((i != 0 || j != 0) && val != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgHeight)) * 25.6)) {
 								edge = true;
 								break;
 							}
@@ -82,4 +82,7 @@ public abstract class MapAbstract {
 		
 		return image;
 	}
+	
+	public double scaledX(int x, int width) {return (x % width) * zoom / width + currX;}
+	public double scaledY(int y, int height) {return (y % height) * zoom / height + currY;}
 }
