@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 
 public abstract class MapAbstract {
+	public static final int POWER_OF_TWO = 1;
+	public static final int FACTORIAL = 2;
+	public static final int HARMONIC = 4;
+	
 	public static final int SEA_LEVEL = 140;
 	public static final int GREEN_RANGE = 150;
 	public static final int SNOW_LINE = 190;
