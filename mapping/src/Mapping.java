@@ -61,14 +61,7 @@ public class Mapping {
 			scale += factor;
 		}
 		
-		factor = 1;
 		scale = 1 / scale;
-		
-		/*for (int i = 0; i < layers; i++) {
-			factor /= (i + 1);
-			
-			map.addNoiseLayer(0, new Noise(i, resolution * factor, factor * scale, dimensions));
-		}*/
 		
 		for (int a = 0; a < map.getWidth(); a++) {
 			for (int b = 0; b < map.getHeight(); b++) {
