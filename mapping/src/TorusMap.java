@@ -11,8 +11,6 @@ public class TorusMap extends MapAbstract {
 		largeRadius = R;
 		smallRadius = r;
 		
-		width = 
-		
 		zoom = 1;
 		currX = 0;
 		currY = 0;
@@ -66,9 +64,6 @@ public class TorusMap extends MapAbstract {
 	
 	public ArrayList<Region> getRegions(double x, double y) {
 		ArrayList<Region> localRegions = new ArrayList<Region>();
-		
-		x %= width;
-		y %= height;
 		
 		for (int i = 0; i < regions.size(); i++) {
 			if (regions.get(i).pointInRegion(x, y))
