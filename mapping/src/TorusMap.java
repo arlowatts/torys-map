@@ -15,8 +15,11 @@ public class TorusMap extends MapAbstract {
 		currX = 0;
 		currY = 0;
 		
+		showContours = false;
+		
 		terrainNoise = new ArrayList<Noise>();
 		temperatureNoise = new ArrayList<Noise>();
+		regions = new ArrayList<Region>();
 	}
 	
 	public double getAltitude(double x, double y) {
@@ -60,11 +63,30 @@ public class TorusMap extends MapAbstract {
 	}
 	
 	public ArrayList<Region> getRegions(double x, double y) {
-		return new ArrayList<Region>();
+		ArrayList<Region> localRegions = new ArrayList<Region>();
+		
+		x %= width;
+		y %= height;
+		
+		for (int i = 0; i < regions.size(); i++) {
+			if (regions.get(i).pointInRegion(x, y))
+				localRegions.add(regions.get(i));
+		}
+		
+		return localRegions;
 	}
 	
 	public double[] getFullCoords(double x, double y) {
-		return new double[] {0, 0};
+		double[] coords = new double[3];
+		
+		double phi = (double)x / width * Math.PI * 2;
+		double theta = (double)y / height * Math.PI * 2;
+		
+		coords[0] = Math.sin(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius;
+		coords[1] = Math.sin(theta) * smallRadius + smallRadius;
+		coords[2] = Math.cos(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius;
+		
+		return coords;
 	}
 	
 	public double getX(double... coords) {
