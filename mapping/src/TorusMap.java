@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 public class TorusMap extends MapAbstract {
 	private double largeRadius, smallRadius;
 	
-	public TorusMap(double R, double r) {
+	public TorusMap(double R, double r, int altitudeNoiseType, int temperatureNoiseType) {
 		largeRadius = R;
 		smallRadius = r;
 		
