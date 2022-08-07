@@ -3,6 +3,10 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.File;
+
 import java.lang.Math;
 
 public class Mapping {
@@ -22,6 +26,8 @@ public class Mapping {
 			int width = Integer.parseInt(args[0]);
 			int height = Integer.parseInt(args[1]);
 			
+			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			
 			map = new Map(width, height, NUM_BANDS);
 		}
 		else {
@@ -34,7 +40,6 @@ public class Mapping {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		image = map.toImage();
 		JLabel label = new JLabel(new ImageIcon(image));
 		frame.getContentPane().add(label);
 		frame.pack();
@@ -87,6 +92,7 @@ public class Mapping {
 		map.toImage(image);
 		label.updateUI();
 		
-		map.toFile("map.png");
+		try {ImageIO.write(image, "png", new File("map.png"));}
+		catch (IOException e) {System.out.println(e);}
 	}
 }
