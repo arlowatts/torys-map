@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class Region {
 	private double[] boundingBox;
 	private ArrayList<double[]> vertices;
+	private ArrayList<Region> subRegions;
 	
 	public Region() {
 		boundingBox = new double[4];
 		vertices = new ArrayList<double[]>();
+		subRegions = new ArrayList<Region>();
 	}
 	
 	public void addVertex(double x, double y) {
