@@ -55,7 +55,7 @@ public abstract class MapAbstract {
 					
 					for (int i = 0; i <= 1 && x + i < imgWidth; i++) {
 						for (int j = 0; j <= 1 && y + j < imgHeight; j++) {
-							if (val != (int)(getAltitude(x + i, y + j) * 25.6)) {
+							if ((i != 0 || j != 0) && val != (int)(getAltitude(x + i, y + j) * 25.6)) {
 								edge = true;
 								break;
 							}
@@ -65,17 +65,17 @@ public abstract class MapAbstract {
 					val *= 10;
 				}
 				
-				if (val < SEA_LEVEL) {
-					pixels[x + y * imgWidth] = val;
+				if (val >= SEA_LEVEL) {
+					if (edge) val = 0;
+					
+					else if (val < SNOW_LINE)
+						val = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + GREEN_RANGE / 2) << 8;
+					
+					else
+						val = val | (val << 8) | (val << 16);
 				}
-				else if (val < SNOW_LINE) {
-					if (edge) pixels[x + y * imgWidth] = 0;
-					else pixels[x + y * imgWidth] = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + GREEN_RANGE / 2) << 8;
-				}
-				else {
-					if (edge) pixels[x + y * imgWidth] = 0;
-					else pixels[x + y * imgWidth] = val | (val << 8) | (val << 16);
-				}
+				
+				pixels[x + y * imgWidth] = val;
 			}
 		}
 		

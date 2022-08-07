@@ -20,9 +20,9 @@ public class TorusMap extends MapAbstract {
 	}
 	
 	public double getAltitude(double x, double y) {
-		double val = 0;
-		
 		double[] coords = getFullCoords(x, y);
+		
+		double val = 0;
 		
 		for (int i = 0; i < terrainNoise.size(); i++) {
 			val += terrainNoise.get(i).getNoise(coords);
