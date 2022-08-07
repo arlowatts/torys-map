@@ -64,11 +64,11 @@ public class Mapping {
 		factor = 1;
 		scale = 1 / scale;
 		
-		for (int i = 0; i < layers; i++) {
+		/*for (int i = 0; i < layers; i++) {
 			factor /= (i + 1);
 			
 			map.addNoiseLayer(0, new Noise(i, resolution * factor, factor * scale, dimensions));
-		}
+		}*/
 		
 		for (int a = 0; a < map.getWidth(); a++) {
 			for (int b = 0; b < map.getHeight(); b++) {
@@ -81,8 +81,10 @@ public class Mapping {
 				
 				double val = 0;
 				
+				factor = 1;
 				for (int i = 0; i < layers; i++) {
-					val += map.getNoiseLayer(0, i).getNoise(x, y, z);
+					factor /= (i + 1);
+					val += Noise.getNoise(i, resolution * factor, dimensions, x, y, z) * factor * scale;
 				}
 				
 				map.setSample(a, b, 0, (int)(val * 256));
