@@ -1,91 +1,135 @@
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.awt.image.DataBuffer;
-import java.awt.Point;
-
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.io.File;
-
 import java.util.ArrayList;
 
-public class Map {
-	public static int SEA_LEVEL = 140;
-	public static int GREEN_RANGE = 150;
-	public static int SNOW_LINE = 190;
+import java.awt.image.BufferedImage;
+
+public abstract class Map {
+	public static final double POWER_OF_TWO = 1;
+	public static final double FACTORIAL = 1 / 1.75;
+	public static final double SQUARES = 1 / 1.5;
 	
-	private WritableRaster raster;
-	private ArrayList<ArrayList<Noise>> noise;
+	public static final int SEA_LEVEL = 140;
+	public static final int GREEN_RANGE = 120;
+	public static final int SNOW_LINE = 190;
 	
-	// Initializes the map's raster and noise layers
-	public Map(int width, int height, int numBands) {
-		raster = WritableRaster.createBandedRaster(DataBuffer.TYPE_INT, width, height, numBands, new Point());
+	protected double baseAltitudeResolution, baseTemperatureResolution;
+	protected double altitudeNoiseType, temperatureNoiseType;
+	protected double zoom, currX, currY;
+	protected boolean showContours;
+	
+	protected ArrayList<Region> regions;
+	
+	public Map(double baseAltitudeResolution, double altitudeNoiseType, double baseTemperatureResolution, double temperatureNoiseType) {
+		this.baseAltitudeResolution = baseAltitudeResolution;
+		this.altitudeNoiseType = altitudeNoiseType;
 		
-		noise = new ArrayList<ArrayList<Noise>>();
+		this.baseTemperatureResolution = baseTemperatureResolution;
+		this.temperatureNoiseType = temperatureNoiseType;
 		
-		for (int i = 0; i < numBands; i++)
-			noise.add(new ArrayList<Noise>());
+		zoom = 1;
+		currX = 0;
+		currY = 0;
+		
+		showContours = false;
+		
+		regions = new ArrayList<Region>();
 	}
 	
-	// Creates a BufferedImage from the map's raster
+	public abstract double getAltitude(double x, double y);
+	public abstract double getWaterLevel(double x, double y);
+	
+	public abstract double getLight(double x, double y, double time);
+	public abstract double getAverageLight(double x, double y);
+	public abstract double getAverageLight(double x, double y, double startTime, double endTime);
+	
+	public abstract double getTemperature(double x, double y, double time);
+	public abstract double getAverageTemperature(double x, double y);
+	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
+	
+	public abstract ArrayList<Region> getRegions(double x, double y);
+	
+	public abstract double[] getFullCoords(double x, double y);
+	
+	public abstract double getX(double... coords);
+	public abstract double getY(double... coords);
+	
 	public BufferedImage toImage(BufferedImage image) {
-		int[] pixels = new int[getWidth() * getHeight()];
+		int imgWidth = image.getWidth();
+		int imgHeight = image.getHeight();
 		
-		for (int x = 0; x < getWidth(); x++) {
-			for (int y = 0; y < getHeight(); y++) {
-				int val = raster.getSample(x, y, 0) / 10 * 10;
+		int[] pixels = new int[imgWidth * imgHeight];
+		
+		for (int x = 0; x < imgWidth; x++) {
+			for (int y = 0; y < imgHeight; y++) {
+				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgHeight)) * 256);
 				
 				boolean edge = false;
 				
-				for (int i = 0; i <= 1 && x + i < getWidth(); i++) {
-					for (int j = 0; j <= 1 && y + j < getHeight(); j++) {
-						if (val / 10 != getSample(x + i, y + j, 0) / 10) {
-							edge = true;
-							break;
+				if (showContours) {
+					val = (int)(val * 0.1 * zoom);
+					
+					for (int i = 0; i <= 1 && x + i < imgWidth; i++) {
+						for (int j = 0; j <= 1 && y + j < imgHeight; j++) {
+							if ((i != 0 || j != 0) && val != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgHeight)) * 25.6 * zoom)) {
+								edge = true;
+								break;
+							}
 						}
 					}
+					
+					val /= 0.1 * zoom;
 				}
 				
-				if (val < SEA_LEVEL) {
-					pixels[x + y * getWidth()] = val;
+				if (val >= SEA_LEVEL) {
+					if (edge) val = 0;
+					
+					else if (val < SNOW_LINE)
+						val = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + (int)(GREEN_RANGE * 0.75)) << 8;
+					
+					else
+						val = val | (val << 8) | (val << 16);
 				}
-				else if (val < SNOW_LINE) {
-					if (edge) pixels[x + y * getWidth()] = 0;
-					else pixels[x + y * getWidth()] = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + GREEN_RANGE / 2) << 8;
-				}
-				else {
-					if (edge) pixels[x + y * getWidth()] = 0;
-					else pixels[x + y * getWidth()] = val | (val << 8) | (val << 16);
-				}
+				
+				pixels[x + y * imgWidth] = val;
 			}
 		}
 		
-		image.setRGB(0, 0, getWidth(), getHeight(), pixels, 0, getWidth());
+		image.setRGB(0, 0, imgWidth, imgHeight, pixels, 0, imgWidth);
 		
 		return image;
 	}
 	
-	public BufferedImage toImage() {
-		return toImage(createImage());
+	public double scaledX(int x, int width) {return (x % width) * zoom / width + currX;}
+	public double scaledY(int y, int height) {return (y % height) * zoom / height + currY;}
+	
+	// Getters
+	public double getBaseAltitudeResolution() {return baseAltitudeResolution;}
+	public double getBaseTermperatureResolution() {return baseTemperatureResolution;}
+	
+	public double getAltitudeNoiseType() {return altitudeNoiseType;}
+	public double getTemperatureNoiseType() {return temperatureNoiseType;}
+	
+	public double getZoom() {return zoom;}
+	
+	public double getCurrX() {return currX;}
+	public double getCurrY() {return currY;}
+	
+	public boolean getShowContours() {return showContours;}
+	
+	// Setters
+	public void setBaseAltitudeResolution(double baseAltitudeResolution) {this.baseAltitudeResolution = baseAltitudeResolution;}
+	public void setBaseTemperatureResolution(double baseTemperatureResolution) {this.baseTemperatureResolution = baseTemperatureResolution;}
+	
+	public void setAltitudeNoiseType(double altitudeNoiseType) {this.altitudeNoiseType = altitudeNoiseType;}
+	public void setTemperatureNoiseType(double temperatureNoiseType) {this.temperatureNoiseType = temperatureNoiseType;}
+	
+	public void setZoom(double zoom) {this.zoom = zoom;}
+	
+	public void setCurrX(double currX) {this.currX = currX;}
+	public void setCurrY(double currY) {this.currY = currY;}
+	public void setCurrPos(double x, double y) {
+		currX = x;
+		currY = y;
 	}
 	
-	public BufferedImage createImage() {
-		return new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-	}
-	
-	// Writes the map to a file
-	public void toFile(String fileName) {
-		try {ImageIO.write(toImage(), "png", new File(fileName));}
-		catch (IOException e) {System.out.println(e);}
-	}
-	
-	public int getSample(int x, int y, int band) {return raster.getSample(x, y, band);}
-	public void setSample(int x, int y, int band, int val) {raster.setSample(x, y, band, val);}
-	
-	public Noise getNoiseLayer(int band, int index) {return noise.get(band).get(index);}
-	public void addNoiseLayer(int band, Noise layer) {noise.get(band).add(layer);}
-	
-	public WritableRaster getRaster() {return raster;}
-	public int getWidth() {return raster.getWidth();}
-	public int getHeight() {return raster.getHeight();}
+	public void setShowContours(boolean showContours) {this.showContours = showContours;}
 }

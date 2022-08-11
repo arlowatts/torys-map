@@ -4,32 +4,34 @@ import java.lang.Math;
 
 import java.awt.image.BufferedImage;
 
-public class TorusMap extends MapAbstract {
+public class TorusMap extends Map {
 	private double largeRadius, smallRadius;
+	private double[] spaceDimensions;
 	
-	public TorusMap(double R, double r, int altitudeNoiseType, int temperatureNoiseType) {
+	public TorusMap(double R, double r, double baseAltitudeResolution, double altitudeNoiseType, double baseTemperatureResolution, double temperatureNoiseType) {
+		super(baseAltitudeResolution, altitudeNoiseType, baseTemperatureResolution, temperatureNoiseType);
+		
 		largeRadius = R;
 		smallRadius = r;
 		
-		zoom = 1;
-		currX = 0;
-		currY = 0;
-		
-		showContours = false;
-		
-		terrainNoise = new ArrayList<Noise>();
-		temperatureNoise = new ArrayList<Noise>();
-		regions = new ArrayList<Region>();
+		spaceDimensions = new double[] {2 * (largeRadius + smallRadius), 2 * smallRadius, 2 * (largeRadius + smallRadius)};
 	}
 	
 	public double getAltitude(double x, double y) {
 		double[] coords = getFullCoords(x, y);
 		
 		double val = 0;
+		double scale = 1;
 		
-		for (int i = 0; i < terrainNoise.size(); i++) {
-			val += terrainNoise.get(i).getNoise(coords);
+		for (int i = 0; scale > 0.025 * zoom; i++) {
+			if (altitudeNoiseType == POWER_OF_TWO) scale *= 0.5;
+			else if (altitudeNoiseType == FACTORIAL) scale /= i + 1;
+			else if (altitudeNoiseType == SQUARES) scale = 1 / ((i + 1) * (i + 1));
+			
+			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, coords) * scale;
 		}
+		
+		val *= altitudeNoiseType;
 		
 		return Math.min(Math.max(val, 0), 1);
 	}

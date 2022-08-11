@@ -28,7 +28,7 @@ public class Mapping {
 			
 			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 			
-			map = new Map(width, height, NUM_BANDS);
+			map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		}
 		else {
 			System.out.println("To create a new map, enter a width and height as arguments");
@@ -44,50 +44,15 @@ public class Mapping {
 		frame.getContentPane().add(label);
 		frame.pack();
 		
-		double R = 5.05425;
-		double r = 1.31675;
-		
-		double resolution = 1.5;
-		
-		int layers = 5;
-		
-		double factor = 1;
-		double scale = 0;
-		
-		double[] dimensions = {2 * (R + r), 2 * r, 2 * (R +  r)};
-		
-		for (int i = 0; i < layers; i++) {
-			factor /= (i + 1);
-			scale += factor;
+		while (true) {
+			map.setZoom(map.getZoom() * 0.9);
+			map.setCurrPos(0.55 - map.getZoom() / 2, 0.5 - map.getZoom() / 2);
+			
+			map.toImage(image);
+			label.updateUI();
 		}
 		
-		scale = 1 / scale;
-		
-		for (int a = 0; a < map.getWidth(); a++) {
-			for (int b = 0; b < map.getHeight(); b++) {
-				double phi = (double)a / map.getWidth() * Math.PI * 2;
-				double theta = (double)b / map.getHeight() * Math.PI * 2;
-				
-				double x = Math.sin(phi) * (R + Math.cos(theta) * r) + R + r;
-				double y = Math.sin(theta) * r + r;
-				double z = Math.cos(phi) * (R + Math.cos(theta) * r) + R + r;
-				
-				double val = 0;
-				
-				factor = 1;
-				for (int i = 0; i < layers; i++) {
-					factor /= (i + 1);
-					val += Noise.getNoise(i, resolution * factor, dimensions, x, y, z) * factor * scale;
-				}
-				
-				map.setSample(a, b, 0, (int)(val * 256));
-			}
-		}
-		
-		map.toImage(image);
-		label.updateUI();
-		
-		try {ImageIO.write(image, "png", new File("map.png"));}
-		catch (IOException e) {System.out.println(e);}
+		//try {ImageIO.write(image, "png", new File("map.png"));}
+		//catch (IOException e) {System.out.println(e);}
 	}
 }
