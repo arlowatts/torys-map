@@ -44,15 +44,10 @@ public class Mapping {
 		frame.getContentPane().add(label);
 		frame.pack();
 		
-		while (true) {
-			map.setZoom(map.getZoom() * 0.9);
-			map.setCurrPos(0.55 - map.getZoom() / 2, 0.5 - map.getZoom() / 2);
-			
-			map.toImage(image);
-			label.updateUI();
-		}
+		map.toImage(image);
+		label.updateUI();
 		
-		//try {ImageIO.write(image, "png", new File("map.png"));}
-		//catch (IOException e) {System.out.println(e);}
+		try {ImageIO.write(image, "png", new File("map.png"));}
+		catch (IOException e) {System.out.println(e);}
 	}
 }

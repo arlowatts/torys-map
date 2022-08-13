@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 
 public abstract class Map {
-	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the sequence sum(k=1,inf)(1/2^k) is 1.0
-	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the sequence sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
-	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the sequence sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
+	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
+	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
+	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the series sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
 	
 	public static final int SEA_LEVEL = 140;
 	public static final int GREEN_RANGE = 120;

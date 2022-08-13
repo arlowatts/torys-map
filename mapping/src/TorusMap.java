@@ -27,7 +27,6 @@ public class TorusMap extends Map {
 			if (altitudeNoiseType == POWER_OF_TWO) scale *= 0.5;
 			else if (altitudeNoiseType == FACTORIAL) scale /= i + 1;
 			else if (altitudeNoiseType == SQUARES) scale = 1 / ((i + 1) * (i + 1));
-			//else System.out.println(altitudeNoiseType);
 			
 			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, coords) * scale;
 		}
