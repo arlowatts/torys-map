@@ -1,7 +1,7 @@
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.image.BufferedImage;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -9,16 +9,20 @@ import java.io.File;
 
 import java.lang.Math;
 
-public class Mapping {
-	public static final int NUM_BANDS = 1;
+public class Mapping extends Application {
+	private WritableImage image;
+	private Map map;
 	
-	private static JFrame frame;
-	private static BufferedImage image;
-	private static Map map;
+	@Override
+	public void start(Stage stage) {
+		image = new WritableImage(2000, 500);
+		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
+		
+		System.out.println("Running");
+	}
 	
-	public static void main (String[] args) {
+	/*public static void main (String[] args) {
 		if (args.length == 1) {
-			/* load map from file */
 			System.out.println("To create a new map, enter a width and height as arguments");
 			return;
 		}
@@ -49,5 +53,9 @@ public class Mapping {
 		
 		try {ImageIO.write(image, "png", new File("map.png"));}
 		catch (IOException e) {System.out.println(e);}
+	}*/
+	
+	public static void main(String[] args) {
+		launch();
 	}
 }

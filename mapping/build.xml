@@ -2,6 +2,7 @@
 
 	<property name="src" location="src"/>
 	<property name="build" location="build"/>
+	<property name="path_to_fx" location="C:\Program Files\javafx-sdk-18.0.2\lib"/>
 
 	<target name="init">
 		<tstamp/>
@@ -9,13 +10,16 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+		<javac modulepath="${path_to_fx}" srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<compilerarg value="--add-modules"/>
+			<compilerarg value="javafx.controls"/>
+		</javac>
 	</target>
 
 	<target name="run" depends="compile">
-		<java fork="true" classpath="${build}" sourcefile="${src}/mapping.java">
-			<arg value="${width}"/>
-			<arg value="${height}"/>
+		<java modulepath="${path_to_fx}" fork="true" classpath="${build}" sourcefile="${src}/mapping.java">
+			<jvmarg value="--add-modules"/>
+			<jvmarg value="javafx.controls"/>
 		</java>
 	</target>
 
