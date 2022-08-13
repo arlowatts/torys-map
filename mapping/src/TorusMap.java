@@ -23,10 +23,11 @@ public class TorusMap extends Map {
 		double val = 0;
 		double scale = 1;
 		
-		for (int i = 0; scale > 0.025 * zoom; i++) {
+		for (int i = 0; scale > 0.1 * zoom; i++) {
 			if (altitudeNoiseType == POWER_OF_TWO) scale *= 0.5;
 			else if (altitudeNoiseType == FACTORIAL) scale /= i + 1;
 			else if (altitudeNoiseType == SQUARES) scale = 1 / ((i + 1) * (i + 1));
+			//else System.out.println(altitudeNoiseType);
 			
 			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, coords) * scale;
 		}
