@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 
 public class Region {
+	private String name;
 	private double[] boundingBox;
 	private ArrayList<double[]> vertices;
 	private ArrayList<Region> subRegions;
 	
-	public Region() {
+	public Region(String name) {
+		this.name = name;
 		boundingBox = new double[4];
 		vertices = new ArrayList<double[]>();
 		subRegions = new ArrayList<Region>();
@@ -31,4 +33,7 @@ public class Region {
 	public boolean pointInRegion(double x, double y) {
 		return pointInBoundingBox(x, y);
 	}
+	
+	// Getters
+	public String getName() {return name;}
 }
