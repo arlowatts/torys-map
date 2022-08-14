@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
-import java.awt.image.BufferedImage;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.PixelWriter;
 
 public abstract class Map {
 	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
@@ -52,11 +53,11 @@ public abstract class Map {
 	public abstract double getX(double... coords);
 	public abstract double getY(double... coords);
 	
-	public BufferedImage toImage(BufferedImage image) {
-		int imgWidth = image.getWidth();
-		int imgHeight = image.getHeight();
+	public WritableImage toImage(WritableImage image) {
+		int imgWidth = (int)image.getWidth();
+		int imgHeight = (int)image.getHeight();
 		
-		int[] pixels = new int[imgWidth * imgHeight];
+		PixelWriter writer = image.getPixelWriter();
 		
 		for (int x = 0; x < imgWidth; x++) {
 			for (int y = 0; y < imgHeight; y++) {
@@ -89,11 +90,9 @@ public abstract class Map {
 						val = val | (val << 8) | (val << 16);
 				}
 				
-				pixels[x + y * imgWidth] = val;
+				writer.setArgb(x, y, val | (255 << 24));
 			}
 		}
-		
-		image.setRGB(0, 0, imgWidth, imgHeight, pixels, 0, imgWidth);
 		
 		return image;
 	}
