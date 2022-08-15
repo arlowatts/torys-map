@@ -2,8 +2,6 @@ import java.util.ArrayList;
 
 import java.lang.Math;
 
-import java.awt.image.BufferedImage;
-
 public class TorusMap extends Map {
 	private double largeRadius, smallRadius;
 	private double[] spaceDimensions;
@@ -64,17 +62,6 @@ public class TorusMap extends Map {
 	
 	public double getAverageTemperature(double x, double y, double startTime, double endTime) {
 		return 0;
-	}
-	
-	public ArrayList<Region> getRegions(double x, double y) {
-		ArrayList<Region> localRegions = new ArrayList<Region>();
-		
-		for (int i = 0; i < regions.size(); i++) {
-			if (regions.get(i).pointInRegion(x, y))
-				localRegions.add(regions.get(i));
-		}
-		
-		return localRegions;
 	}
 	
 	public double[] getFullCoords(double x, double y) {

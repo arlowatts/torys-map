@@ -6,8 +6,6 @@ import javafx.concurrent.Task;
 
 import java.util.ArrayList;
 
-import java.lang.Math;
-
 public abstract class Map extends Service<WritableImage> {
 	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
 	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
@@ -57,12 +55,21 @@ public abstract class Map extends Service<WritableImage> {
 	public abstract double getAverageTemperature(double x, double y);
 	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
 	
-	public abstract ArrayList<Region> getRegions(double x, double y);
-	
 	public abstract double[] getFullCoords(double x, double y);
 	
 	public abstract double getX(double... coords);
 	public abstract double getY(double... coords);
+	
+	public ArrayList<Region> getRegions(double x, double y) {
+		ArrayList<Region> localRegions = new ArrayList<Region>();
+		
+		for (int i = 0; i < regions.size(); i++) {
+			if (regions.get(i).pointInRegion(x, y))
+				localRegions.add(regions.get(i));
+		}
+		
+		return localRegions;
+	}
 	
 	public WritableImage toImage() {
 		int imgWidth = (int)image.getWidth();
