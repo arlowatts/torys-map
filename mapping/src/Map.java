@@ -3,6 +3,7 @@ import javafx.scene.image.PixelFormat;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker.State;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,8 @@ public abstract class Map extends Service<WritableImage> {
 	protected boolean showContours;
 	
 	protected ArrayList<Region> regions;
+	
+	private boolean cancelled = false;
 	
 	public Map(double baseAltitudeResolution, double altitudeNoiseType, double baseTemperatureResolution, double temperatureNoiseType) {
 		super();
@@ -71,7 +74,7 @@ public abstract class Map extends Service<WritableImage> {
 		return localRegions;
 	}
 	
-	public WritableImage toImage() {
+	public void toImage() {
 		int imgWidth = (int)image.getWidth();
 		int imgHeight = (int)image.getHeight();
 		
@@ -79,6 +82,8 @@ public abstract class Map extends Service<WritableImage> {
 		
 		for (int x = 0; x < imgWidth; x++) {
 			for (int y = 0; y < imgHeight; y++) {
+				if (cancelled) return;
+				
 				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
 				
 				boolean edge = false;
@@ -109,8 +114,6 @@ public abstract class Map extends Service<WritableImage> {
 		}
 		
 		image.getPixelWriter().setPixels(0, 0, imgWidth, imgHeight, PixelFormat.getIntArgbInstance(), pixels, 0, imgWidth);
-		
-		return image;
 	}
 	
 	protected Task<WritableImage> createTask() {
@@ -121,6 +124,12 @@ public abstract class Map extends Service<WritableImage> {
 			}
 		};
 	}
+	
+	@Override
+	protected void cancelled() {cancelled = true;}
+	
+	@Override
+	protected void ready() {cancelled = false;}
 	
 	public double scaledX(int x, int width) {return x * zoom / width + currX;}
 	public double scaledY(int y, int width) {return y * zoom / width * sizeRatio + currY;}
