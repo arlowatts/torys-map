@@ -14,7 +14,9 @@ public class TorusMap extends Map {
 		largeRadius = R;
 		smallRadius = r;
 		
-		spaceDimensions = new double[] {2 * (largeRadius + smallRadius), 2 * smallRadius, 2 * (largeRadius + smallRadius)};
+		setSizeRatio();
+		
+		spaceDimensions = new double[] {2 * (R + r), 2 * r, 2 * (R + r)};
 	}
 	
 	public double getAltitude(double x, double y) {
@@ -94,5 +96,25 @@ public class TorusMap extends Map {
 	
 	public double getY(double... coords) {
 		return 0;
+	}
+	
+	// Getters
+	public double getLargeRadius() {return largeRadius;}
+	public double getSmallRadius() {return smallRadius;}
+	
+	// Setters
+	public void setLargeRadius(double R) {
+		largeRadius = R;
+		setSizeRatio();
+	}
+	
+	public void setSmallRadius(double r) {
+		smallRadius = r;
+		setSizeRatio();
+	}
+	
+	// Helpers
+	protected void setSizeRatio() {
+		sizeRatio = (largeRadius + smallRadius) / smallRadius;
 	}
 }

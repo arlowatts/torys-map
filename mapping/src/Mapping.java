@@ -12,14 +12,18 @@ public class Mapping extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		image = new WritableImage(2000, 500);
+		int imageWidth = 2000;
+		int imageHeight = 750;
+		
+		image = new WritableImage(imageWidth, imageHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
+		map.setImage(image);
 		
-		map.toImage(image);
-		
-		Scene scene = new Scene(new StackPane(new ImageView(image)), 2000, 500);
+		Scene scene = new Scene(new StackPane(new ImageView(image)), imageWidth, imageHeight);
         stage.setScene(scene);
 		stage.show();
+		
+		map.start();
 	}
 	
 	public static void main(String[] args) {

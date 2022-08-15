@@ -13,6 +13,7 @@
 		<javac modulepath="${path_to_fx}" srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<compilerarg value="--add-modules"/>
 			<compilerarg value="javafx.controls"/>
+			<compilerarg value="-Xlint:unchecked"/>
 		</javac>
 	</target>
 

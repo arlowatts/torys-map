@@ -1,9 +1,14 @@
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.PixelFormat;
+
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+
 import java.util.ArrayList;
 
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.PixelWriter;
+import java.lang.Math;
 
-public abstract class Map {
+public abstract class Map extends Service<WritableImage> {
 	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
 	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
 	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the series sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
@@ -12,14 +17,20 @@ public abstract class Map {
 	public static final int GREEN_RANGE = 120;
 	public static final int SNOW_LINE = 190;
 	
+	protected WritableImage image;
+	
 	protected double baseAltitudeResolution, baseTemperatureResolution;
 	protected double altitudeNoiseType, temperatureNoiseType;
+	
 	protected double zoom, currX, currY;
+	protected double sizeRatio;
 	protected boolean showContours;
 	
 	protected ArrayList<Region> regions;
 	
 	public Map(double baseAltitudeResolution, double altitudeNoiseType, double baseTemperatureResolution, double temperatureNoiseType) {
+		super();
+		
 		this.baseAltitudeResolution = baseAltitudeResolution;
 		this.altitudeNoiseType = altitudeNoiseType;
 		
@@ -53,31 +64,27 @@ public abstract class Map {
 	public abstract double getX(double... coords);
 	public abstract double getY(double... coords);
 	
-	public WritableImage toImage(WritableImage image) {
+	public WritableImage toImage() {
 		int imgWidth = (int)image.getWidth();
 		int imgHeight = (int)image.getHeight();
 		
-		PixelWriter writer = image.getPixelWriter();
+		int[] pixels = new int[imgWidth * imgHeight];
 		
 		for (int x = 0; x < imgWidth; x++) {
 			for (int y = 0; y < imgHeight; y++) {
-				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgHeight)) * 256);
+				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
 				
 				boolean edge = false;
 				
 				if (showContours) {
-					val = (int)(val * 0.1 * zoom);
-					
 					for (int i = 0; i <= 1 && x + i < imgWidth; i++) {
 						for (int j = 0; j <= 1 && y + j < imgHeight; j++) {
-							if ((i != 0 || j != 0) && val != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgHeight)) * 25.6 * zoom)) {
+							if ((i != 0 || j != 0) && (int)(val * 0.1 * zoom) != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgWidth)) * 25.6 * zoom)) {
 								edge = true;
 								break;
 							}
 						}
 					}
-					
-					val /= 0.1 * zoom;
 				}
 				
 				if (val >= SEA_LEVEL) {
@@ -90,15 +97,26 @@ public abstract class Map {
 						val = val | (val << 8) | (val << 16);
 				}
 				
-				writer.setArgb(x, y, val | (255 << 24));
+				pixels[x + y * imgWidth] = val | 0xff000000;
 			}
 		}
+		
+		image.getPixelWriter().setPixels(0, 0, imgWidth, imgHeight, PixelFormat.getIntArgbInstance(), pixels, 0, imgWidth);
 		
 		return image;
 	}
 	
-	public double scaledX(int x, int width) {return (x % width) * zoom / width + currX;}
-	public double scaledY(int y, int height) {return (y % height) * zoom / height + currY;}
+	protected Task<WritableImage> createTask() {
+		return new Task<WritableImage>() {
+			protected WritableImage call() {
+				toImage();
+				return image;
+			}
+		};
+	}
+	
+	public double scaledX(int x, int width) {return x * zoom / width + currX;}
+	public double scaledY(int y, int width) {return y * zoom / width * sizeRatio + currY;}
 	
 	// Getters
 	public double getBaseAltitudeResolution() {return baseAltitudeResolution;}
@@ -112,7 +130,11 @@ public abstract class Map {
 	public double getCurrX() {return currX;}
 	public double getCurrY() {return currY;}
 	
+	public double getSizeRatio() {return sizeRatio;}
+	
 	public boolean getShowContours() {return showContours;}
+	
+	public WritableImage getImage() {return image;}
 	
 	// Setters
 	public void setBaseAltitudeResolution(double baseAltitudeResolution) {this.baseAltitudeResolution = baseAltitudeResolution;}
@@ -131,4 +153,9 @@ public abstract class Map {
 	}
 	
 	public void setShowContours(boolean showContours) {this.showContours = showContours;}
+	
+	public void setImage(WritableImage image) {this.image = image;}
+	
+	// Helpers
+	protected abstract void setSizeRatio();
 }
