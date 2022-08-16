@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import java.lang.Math;
 
 public class Mapping extends Application {
-	private static final double ZOOM_SCROLL_SPEED = 1.0 / 1600.0;
+	private static final double ZOOM_SCROLL_SPEED = 1.0 / 5000.0;
 	
 	private Scene scene;
 	
@@ -41,7 +41,7 @@ public class Mapping extends Application {
 		map.setImage(img);
 		
 		imgView = new ImageView(img);
-		imgView.setPreserveRatio(true);
+		//imgView.setPreserveRatio(true);
 		
 		scene = new Scene(new StackPane(imgView), imgWidth, imgHeight);
         stage.setScene(scene);
@@ -77,8 +77,8 @@ public class Mapping extends Application {
 		EventHandler<MouseEvent> releaseHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / img.getWidth());
-				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio());
+				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / img.getWidth() * map.getZoom());
+				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio() * map.getZoom());
 				
 				map.restart();
 			}
@@ -89,21 +89,23 @@ public class Mapping extends Application {
 			public void handle(WorkerStateEvent e) {
 				imgView.setTranslateX(0);
 				imgView.setTranslateY(0);
+				
 				imgView.setFitWidth(imgWidth);
+				imgView.setFitHeight(imgHeight);
 			}
 		};
 		
 		EventHandler<ScrollEvent> zoomHandler = new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent e) {
-				map.setZoom(map.getZoom() * Math.pow(0.5, e.getDeltaY() * e.getMultiplierY() * ZOOM_SCROLL_SPEED));
+				double zoomChange = Math.pow(0.5, e.getDeltaY() * e.getMultiplierY() * ZOOM_SCROLL_SPEED);
 				
-				//map.setCurrX(map.getCurrX() + 0.5 * (1 - map.getZoom()));
-				//map.setCurrY(map.getCurrX() + 0.5 * (1 - map.getZoom()));
+				map.setZoom(map.getZoom() * zoomChange);
 				
-				imgView.setFitWidth(imgWidth / map.getZoom());
-				
-				System.out.println(map.getZoom());
+				imgView.setFitWidth(imgView.getFitWidth() / zoomChange);
+				imgView.setFitHeight(imgView.getFitHeight() / zoomChange);
+				imgView.setTranslateX((imgView.getTranslateX() + 1) / zoomChange);
+				imgView.setTranslateY((imgView.getTranslateY() + 1) / zoomChange);
 				
 				map.restart();
 			}

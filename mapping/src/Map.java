@@ -12,7 +12,7 @@ public abstract class Map extends Service<WritableImage> {
 	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
 	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the series sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
 	
-	public static final int SEA_LEVEL = 160;
+	public static final int SEA_LEVEL = 150;
 	public static final int GREEN_RANGE = 120;
 	public static final int SNOW_LINE = 230;
 	
@@ -39,8 +39,8 @@ public abstract class Map extends Service<WritableImage> {
 		this.temperatureNoiseType = temperatureNoiseType;
 		
 		zoom = 1.0;
-		currX = 0.0;
-		currY = 0.0;
+		currX = 0.5;
+		currY = 0.5;
 		
 		showContours = false;
 		
