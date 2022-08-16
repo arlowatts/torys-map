@@ -12,9 +12,9 @@ public abstract class Map extends Service<WritableImage> {
 	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
 	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the series sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
 	
-	public static final int SEA_LEVEL = 140;
+	public static final int SEA_LEVEL = 160;
 	public static final int GREEN_RANGE = 120;
-	public static final int SNOW_LINE = 190;
+	public static final int SNOW_LINE = 230;
 	
 	protected WritableImage image;
 	
@@ -131,8 +131,8 @@ public abstract class Map extends Service<WritableImage> {
 	@Override
 	protected void ready() {cancelled = false;}
 	
-	public double scaledX(int x, int width) {return x * zoom / width + currX;}
-	public double scaledY(int y, int width) {return y * zoom / width * sizeRatio + currY;}
+	public double scaledX(int x, int width) {return x * zoom / width + currX - 0.5 * zoom;}
+	public double scaledY(int y, int width) {return y * zoom / width * sizeRatio + currY - 0.5 * zoom;}
 	
 	// Getters
 	public double getBaseAltitudeResolution() {return baseAltitudeResolution;}
