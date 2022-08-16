@@ -5,15 +5,20 @@ import javafx.scene.layout.StackPane;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.concurrent.WorkerStateEvent;
 
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 
+import java.lang.Math;
+
 public class Mapping extends Application {
+	private static final double ZOOM_SCROLL_SPEED = 1.0 / 1600.0;
+	
 	private Scene scene;
 	
-	private WritableImage image;
+	private WritableImage img;
 	private ImageView imgView;
 	private Map map;
 	
@@ -26,18 +31,19 @@ public class Mapping extends Application {
 	private double imgViewPrevX = 0;
 	private double imgViewPrevY = 0;
 	
+	private int imgWidth = 2000;
+	private int imgHeight = 500;
+	
 	@Override
 	public void start(Stage stage) {
-		int imageWidth = 2000;
-		int imageHeight = 500;
-		
-		image = new WritableImage(imageWidth, imageHeight);
+		img = new WritableImage(imgWidth, imgHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
-		map.setImage(image);
+		map.setImage(img);
 		
-		imgView = new ImageView(image);
+		imgView = new ImageView(img);
+		imgView.setPreserveRatio(true);
 		
-		scene = new Scene(new StackPane(imgView), imageWidth, imageHeight);
+		scene = new Scene(new StackPane(imgView), imgWidth, imgHeight);
         stage.setScene(scene);
 		stage.show();
 		
@@ -71,11 +77,10 @@ public class Mapping extends Application {
 		EventHandler<MouseEvent> releaseHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / image.getWidth());
-				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / image.getWidth() * map.getSizeRatio());
+				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / img.getWidth());
+				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio());
 				
-				map.reset();
-				map.start();
+				map.restart();
 			}
 		};
 		
@@ -84,6 +89,23 @@ public class Mapping extends Application {
 			public void handle(WorkerStateEvent e) {
 				imgView.setTranslateX(0);
 				imgView.setTranslateY(0);
+				imgView.setFitWidth(imgWidth);
+			}
+		};
+		
+		EventHandler<ScrollEvent> zoomHandler = new EventHandler<ScrollEvent>() {
+			@Override
+			public void handle(ScrollEvent e) {
+				map.setZoom(map.getZoom() * Math.pow(0.5, e.getDeltaY() * e.getMultiplierY() * ZOOM_SCROLL_SPEED));
+				
+				//map.setCurrX(map.getCurrX() + 0.5 * (1 - map.getZoom()));
+				//map.setCurrY(map.getCurrX() + 0.5 * (1 - map.getZoom()));
+				
+				imgView.setFitWidth(imgWidth / map.getZoom());
+				
+				System.out.println(map.getZoom());
+				
+				map.restart();
 			}
 		};
 		
@@ -92,6 +114,8 @@ public class Mapping extends Application {
 		scene.setOnMouseReleased(releaseHandler);
 		
 		map.setOnSucceeded(mapAdjustHandler);
+		
+		scene.setOnScroll(zoomHandler);
 	}
 	
 	public static void main(String[] args) {

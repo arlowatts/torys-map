@@ -38,9 +38,9 @@ public abstract class Map extends Service<WritableImage> {
 		this.baseTemperatureResolution = baseTemperatureResolution;
 		this.temperatureNoiseType = temperatureNoiseType;
 		
-		zoom = 1;
-		currX = 0;
-		currY = 0;
+		zoom = 1.0;
+		currX = 0.0;
+		currY = 0.0;
 		
 		showContours = false;
 		
@@ -161,8 +161,8 @@ public abstract class Map extends Service<WritableImage> {
 	
 	public void setZoom(double zoom) {this.zoom = zoom;}
 	
-	public void setCurrX(double currX) {this.currX = currX;}
-	public void setCurrY(double currY) {this.currY = currY;}
+	public void setCurrX(double x) {currX = x;}
+	public void setCurrY(double y) {currY = y;}
 	public void setCurrPos(double x, double y) {
 		currX = x;
 		currY = y;
