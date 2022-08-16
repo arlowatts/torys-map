@@ -30,7 +30,8 @@ public class Noise {
 	
 	// Linear interpolation
 	private static double lerp(double a, double b, double t) {
-		return a + t * (b - a);
+		double x = a + t * (b - a);
+		return x * x * (3 - 2 * x);
 	}
 	
 	// Random hash function
