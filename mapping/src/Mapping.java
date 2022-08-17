@@ -25,23 +25,19 @@ public class Mapping extends Application {
 	private double dragStartX = 0;
 	private double dragStartY = 0;
 	
-	private double mapPrevX = 0;
-	private double mapPrevY = 0;
-	
 	private double imgViewPrevX = 0;
 	private double imgViewPrevY = 0;
 	
-	private int imgWidth = 2000;
-	private int imgHeight = 500;
-	
 	@Override
 	public void start(Stage stage) {
+		int imgWidth = 2000;
+		int imgHeight = 500;
+		
 		img = new WritableImage(imgWidth, imgHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		map.setImage(img);
 		
 		imgView = new ImageView(img);
-		//imgView.setPreserveRatio(true);
 		
 		scene = new Scene(new StackPane(imgView), imgWidth, imgHeight);
         stage.setScene(scene);
@@ -53,6 +49,17 @@ public class Mapping extends Application {
 	}
 	
 	public void initEventHandlers() {
+		EventHandler<WorkerStateEvent> mapAdjustHandler = new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent e) {
+				imgView.setTranslateX(0);
+				imgView.setTranslateY(0);
+				
+				imgView.setFitWidth(img.getWidth());
+				imgView.setFitHeight(img.getHeight());
+			}
+		};
+		
 		EventHandler<MouseEvent> pressHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -84,17 +91,6 @@ public class Mapping extends Application {
 			}
 		};
 		
-		EventHandler<WorkerStateEvent> mapAdjustHandler = new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent e) {
-				imgView.setTranslateX(0);
-				imgView.setTranslateY(0);
-				
-				imgView.setFitWidth(imgWidth);
-				imgView.setFitHeight(imgHeight);
-			}
-		};
-		
 		EventHandler<ScrollEvent> zoomHandler = new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent e) {
@@ -111,11 +107,11 @@ public class Mapping extends Application {
 			}
 		};
 		
+		map.setOnSucceeded(mapAdjustHandler);
+		
 		scene.setOnMousePressed(pressHandler);
 		scene.setOnMouseDragged(dragHandler);
 		scene.setOnMouseReleased(releaseHandler);
-		
-		map.setOnSucceeded(mapAdjustHandler);
 		
 		scene.setOnScroll(zoomHandler);
 	}
