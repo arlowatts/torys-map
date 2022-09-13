@@ -3,7 +3,6 @@ import javafx.scene.image.PixelFormat;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker.State;
 
 import java.util.ArrayList;
 
