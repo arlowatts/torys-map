@@ -36,8 +36,8 @@ public class Mapping extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		int imgWidth = 500;
-		int imgHeight = 500;
+		int imgWidth = (int)(400.0 * (5.05425 + 1.31675));
+		int imgHeight = (int)(400.0 * 1.31675);
 		
 		img = new WritableImage(imgWidth, imgHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
