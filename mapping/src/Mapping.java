@@ -11,6 +11,12 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.ImageView;
 
+import javafx.scene.image.PixelFormat;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 import java.lang.Math;
 
 public class Mapping extends Application {
@@ -30,7 +36,7 @@ public class Mapping extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		int imgWidth = 2000;
+		int imgWidth = 500;
 		int imgHeight = 500;
 		
 		img = new WritableImage(imgWidth, imgHeight);
@@ -46,6 +52,27 @@ public class Mapping extends Application {
 		initEventHandlers();
 		
 		map.start();
+	}
+	
+	@Override
+	public void stop() {
+		int imgWidth = (int)img.getWidth();
+		int imgHeight = (int)img.getHeight();
+		
+		BufferedImage bufferedImg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		int[] pixels = new int[imgWidth * imgHeight];
+		
+		img.getPixelReader().getPixels(0, 0, imgWidth, imgHeight, PixelFormat.getIntArgbInstance(), pixels, 0, imgWidth);
+		
+		bufferedImg.setRGB(0, 0, imgWidth, imgHeight, pixels, 0, imgWidth);
+		
+		try {
+			File imgOut = new File("C:\\Users\\Arlo\\Documents\\the-heart-of-a-dead-star\\mapping\\map.png");
+			ImageIO.write(bufferedImg, "png", imgOut);
+		}
+		catch (IOException e) {
+			System.out.println("Image could not be saved.");
+		}
 	}
 	
 	public void initEventHandlers() {
