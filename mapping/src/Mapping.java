@@ -36,12 +36,14 @@ public class Mapping extends Application {
 	
 	@Override
 	public void start(Stage stage) {
-		int imgWidth = (int)(400.0 * (5.05425 + 1.31675));
-		int imgHeight = (int)(400.0 * 1.31675);
+		int imgWidth = (int)(200.0 * (5.05425 + 1.31675));
+		int imgHeight = (int)(200.0 * 1.31675);
 		
 		img = new WritableImage(imgWidth, imgHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		map.setImage(img);
+		
+		map.addRotation(new Vector(1, 0, 0), 1);
 		
 		imgView = new ImageView(img);
 		
@@ -113,6 +115,8 @@ public class Mapping extends Application {
 			public void handle(MouseEvent e) {
 				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / img.getWidth() * map.getZoom());
 				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio() * map.getZoom());
+				
+				map.setCurrTime(map.getCurrTime() + 0.1);
 				
 				map.restart();
 			}

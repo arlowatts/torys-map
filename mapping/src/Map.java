@@ -20,11 +20,14 @@ public abstract class Map extends Service<WritableImage> {
 	protected double baseAltitudeResolution, baseTemperatureResolution;
 	protected double altitudeNoiseType, temperatureNoiseType;
 	
-	protected double zoom, currX, currY;
+	protected double zoom, currX, currY, currTime;
 	protected double sizeRatio;
 	protected boolean showContours;
 	
 	protected ArrayList<Region> regions;
+	
+	protected ArrayList<Vector> rotationAxes;
+	protected ArrayList<Double> rotationRates;
 	
 	private boolean cancelled = false;
 	
@@ -40,10 +43,14 @@ public abstract class Map extends Service<WritableImage> {
 		zoom = 1.0;
 		currX = 0.5;
 		currY = 0.5;
+		currTime = 0.0;
 		
 		showContours = false;
 		
 		regions = new ArrayList<Region>();
+		
+		rotationAxes = new ArrayList<Vector>();
+		rotationRates = new ArrayList<Double>();
 	}
 	
 	public abstract double getAltitude(double x, double y);
@@ -57,7 +64,8 @@ public abstract class Map extends Service<WritableImage> {
 	public abstract double getAverageTemperature(double x, double y);
 	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
 	
-	public abstract double[] getFullCoords(double x, double y);
+	public abstract Vector getFullCoords(double x, double y);
+	public abstract Vector getNormal(double x, double y);
 	
 	public abstract double getX(double... coords);
 	public abstract double getY(double... coords);
@@ -83,14 +91,15 @@ public abstract class Map extends Service<WritableImage> {
 			for (int y = 0; y < imgHeight; y++) {
 				if (cancelled) return;
 				
-				int val = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
+				int alt = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
+				double light = getLight(scaledX(x, imgWidth), scaledY(y, imgWidth), currTime) * 0.85 + 0.15;
 				
 				boolean edge = false;
 				
 				if (showContours) {
 					for (int i = 0; i <= 1 && x + i < imgWidth; i++) {
 						for (int j = 0; j <= 1 && y + j < imgHeight; j++) {
-							if ((i != 0 || j != 0) && (int)(val * 0.1 * zoom) != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgWidth)) * 25.6 * zoom)) {
+							if ((i != 0 || j != 0) && (int)(alt * 0.1 * zoom) != (int)(getAltitude(scaledX(x + i, imgWidth), scaledY(y + j, imgWidth)) * 25.6 * zoom)) {
 								edge = true;
 								break;
 							}
@@ -98,17 +107,17 @@ public abstract class Map extends Service<WritableImage> {
 					}
 				}
 				
-				if (val >= SEA_LEVEL) {
-					if (edge) val = 0;
+				if (alt >= SEA_LEVEL) {
+					if (edge) alt = 0;
 					
-					else if (val < SNOW_LINE)
-						val = (((val - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + (int)(GREEN_RANGE * 0.75)) << 8;
+					else if (alt < SNOW_LINE)
+						alt = (((alt - SEA_LEVEL) * GREEN_RANGE) / (SNOW_LINE - SEA_LEVEL) + (int)(GREEN_RANGE * 0.75)) << 8;
 					
 					else
-						val = val | (val << 8) | (val << 16);
+						alt = alt | (alt << 8) | (alt << 16);
 				}
 				
-				pixels[x + y * imgWidth] = val | 0xff000000;
+				pixels[x + y * imgWidth] = Color.shade(alt, light) | 0xff000000;
 			}
 		}
 		
@@ -122,6 +131,28 @@ public abstract class Map extends Service<WritableImage> {
 				return image;
 			}
 		};
+	}
+	
+	public int addRotation(Vector axis, double rate) {
+		rotationAxes.add(axis);
+		rotationRates.add(rate);
+		
+		return rotationAxes.size();
+	}
+	
+	public Vector getRotationAxis(int i) {
+		return rotationAxes.get(i);
+	}
+	
+	public double getRotationRate(int i) {
+		return rotationRates.get(i);
+	}
+	
+	public int removeRotation(int i) {
+		rotationAxes.remove(i);
+		rotationRates.remove(i);
+		
+		return rotationAxes.size();
 	}
 	
 	@Override
@@ -145,6 +176,8 @@ public abstract class Map extends Service<WritableImage> {
 	public double getCurrX() {return currX;}
 	public double getCurrY() {return currY;}
 	
+	public double getCurrTime() {return currTime;}
+	
 	public double getSizeRatio() {return sizeRatio;}
 	
 	public boolean getShowContours() {return showContours;}
@@ -166,6 +199,8 @@ public abstract class Map extends Service<WritableImage> {
 		currX = x;
 		currY = y;
 	}
+	
+	public void setCurrTime(double t) {currTime = t;}
 	
 	public void setShowContours(boolean showContours) {this.showContours = showContours;}
 	
