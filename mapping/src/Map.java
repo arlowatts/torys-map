@@ -24,6 +24,8 @@ public abstract class Map extends Service<WritableImage> {
 	protected double sizeRatio;
 	protected boolean showContours;
 	
+	protected Vector currLightAngle;
+	
 	protected ArrayList<Region> regions;
 	
 	protected ArrayList<Vector> rotationAxes;
@@ -47,6 +49,8 @@ public abstract class Map extends Service<WritableImage> {
 		
 		showContours = false;
 		
+		currLightAngle = new Vector(1, 0, 0);
+		
 		regions = new ArrayList<Region>();
 		
 		rotationAxes = new ArrayList<Vector>();
@@ -56,11 +60,11 @@ public abstract class Map extends Service<WritableImage> {
 	public abstract double getAltitude(double x, double y);
 	public abstract double getWaterLevel(double x, double y);
 	
-	public abstract double getLight(double x, double y, double time);
+	public abstract double getLight(double x, double y);
 	public abstract double getAverageLight(double x, double y);
 	public abstract double getAverageLight(double x, double y, double startTime, double endTime);
 	
-	public abstract double getTemperature(double x, double y, double time);
+	public abstract double getTemperature(double x, double y);
 	public abstract double getAverageTemperature(double x, double y);
 	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
 	
@@ -92,7 +96,7 @@ public abstract class Map extends Service<WritableImage> {
 				if (cancelled) return;
 				
 				int alt = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
-				double light = getLight(scaledX(x, imgWidth), scaledY(y, imgWidth), currTime) * 0.85 + 0.15;
+				double light = getLight(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 0.85 + 0.15;
 				
 				boolean edge = false;
 				
@@ -200,7 +204,19 @@ public abstract class Map extends Service<WritableImage> {
 		currY = y;
 	}
 	
-	public void setCurrTime(double t) {currTime = t;}
+	public void setCurrTime(double t) {
+		currTime = t;
+		
+		Vector r = new Vector();
+		currLightAngle.set(1, 0, 0);
+		
+		for (int i = 0; i < rotationAxes.size(); i++) {
+			r.set(rotationAxes.get(i));
+			r.multiply(currTime);
+			
+			currLightAngle.rotate(r);
+		}
+	}
 	
 	public void setShowContours(boolean showContours) {this.showContours = showContours;}
 	

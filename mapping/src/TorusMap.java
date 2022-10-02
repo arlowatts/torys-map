@@ -42,23 +42,13 @@ public class TorusMap extends Map {
 		return 0;
 	}
 	
-	public double getLight(double x, double y, double time) {
+	public double getLight(double x, double y) {
 		Vector n = getNormal(x, y);
 		Vector pos = getFullCoords(x, y);
-		Vector ray = new Vector(1, 0, 0);
 		
-		Vector r = new Vector();
+		double dot = n.dotProduct(currLightAngle);
 		
-		for (int i = 0; i < rotationAxes.size(); i++) {
-			r.set(rotationAxes.get(i));
-			r.multiply(time);
-			
-			ray.rotate(r);
-		}
-		
-		double dot = n.dotProduct(ray);
-		
-		if (dot <= 0 || march(pos, n, ray)) return 0;
+		if (dot <= 0 || march(pos, n, currLightAngle)) return 0;
 		
 		return dot;
 	}
@@ -71,7 +61,7 @@ public class TorusMap extends Map {
 		return 0;
 	}
 	
-	public double getTemperature(double x, double y, double time) {
+	public double getTemperature(double x, double y) {
 		return 0;
 	}
 	
