@@ -15,6 +15,8 @@ public abstract class Map extends Service<WritableImage> {
 	public static final int GREEN_RANGE = 120;
 	public static final int SNOW_LINE = 230;
 	
+	public static final Vector BASE_LIGHT_ANGLE = new Vector(1, 0, 0);
+	
 	protected WritableImage image;
 	
 	protected double baseAltitudeResolution, baseTemperatureResolution;
@@ -28,8 +30,7 @@ public abstract class Map extends Service<WritableImage> {
 	
 	protected ArrayList<Region> regions;
 	
-	protected ArrayList<Vector> rotationAxes;
-	protected ArrayList<Double> rotationRates;
+	protected ArrayList<Vector> rotations;
 	
 	private boolean cancelled = false;
 	
@@ -49,12 +50,11 @@ public abstract class Map extends Service<WritableImage> {
 		
 		showContours = false;
 		
-		currLightAngle = new Vector(1, 0, 0);
+		currLightAngle = new Vector(BASE_LIGHT_ANGLE);
 		
 		regions = new ArrayList<Region>();
 		
-		rotationAxes = new ArrayList<Vector>();
-		rotationRates = new ArrayList<Double>();
+		rotations = new ArrayList<Vector>();
 	}
 	
 	public abstract double getAltitude(double x, double y);
@@ -137,26 +137,34 @@ public abstract class Map extends Service<WritableImage> {
 		};
 	}
 	
-	public int addRotation(Vector axis, double rate) {
-		rotationAxes.add(axis);
-		rotationRates.add(rate);
-		
-		return rotationAxes.size();
+	public int addRotation(Vector axis) {
+		rotations.add(axis);
+		setCurrTime(currTime);
+		return rotations.size();
 	}
 	
-	public Vector getRotationAxis(int i) {
-		return rotationAxes.get(i);
-	}
-	
-	public double getRotationRate(int i) {
-		return rotationRates.get(i);
+	public Vector getRotation(int i) {
+		return rotations.get(i);
 	}
 	
 	public int removeRotation(int i) {
-		rotationAxes.remove(i);
-		rotationRates.remove(i);
+		rotations.remove(i);
+		setCurrTime(currTime);
+		return rotations.size();
+	}
+	
+	public void setCurrTime(double t) {
+		currTime = t;
 		
-		return rotationAxes.size();
+		Vector r = new Vector();
+		currLightAngle.set(BASE_LIGHT_ANGLE);
+		
+		for (int i = rotations.size() - 1; i >= 0; i--) {
+			r.set(rotations.get(i));
+			r.setZ(currTime * r.getZ());
+			
+			currLightAngle.rotate(r);
+		}
 	}
 	
 	@Override
@@ -202,20 +210,6 @@ public abstract class Map extends Service<WritableImage> {
 	public void setCurrPos(double x, double y) {
 		currX = x;
 		currY = y;
-	}
-	
-	public void setCurrTime(double t) {
-		currTime = t;
-		
-		Vector r = new Vector();
-		currLightAngle.set(1, 0, 0);
-		
-		for (int i = 0; i < rotationAxes.size(); i++) {
-			r.set(rotationAxes.get(i));
-			r.multiply(currTime);
-			
-			currLightAngle.rotate(r);
-		}
 	}
 	
 	public void setShowContours(boolean showContours) {this.showContours = showContours;}

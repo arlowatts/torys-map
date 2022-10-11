@@ -44,11 +44,9 @@ public class TorusMap extends Map {
 	
 	public double getLight(double x, double y) {
 		Vector n = getNormal(x, y);
-		Vector pos = getFullCoords(x, y);
-		
 		double dot = n.dotProduct(currLightAngle);
 		
-		if (dot <= 0 || march(pos, n, currLightAngle)) return 0;
+		if (dot <= 0 || march(getFullCoords(x, y), n, currLightAngle)) return 0;
 		
 		return dot;
 	}

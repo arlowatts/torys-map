@@ -43,7 +43,8 @@ public class Mapping extends Application {
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		map.setImage(img);
 		
-		map.addRotation(new Vector(1, 0, 0), 1);
+		map.addRotation(new Vector(Math.PI/7, Math.PI/2, 1));
+		map.addRotation(new Vector(0, Math.PI/2, 1/365));
 		
 		imgView = new ImageView(img);
 		
