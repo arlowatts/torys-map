@@ -1,3 +1,5 @@
+package mapping;
+
 public class Noise {
 	// Starter function for the recursive function
 	public static double getNoise(int channel, double resolution, double[] dimensions, double... coords) {

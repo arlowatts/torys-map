@@ -1,6 +1,6 @@
 <project name="Mapping" default="compile">
 
-	<property name="src" location="src"/>
+	<property name="src" location="mapping"/>
 	<property name="build" location="build"/>
 	<property name="path_to_fx" location="C:\Program Files\javafx-sdk-18.0.2\lib"/>
 
