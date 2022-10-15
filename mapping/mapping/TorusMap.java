@@ -32,7 +32,7 @@ public class TorusMap extends Map {
 			else if (altitudeNoiseType == FACTORIAL) scale /= i + 1;
 			else if (altitudeNoiseType == SQUARES) scale = 1 / ((i + 1) * (i + 1));
 			
-			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, c.getX(), c.getY(), c.getZ()) * scale;
+			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, c.x, c.y, c.z) * scale;
 		}
 		
 		val *= altitudeNoiseType;
@@ -79,9 +79,9 @@ public class TorusMap extends Map {
 		double phi = x * Math.PI * 2;
 		double theta = y * Math.PI * 2;
 		
-		c.setX(Math.sin(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius);
-		c.setY(Math.sin(theta) * smallRadius + smallRadius);
-		c.setZ(Math.cos(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius);
+		c.x = Math.sin(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius;
+		c.y = Math.sin(theta) * smallRadius + smallRadius;
+		c.z = Math.cos(phi) * (largeRadius + Math.cos(theta) * smallRadius) + largeRadius + smallRadius;
 		
 		return c;
 	}
@@ -92,9 +92,9 @@ public class TorusMap extends Map {
 		double phi = x * Math.PI * 2;
 		double theta = y * Math.PI * 2;
 		
-		n.setX(Math.sin(phi) * Math.cos(theta));
-		n.setY(Math.sin(theta));
-		n.setZ(Math.cos(phi) * Math.cos(theta));
+		n.x = Math.sin(phi) * Math.cos(theta);
+		n.y = Math.sin(theta);
+		n.z = Math.cos(phi) * Math.cos(theta);
 		
 		n.setLength(1);
 		
@@ -138,8 +138,8 @@ public class TorusMap extends Map {
 		double distance = 0;
 		
 		while (distance < largeRadius + smallRadius) {
-			a = Math.sqrt(v.getX()*v.getX() + v.getZ()*v.getZ()) - largeRadius;
-			distance = Math.sqrt(a*a + v.getY()*v.getY()) - smallRadius;
+			a = Math.sqrt(v.x*v.x + v.z*v.z) - largeRadius;
+			distance = Math.sqrt(a*a + v.y*v.y) - smallRadius;
 			
 			if (distance < MIN_LENGTH) return true;
 			

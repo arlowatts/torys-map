@@ -163,7 +163,7 @@ public abstract class Map extends Service<WritableImage> {
 		
 		for (int i = rotations.size() - 1; i >= 0; i--) {
 			r.set(rotations.get(i));
-			r.setZ(currTime * r.getZ());
+			r.z *= currTime;
 			
 			currLightAngle.rotate(r);
 		}

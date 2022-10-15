@@ -6,7 +6,7 @@ import java.lang.Math;
 A class to store a set of three doubles and perform calculations on them.
 */
 public class Vector {
-	private double x, y, z;
+	public double x, y, z;
 	
 	/**
 	Creates a new vector with the specified x, y, and z values.
@@ -167,17 +167,9 @@ public class Vector {
 		z *= lz;
 	}
 	
-	public double getX() {return x;}
-	public double getY() {return y;}
-	public double getZ() {return z;}
-	
 	public double getLength() {
 		return Math.sqrt(x*x + y*y + z*z);
 	}
-	
-	public void setX(double x) {this.x = x;}
-	public void setY(double y) {this.y = y;}
-	public void setZ(double z) {this.z = z;}
 	
 	public void set(double x, double y, double z) {
 		this.x = x;
