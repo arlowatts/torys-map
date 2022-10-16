@@ -6,6 +6,7 @@ import java.lang.Math;
 
 public class TorusMap extends Map {
 	private static final double MIN_LENGTH = 0.01;
+	private static final int DEFAULT_AVG_LIGHT_PRECISION = 1000;
 	
 	private double largeRadius, smallRadius;
 	private double[] spaceDimensions;
@@ -23,6 +24,9 @@ public class TorusMap extends Map {
 	
 	public double getAltitude(double x, double y) {
 		Vector c = getFullCoords(x, y);
+		
+		if (Math.abs(c.y - smallRadius) > smallRadius * 0.99) return 1;
+		if ((c.x-largeRadius-smallRadius)*(c.x-largeRadius-smallRadius) + (c.y-smallRadius)*(c.y-smallRadius) < 0.05) return 1;
 		
 		double val = 0;
 		double scale = 1;
@@ -44,8 +48,7 @@ public class TorusMap extends Map {
 		return 0;
 	}
 	
-	public double getLight(double x, double y) {
-		Vector n = getNormal(x, y);
+	public double getLight(double x, double y, Vector n) {
 		double dot = n.dotProduct(currLightAngle);
 		
 		if (dot <= 0 || march(getFullCoords(x, y), n, currLightAngle)) return 0;
@@ -53,12 +56,36 @@ public class TorusMap extends Map {
 		return dot;
 	}
 	
-	public double getAverageLight(double x, double y) {
-		return 0;
+	public double getLight(double x, double y) {
+		Vector n = getNormal(x, y);
+		return getLight(x, y, n);
 	}
 	
-	public double getAverageLight(double x, double y, double startTime, double endTime) {
-		return 0;
+	public double getAverageLight(double x, double y) {
+		double time = 0;
+		
+		for (int i = 0; i < rotations.size(); i++) {
+			time = Math.max(time, Math.abs(1 / rotations.get(i).z));
+		}
+		
+		return getAverageLight(x, y, 0, Math.PI * 2 * time, DEFAULT_AVG_LIGHT_PRECISION);
+	}
+	
+	public double getAverageLight(double x, double y, double startTime, double endTime, int steps) {
+		setCurrTime(startTime);
+		
+		Vector n = getNormal(x, y);
+		
+		double stepSize = (endTime - startTime) / (double)(steps - 1);
+		
+		double light = 0;
+		
+		for (int i = 0; i < steps; i++) {
+			light += getLight(x, y, n);
+			setCurrTime(getCurrTime() + stepSize);
+		}
+		
+		return light / steps;
 	}
 	
 	public double getTemperature(double x, double y) {

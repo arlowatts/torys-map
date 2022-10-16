@@ -45,8 +45,8 @@ public class Mapping extends Application {
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		map.setImage(img);
 		
-		map.addRotation(new Vector(Math.PI/7, Math.PI/2, 1));
-		map.addRotation(new Vector(0, Math.PI/2, 1/365));
+		map.addRotation(new Vector(Math.PI/7, Math.PI/2, 1.0));
+		map.addRotation(new Vector(0, Math.PI/2, 1.0/365.0));
 		
 		imgView = new ImageView(img);
 		
@@ -120,6 +120,7 @@ public class Mapping extends Application {
 				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio() * map.getZoom());
 				
 				map.setCurrTime(map.getCurrTime() + 0.1);
+				System.out.println(map.getCurrTime() / Math.PI / 2);
 				
 				map.restart();
 			}

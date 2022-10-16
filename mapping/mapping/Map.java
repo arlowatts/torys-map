@@ -10,23 +10,24 @@ import java.util.ArrayList;
 
 public abstract class Map extends Service<WritableImage> {
 	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
-	public static final double FACTORIAL    = 1 / 1.7182818284590455; // The sum of the series sum(k=1,inf)(1/k!) is approximately 1.7182818284590455
-	public static final double SQUARES      = 1 / 1.644934054103904; // The sum of the series sum(k=1,inf)(1/k^2) is approximately 1.644934054103904
+	public static final double FACTORIAL    = 1 / 1.71828; // Approximately the sum of the series sum(k=1,inf)(1/k!)
+	public static final double SQUARES      = 1 / 1.64493; // Approximately the sum of the series sum(k=1,inf)(1/k^2)
+	
+	public static final Vector BASE_LIGHT_ANGLE = new Vector(1, 0, 0);
 	
 	public static final int SEA_LEVEL = 150;
 	public static final int GREEN_RANGE = 120;
 	public static final int SNOW_LINE = 230;
-	
-	public static final Vector BASE_LIGHT_ANGLE = new Vector(1, 0, 0);
 	
 	protected WritableImage image;
 	
 	protected double baseAltitudeResolution, baseTemperatureResolution;
 	protected double altitudeNoiseType, temperatureNoiseType;
 	
-	protected double zoom, currX, currY, currTime;
+	protected double zoom, currX, currY;
 	protected double sizeRatio;
 	protected boolean showContours;
+	private double currTime;
 	
 	protected Vector currLightAngle;
 	
@@ -64,7 +65,7 @@ public abstract class Map extends Service<WritableImage> {
 	
 	public abstract double getLight(double x, double y);
 	public abstract double getAverageLight(double x, double y);
-	public abstract double getAverageLight(double x, double y, double startTime, double endTime);
+	public abstract double getAverageLight(double x, double y, double startTime, double endTime, int steps);
 	
 	public abstract double getTemperature(double x, double y);
 	public abstract double getAverageTemperature(double x, double y);
@@ -97,8 +98,7 @@ public abstract class Map extends Service<WritableImage> {
 			for (int y = 0; y < imgHeight; y++) {
 				if (cancelled) return;
 				
-				int alt = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 256);
-				double light = getLight(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 0.85 + 0.15;
+				int alt = (int)(getAltitude(scaledX(x, imgWidth), scaledY(y, imgWidth)) * 255);
 				
 				boolean edge = false;
 				
@@ -123,7 +123,22 @@ public abstract class Map extends Service<WritableImage> {
 						alt = alt | (alt << 8) | (alt << 16);
 				}
 				
-				pixels[x + y * imgWidth] = Color.shade(alt, light) | 0xff000000;
+				pixels[x + y * imgWidth] = alt;
+			}
+		}
+		
+		for (int x = 0; x < imgWidth; x += 10) {
+			for (int y = 0; y < imgHeight; y += 10) {
+				double light = getAverageLight(scaledX(x, imgWidth), scaledY(y, imgWidth));
+				light = (int)(Math.min(Math.pow(light, 6) * Math.pow(4, 6) * 10, 10)) / 10.0;
+				
+				int i = 0, j = 0;
+				
+				for (i = 0; i < 10 && x + i < imgWidth; i++) {
+					for (j = 0; j < 10 && y + j < imgHeight; j++) {
+						pixels[x+i + (y+j) * imgWidth] = Color.shade(pixels[x+i + (y+j) * imgWidth], light) | 0xff000000;
+					}
+				}
 			}
 		}
 		
