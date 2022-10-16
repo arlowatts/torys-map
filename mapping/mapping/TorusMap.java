@@ -68,24 +68,24 @@ public class TorusMap extends Map {
 			time = Math.max(time, Math.abs(1 / rotations.get(i).z));
 		}
 		
-		return getAverageLight(x, y, 0, Math.PI * 2 * time, DEFAULT_AVG_LIGHT_PRECISION);
+		return getAverageLight(x, y, 0, Math.PI * 2 * time);
 	}
 	
-	public double getAverageLight(double x, double y, double startTime, double endTime, int steps) {
+	public double getAverageLight(double x, double y, double startTime, double endTime) {
 		setCurrTime(startTime);
 		
 		Vector n = getNormal(x, y);
 		
-		double stepSize = (endTime - startTime) / (double)(steps - 1);
+		double stepSize = (endTime - startTime) / (double)(DEFAULT_AVG_LIGHT_PRECISION - 1);
 		
 		double light = 0;
 		
-		for (int i = 0; i < steps; i++) {
+		for (int i = 0; i < DEFAULT_AVG_LIGHT_PRECISION; i++) {
 			light += getLight(x, y, n);
 			setCurrTime(getCurrTime() + stepSize);
 		}
 		
-		return light / steps;
+		return light / DEFAULT_AVG_LIGHT_PRECISION;
 	}
 	
 	public double getTemperature(double x, double y) {
