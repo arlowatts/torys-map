@@ -30,16 +30,17 @@ public class TorusMap extends Map {
 		
 		double val = 0;
 		double scale = 1;
+		double zoom = getZoom();
 		
 		for (int i = 0; scale > 0.1 * zoom && scale > 0.005; i++) {
-			if (altitudeNoiseType == POWER_OF_TWO) scale *= 0.5;
-			else if (altitudeNoiseType == FACTORIAL) scale /= i + 1;
-			else if (altitudeNoiseType == SQUARES) scale = 1 / ((i + 1) * (i + 1));
+			if (getAltitudeNoiseType() == POWER_OF_TWO) scale *= 0.5;
+			else if (getAltitudeNoiseType() == FACTORIAL) scale /= i + 1;
+			else if (getAltitudeNoiseType() == SQUARES) scale = 1 / ((i + 1) * (i + 1));
 			
-			val += Noise.getNoise(i, baseAltitudeResolution * scale, spaceDimensions, c.x, c.y, c.z) * scale;
+			val += Noise.getNoise(i, getBaseAltitudeResolution() * scale, spaceDimensions, c.x, c.y, c.z) * scale;
 		}
 		
-		val *= altitudeNoiseType;
+		val *= getAltitudeNoiseType();
 		
 		return Math.min(Math.max(val, 0), 1);
 	}
@@ -48,10 +49,10 @@ public class TorusMap extends Map {
 		return 0;
 	}
 	
-	public double getLight(double x, double y, Vector n) {
-		double dot = n.dotProduct(currLightAngle);
+	private double getLight(double x, double y, Vector n) {
+		double dot = n.dotProduct(getCurrLightAngle());
 		
-		if (dot <= 0 || march(getFullCoords(x, y), n, currLightAngle)) return 0;
+		if (dot <= 0 || march(getFullCoords(x, y), n, getCurrLightAngle())) return 0;
 		
 		return dot;
 	}
@@ -64,8 +65,8 @@ public class TorusMap extends Map {
 	public double getAverageLight(double x, double y) {
 		double time = 0;
 		
-		for (int i = 0; i < rotations.size(); i++) {
-			time = Math.max(time, Math.abs(1 / rotations.get(i).z));
+		for (int i = 0; i < getNumRotations(); i++) {
+			time = Math.max(time, Math.abs(1 / getRotation(i).z));
 		}
 		
 		return getAverageLight(x, y, 0, Math.PI * 2 * time);
@@ -128,11 +129,11 @@ public class TorusMap extends Map {
 		return n;
 	}
 	
-	public double getX(double... coords) {
+	public double getX(Vector coords) {
 		return 0;
 	}
 	
-	public double getY(double... coords) {
+	public double getY(Vector coords) {
 		return 0;
 	}
 	
@@ -153,7 +154,7 @@ public class TorusMap extends Map {
 	
 	// Helpers
 	protected void setSizeRatio() {
-		sizeRatio = (largeRadius + smallRadius) / smallRadius;
+		setSizeRatio((largeRadius + smallRadius) / smallRadius);
 	}
 	
 	private boolean march(Vector pos, Vector n, Vector dir) {

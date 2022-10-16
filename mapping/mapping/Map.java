@@ -19,21 +19,19 @@ public abstract class Map extends Service<WritableImage> {
 	public static final int GREEN_RANGE = 120;
 	public static final int SNOW_LINE = 230;
 	
-	protected WritableImage image;
+	private WritableImage image;
 	
-	protected double baseAltitudeResolution, baseTemperatureResolution;
-	protected double altitudeNoiseType, temperatureNoiseType;
+	private double baseAltitudeResolution, baseTemperatureResolution;
+	private double altitudeNoiseType, temperatureNoiseType;
 	
-	protected double zoom, currX, currY;
-	protected double sizeRatio;
-	protected boolean showContours;
-	private double currTime;
+	private double zoom, currX, currY, currTime, sizeRatio;
+	private boolean showContours;
 	
-	protected Vector currLightAngle;
+	private Vector currLightAngle;
 	
-	protected ArrayList<Region> regions;
+	private ArrayList<Vector> rotations;
 	
-	protected ArrayList<Vector> rotations;
+	private ArrayList<Region> regions;
 	
 	private boolean cancelled = false;
 	
@@ -58,34 +56,6 @@ public abstract class Map extends Service<WritableImage> {
 		regions = new ArrayList<Region>();
 		
 		rotations = new ArrayList<Vector>();
-	}
-	
-	public abstract double getAltitude(double x, double y);
-	public abstract double getWaterLevel(double x, double y);
-	
-	public abstract double getLight(double x, double y);
-	public abstract double getAverageLight(double x, double y);
-	public abstract double getAverageLight(double x, double y, double startTime, double endTime, int steps);
-	
-	public abstract double getTemperature(double x, double y);
-	public abstract double getAverageTemperature(double x, double y);
-	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
-	
-	public abstract Vector getFullCoords(double x, double y);
-	public abstract Vector getNormal(double x, double y);
-	
-	public abstract double getX(double... coords);
-	public abstract double getY(double... coords);
-	
-	public ArrayList<Region> getRegions(double x, double y) {
-		ArrayList<Region> localRegions = new ArrayList<Region>();
-		
-		for (int i = 0; i < regions.size(); i++) {
-			if (regions.get(i).pointInRegion(x, y))
-				localRegions.add(regions.get(i));
-		}
-		
-		return localRegions;
 	}
 	
 	public void toImage() {
@@ -130,7 +100,7 @@ public abstract class Map extends Service<WritableImage> {
 		for (int x = 0; x < imgWidth; x += 10) {
 			for (int y = 0; y < imgHeight; y += 10) {
 				double light = getAverageLight(scaledX(x, imgWidth), scaledY(y, imgWidth));
-				light = (int)(Math.min(Math.pow(light, 6) * Math.pow(4, 6) * 10, 10)) / 10.0;
+				light = (int)(Math.min(Math.pow(light, 5) * Math.pow(4, 5) * 10, 10)) / 10.0;
 				
 				int i = 0, j = 0;
 				
@@ -145,30 +115,51 @@ public abstract class Map extends Service<WritableImage> {
 		image.getPixelWriter().setPixels(0, 0, imgWidth, imgHeight, PixelFormat.getIntArgbInstance(), pixels, 0, imgWidth);
 	}
 	
-	protected Task<WritableImage> createTask() {
-		return new Task<WritableImage>() {
-			protected WritableImage call() {
-				toImage();
-				return image;
-			}
-		};
+	public abstract double getAltitude(double x, double y);
+	public abstract double getWaterLevel(double x, double y);
+	
+	public abstract double getLight(double x, double y);
+	public abstract double getAverageLight(double x, double y);
+	public abstract double getAverageLight(double x, double y, double startTime, double endTime);
+	
+	public abstract double getTemperature(double x, double y);
+	public abstract double getAverageTemperature(double x, double y);
+	public abstract double getAverageTemperature(double x, double y, double startTime, double endTime);
+	
+	public abstract Vector getFullCoords(double x, double y);
+	public abstract Vector getNormal(double x, double y);
+	
+	public abstract double getX(Vector coords);
+	public abstract double getY(Vector coords);
+	
+	protected abstract void setSizeRatio();
+	
+	public ArrayList<Region> getRegions(double x, double y) {
+		ArrayList<Region> localRegions = new ArrayList<Region>();
+		
+		for (int i = 0; i < regions.size(); i++) {
+			if (regions.get(i).pointInRegion(x, y))
+				localRegions.add(regions.get(i));
+		}
+		
+		return localRegions;
 	}
 	
-	public int addRotation(Vector axis) {
+	public void addRotation(Vector axis) {
 		rotations.add(axis);
 		setCurrTime(currTime);
-		return rotations.size();
 	}
 	
 	public Vector getRotation(int i) {
 		return rotations.get(i);
 	}
 	
-	public int removeRotation(int i) {
+	public void removeRotation(int i) {
 		rotations.remove(i);
 		setCurrTime(currTime);
-		return rotations.size();
 	}
+	
+	public int getNumRotations() {return rotations.size();}
 	
 	public void setCurrTime(double t) {
 		currTime = t;
@@ -184,16 +175,12 @@ public abstract class Map extends Service<WritableImage> {
 		}
 	}
 	
-	@Override
-	protected void cancelled() {cancelled = true;}
-	
-	@Override
-	protected void ready() {cancelled = false;}
-	
 	public double scaledX(int x, int width) {return x * zoom / width + currX - 0.5 * zoom;}
 	public double scaledY(int y, int width) {return y * zoom / width * sizeRatio + currY - 0.5 * zoom;}
 	
 	// Getters
+	public WritableImage getImage() {return image;}
+	
 	public double getBaseAltitudeResolution() {return baseAltitudeResolution;}
 	public double getBaseTermperatureResolution() {return baseTemperatureResolution;}
 	
@@ -211,9 +198,13 @@ public abstract class Map extends Service<WritableImage> {
 	
 	public boolean getShowContours() {return showContours;}
 	
-	public WritableImage getImage() {return image;}
+	protected Vector getCurrLightAngle() {return currLightAngle;}
+	
+	public ArrayList<Region> getRegions() {return regions;}
 	
 	// Setters
+	public void setImage(WritableImage image) {this.image = image;}
+	
 	public void setBaseAltitudeResolution(double baseAltitudeResolution) {this.baseAltitudeResolution = baseAltitudeResolution;}
 	public void setBaseTemperatureResolution(double baseTemperatureResolution) {this.baseTemperatureResolution = baseTemperatureResolution;}
 	
@@ -229,10 +220,23 @@ public abstract class Map extends Service<WritableImage> {
 		currY = y;
 	}
 	
+	protected void setSizeRatio(double sizeRatio) {this.sizeRatio = sizeRatio;}
+	
 	public void setShowContours(boolean showContours) {this.showContours = showContours;}
 	
-	public void setImage(WritableImage image) {this.image = image;}
-	
 	// Helpers
-	protected abstract void setSizeRatio();
+	protected Task<WritableImage> createTask() {
+		return new Task<WritableImage>() {
+			protected WritableImage call() {
+				toImage();
+				return image;
+			}
+		};
+	}
+	
+	@Override
+	protected void cancelled() {cancelled = true;}
+	
+	@Override
+	protected void ready() {cancelled = false;}
 }
