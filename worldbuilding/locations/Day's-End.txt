@@ -8,3 +8,5 @@ Day's End
 
 	The mayor of the town is a man named Usen. He generally stays in his rooms and doesn't see anyone if he can avoid it, leaving visitors to his butler, Tyagr. When he must speak to people, he is gruff, brief, and always interrupts whenever he thinks someone is saying something unimportant.
 	Tyagr, on the other hand, is eloquent and adept at manipulating people into thinking they've heard what they wanted to hear. He knows very well his employer does not wish to see people and tries his best to steer people away with misleading answers and vague promises.
+
+	Rettoo is a merchant that frequently visits Day's End. He brings unique food items, art pieces, rare fabrics and more from his travels and sells them in the isolated community. Then he buys freshly cut wood from the forest to resell in towns that are far from any meaningful trees. Whenever he visits Day's End, he brings news from Dayward lands and tells stories to children and lumberjacks alike.
