@@ -1,0 +1,10 @@
+Day's End - locations/Day's-End
+Elizar - locations/Day's-End
+Elking Wood - locations/Day's-End
+Horizon, Evening - locations/Evening-and-Morning-Horizons
+Horizon, Morning - locations/Evening-and-Morning-Horizons
+Natra - locations/Day's-End
+Old Prince, The - locations/Day's-End, adventures/Adventure1-Nightfall
+Ruemin Cavern - locations/Ruemin-Cavern
+Tyagr - locations/Day's-End
+Usen - locations/Day's-End, adventures/Adventure1-Nightfall
