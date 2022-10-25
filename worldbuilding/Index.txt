@@ -5,6 +5,7 @@ Horizon, Evening - locations/Evening-and-Morning-Horizons
 Horizon, Morning - locations/Evening-and-Morning-Horizons
 Natra - locations/Day's-End
 Old Prince, The - locations/Day's-End, adventures/Adventure1-Nightfall
+Rettoo - locations/Day's-End
 Ruemin Cavern - locations/Ruemin-Cavern
 Tyagr - locations/Day's-End
 Usen - locations/Day's-End, adventures/Adventure1-Nightfall
