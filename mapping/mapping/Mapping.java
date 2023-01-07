@@ -72,7 +72,7 @@ public class Mapping extends Application {
 		bufferedImg.setRGB(0, 0, imgWidth, imgHeight, pixels, 0, imgWidth);
 		
 		try {
-			File imgOut = new File("C:\\Users\\Arlo\\Documents\\the-heart-of-a-dead-star\\mapping\\map.png");
+			File imgOut = new File("C:/Users/Arlo/Documents/Games/the-heart-of-a-dead-star/mapping/map.png");
 			ImageIO.write(bufferedImg, "png", imgOut);
 		}
 		catch (IOException e) {
