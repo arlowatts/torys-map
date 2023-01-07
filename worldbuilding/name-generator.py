@@ -1,47 +1,53 @@
-from random import randint
+import random
 
-letters = {"any" : "abcdefghijklmnopqrstuvwxyz", "vowel" : "aeiouy", "consonant" : "bcdfghjklmnpqrstvwxz", "can be followed by" : "cpst", "can follow" : "h", "must be followed by" : "q", "must follow" : "u"}
-frequency = {"a":81, "b":15, "c":27, "d":43, "e":120, "f":23, "g":20, "h":59, "i":73, "j":1, "k":7, "l":40, "m":26, "n":70, "o":77, "p":18, "q":1, "r":60, "s":63, "t":91, "u":29, "v":11, "w":21, "x":2, "y":21, "z":1}
+letters = {"any" : list("abcdefghijklmnoprstuvwxyz") + ["qu", "ch", "ph", "sh", "th"],
+           "middle" : list("abcdefghijklmnoprstuvwxyz-'") + ["qu", "ch", "ph", "sh", "th"],
+           "vowel" : list("aeiou"),
+           "consonant" : list("bcdfghjklmnprstvwxyz") + ["qu", "ch", "ph", "sh", "th"]}
+
+frequency = {"a":81, "b":15, "c":23, "d":43, "e":120, "f":23, "g":20, "h":43, "i":73, "j":1,
+             "k":7, "l":40, "m":26, "n":70, "o":77, "p":12, "r":60, "s":57, "t":84, "u":24,
+             "v":11, "w":21, "x":2, "y":21, "z":1, "qu":6, "ch":8, "ph":6, "sh":10, "th":11,
+             "-":21, "'":24}
 
 def getWord(length):
-    word = getLetter(letters["any"])
+    word = [getLetter(letters["any"])]
 
     if word in letters["vowel"]:
-        word += getLetter(letters["consonant"])
-    else:
-        word += getLetter(letters["vowel"])
+        word.append(getLetter(letters["consonant"]))
 
-    for i in range(length - 2):
+    else:
+        word.append(getLetter(letters["vowel"]))
+
+    for i in range(length - 1):
         nextLetter = ""
 
-        if word[-1] in letters["must be followed by"]:
-            word += letters["must follow"]
-            continue
+        if word[-1] in letters["vowel"] and word[-2] in letters["vowel"]:
+            word.append(getLetter(letters["consonant"]))
 
-        if word[-1] in letters["can be followed by"]:
-            nextLetter += letters["can follow"]
-
-        if (word[-1] in letters["vowel"]) != (word[-2] in letters["vowel"]):
-            nextLetter += letters["any"]
-        elif word[-1] in letters["vowel"] and word[-2] in letters["vowel"]:
-            nextLetter += letters["consonant"]
         elif word[-1] in letters["consonant"] and word[-2] in letters["consonant"]:
-            nextLetter += letters["vowel"]
+            word.append(getLetter(letters["vowel"]))
 
-        word += getLetter(nextLetter)
+        elif i < length - 2:
+            word.append(getLetter(letters["middle"]))
 
-    return word
+        else:
+            word.append(getLetter(letters["any"]))
 
-def getLetter(string):
-    for i in range(len(string)):
-        string += (frequency[string[i]] - 1) * string[i]
+    return "".join(word)
 
-    return string[randint(0, len(string) - 1)]
+def getLetter(array):
+    string = []
+    
+    for i in range(len(array)):
+        string += [array[i]] * frequency[array[i]]
+
+    return random.choice(string)
 
 def main():
-    print("Press Enter to see a new word or q to quit")
+    print("Press Enter to get a new word or q to quit")
 
     while input() == "":
-        print(getWord(randint(4, 8)))
+        print(getWord(random.randint(4, 8)))
 
 if __name__ == "__main__": main()
