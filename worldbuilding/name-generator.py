@@ -28,7 +28,7 @@ def getWord(length):
         elif word[-1] in letters["consonant"] and word[-2] in letters["consonant"]:
             word.append(getLetter(letters["vowel"]))
 
-        elif i < length - 2:
+        elif i < length - 3:
             word.append(getLetter(letters["middle"]))
 
         else:
