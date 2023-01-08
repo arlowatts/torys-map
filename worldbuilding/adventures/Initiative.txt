@@ -1,0 +1,8 @@
+Pippin	15
+Nuri	13.1
+PeeJi	13
+Wolves	10
+
+Wolf 1	dead
+Wolf 2	dead
+Wolf 3	dead
