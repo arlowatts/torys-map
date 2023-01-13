@@ -25,8 +25,8 @@ public class TorusMap extends Map {
 	public double getAltitude(double x, double y) {
 		Vector c = getFullCoords(x, y);
 		
-		if (Math.abs(c.y - smallRadius) > smallRadius * 0.99) return 1;
-		if ((c.x-largeRadius-smallRadius)*(c.x-largeRadius-smallRadius) + (c.y-smallRadius)*(c.y-smallRadius) < 0.05) return 1;
+		//if (Math.abs(c.y - smallRadius) > smallRadius * 0.99) return 1;
+		//if ((c.x-largeRadius-smallRadius)*(c.x-largeRadius-smallRadius) + (c.y-smallRadius)*(c.y-smallRadius) < 0.05) return 1;
 		
 		double val = 0;
 		double scale = 1;

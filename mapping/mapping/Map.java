@@ -93,10 +93,10 @@ public abstract class Map extends Service<WritableImage> {
 						alt = alt | (alt << 8) | (alt << 16);
 				}
 				
-				pixels[x + y * imgWidth] = alt;
+				pixels[x + y * imgWidth] = alt | 0xff000000;
 			}
 		}
-		
+		/*
 		for (int x = 0; x < imgWidth; x += 10) {
 			for (int y = 0; y < imgHeight; y += 10) {
 				double light = getAverageLight(scaledX(x, imgWidth), scaledY(y, imgWidth));
@@ -111,7 +111,7 @@ public abstract class Map extends Service<WritableImage> {
 				}
 			}
 		}
-		
+		*/
 		image.getPixelWriter().setPixels(0, 0, imgWidth, imgHeight, PixelFormat.getIntArgbInstance(), pixels, 0, imgWidth);
 	}
 	
