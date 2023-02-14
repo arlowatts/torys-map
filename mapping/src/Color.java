@@ -1,4 +1,4 @@
-package mapping;
+package src;
 
 /*
  * A class with static methods for manipulating colors stored as standard RGB integers

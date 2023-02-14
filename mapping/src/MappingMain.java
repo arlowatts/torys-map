@@ -1,4 +1,4 @@
-package mapping;
+package src;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 
 import java.lang.Math;
 
-public class Mapping extends Application {
+public class MappingMain extends Application {
 	private static final double ZOOM_SCROLL_SPEED = 1.0 / 5000.0;
 	
 	private Scene scene;
@@ -38,18 +38,21 @@ public class Mapping extends Application {
 	
 	@Override
 	public void start(Stage stage) {
+		// Define image width and height based on the dimensions of the torus world
 		int imgWidth = (int)(200.0 * (5.05425 + 1.31675));
 		int imgHeight = (int)(200.0 * 1.31675);
 		
+		/// Create the map and the image
 		img = new WritableImage(imgWidth, imgHeight);
 		map = new TorusMap(5.05425, 1.31675, 1.5, Map.FACTORIAL, 0.6, Map.POWER_OF_TWO);
 		map.setImage(img);
 		
+		// Add rotations to the map for day and year cycles
 		map.addRotation(new Vector(Math.PI/7, Math.PI/2, 1.0));
 		map.addRotation(new Vector(0, Math.PI/2, 1.0/365.0));
 		
+		// Display the image to the screen
 		imgView = new ImageView(img);
-		
 		scene = new Scene(new StackPane(imgView), imgWidth, imgHeight);
         stage.setScene(scene);
 		stage.show();
@@ -59,6 +62,7 @@ public class Mapping extends Application {
 		map.start();
 	}
 	
+	// Save the image to a fileand close the display
 	@Override
 	public void stop() {
 		int imgWidth = (int)img.getWidth();
@@ -72,7 +76,7 @@ public class Mapping extends Application {
 		bufferedImg.setRGB(0, 0, imgWidth, imgHeight, pixels, 0, imgWidth);
 		
 		try {
-			File imgOut = new File("C:/Users/Arlo/Documents/Games/the-heart-of-a-dead-star/mapping/map.png");
+			File imgOut = new File("map.png");
 			ImageIO.write(bufferedImg, "png", imgOut);
 		}
 		catch (IOException e) {
@@ -80,7 +84,9 @@ public class Mapping extends Application {
 		}
 	}
 	
+	// Initialise and continue to check the event handlers
 	public void initEventHandlers() {
+		// When the map finishes resizing or panning, this handler resets the image view
 		EventHandler<WorkerStateEvent> mapAdjustHandler = new EventHandler<WorkerStateEvent>() {
 			@Override
 			public void handle(WorkerStateEvent e) {
@@ -92,6 +98,8 @@ public class Mapping extends Application {
 			}
 		};
 		
+		// The handler that checks for mouse press events
+		// When the mouse is pressed, it cancels the map updates until the mouse is released
 		EventHandler<MouseEvent> pressHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -105,6 +113,7 @@ public class Mapping extends Application {
 			}
 		};
 		
+		// Move the image view with the mouse until the mouse is released
 		EventHandler<MouseEvent> dragHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -113,19 +122,22 @@ public class Mapping extends Application {
 			}
 		};
 		
+		// When the mouse is released, the map starts updating to the new position and zoom
 		EventHandler<MouseEvent> releaseHandler = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
 				map.setCurrX(map.getCurrX() + (dragStartX - e.getSceneX()) / img.getWidth() * map.getZoom());
 				map.setCurrY(map.getCurrY() + (dragStartY - e.getSceneY()) / img.getWidth() * map.getSizeRatio() * map.getZoom());
 				
-				map.setCurrTime(map.getCurrTime() + 0.1);
-				System.out.println(map.getCurrTime() / Math.PI / 2);
+				//map.setCurrTime(map.getCurrTime() + 0.1);
+				//System.out.println(map.getCurrTime() / Math.PI / 2);
 				
 				map.restart();
 			}
 		};
 		
+		// Manage the zoom level of the map when the scroll wheel is used
+		// When the map is zoomed, don't wait; start updating the map immediately
 		EventHandler<ScrollEvent> zoomHandler = new EventHandler<ScrollEvent>() {
 			@Override
 			public void handle(ScrollEvent e) {

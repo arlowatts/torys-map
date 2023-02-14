@@ -1,4 +1,4 @@
-package mapping;
+package src;
 
 public class Noise {
 	// Starter function for the recursive function

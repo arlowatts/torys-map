@@ -1,4 +1,4 @@
-package mapping;
+package src;
 
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.PixelFormat;
