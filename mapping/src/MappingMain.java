@@ -22,7 +22,7 @@ import javax.imageio.ImageIO;
 import java.lang.Math;
 
 public class MappingMain extends Application {
-	private static final double ZOOM_SCROLL_SPEED = 1.0 / 5000.0;
+	private static final double ZOOM_SCROLL_SPEED = 1.0 / 10000.0;
 	
 	private Scene scene;
 	

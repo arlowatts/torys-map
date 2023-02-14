@@ -6,11 +6,13 @@ import javafx.scene.image.PixelFormat;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
+import java.lang.Math;
+
 import java.util.ArrayList;
 
 public abstract class Map extends Service<WritableImage> {
 	public static final double POWER_OF_TWO = 1 / 1.0; // The sum of the series sum(k=1,inf)(1/2^k) is 1.0
-	public static final double FACTORIAL    = 1 / 1.71828; // Approximately the sum of the series sum(k=1,inf)(1/k!)
+	public static final double FACTORIAL    = 1 / (Math.E - 1); // Approximately the sum of the series sum(k=1,inf)(1/k!)
 	public static final double SQUARES      = 1 / 1.64493; // Approximately the sum of the series sum(k=1,inf)(1/k^2)
 	
 	public static final Vector BASE_LIGHT_ANGLE = new Vector(1, 0, 0);
