@@ -5,3 +5,5 @@ Evening Horizon
 Morning Horizon
 
 	The Morning Horizon is the similar part of the world that is eclipsed shortly before morning.
+
+To describe directions on the surface of Arnsdale, North and South refer to the direction tangent to the surface that leads towards the north or south pole, respectively. Darth is the direction towards the dark side of the planet, and Lith is the direction towards the light side of the planet.
