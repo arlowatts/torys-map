@@ -11,17 +11,19 @@ Level 1 - Archives
 	1. Entrance
 	The entrance area of the dungeon is a 20x20 foot square room with stone brick walls. The north wall is largely filled with the entrance door, the back of which is engraved with an image of an elf monarch seated upon a magnificent throne. The elf wears a crown and holds a long curved sword resting upon their knees. To either side of the throne is an elf warrior, each wearing full-face helmets and weilding spears. An inscription at the top reads (in Elvish): "The sword of justice rests on the wisdom of words." On this side of the door there is a handle and a lever to lock the door (if the lock was broken, this lever no longer moves).
 	In each of the darth and lith walls is an alcove each containing a stone statue of an elf warrior identical to those depicted on the door. The statue in the lith wall is largely eroded by a leak in the ceiling above it, that has slowly worn away the detailing on the helmet of the statue. These statues have also been magically animated, but their magic has decayed over the centuries such that they will no longer animate unless either one is touched. They will attack when this happens (as Animated Armor), but the statue in the lith wall no longer has the benefit of any sort of vision.
-	The south end of the room leads to a T intersection with a passageway. The passageway is 10 feet wide and 100 feet long, extending 40 feet both darth and lith from the entrance room. There are torch brackets in the passage, but no torches. All along the passageway on both sides are doors leading into archive rooms. There are eight such rooms, spread out evenly along the passageway. Each room has an unlocked stone door leading into it from the passage. These doors are carved with simple images of trees and woodland creatures. At each end of the passage is a stairwell leading down.
-	-Lithward
+	The south end of the room leads to a T intersection with a passageway. The passageway is 10 feet wide and 100 feet long, extending 40 feet both darth and lith from the entrance room. There are torch brackets in the passage, but no torches. All along the passageway on both sides are doors leading into archive rooms. There are eight such rooms, spread out evenly along the passageway. Each room has an unlocked stone door leading into it from the passage. These doors are carved with simple images of trees and woodland creatures.
+	Lithward:
 	Wolf
-	Elk(empty)
+	Elk (room with ooze)
 	Tree
 	Birds
-	-Darthward
+	Darthward:
 	Mushrooms
 	Monkeys
-	Beast(pre-basilisk)
+	Beast (pre-basilisk)
 	Spider
+
+	At each end of the passage is a stairwell leading down.
 
 	2. Archive Rooms
 	Each archive room is 20 feet wide and extends 50 feet from the door. Each room is filled with long shelves with thousands of scrolls upon each one. With one shelf all along each 50 foot wall, one shelf along the back 20 foot wall, three double-width 40-foot shelves along the length of the room, and five layers to each shelf, each room contains 1800 feet of shelf space. Each foot of shelf space can contain up to 10 scrolls, giving each room a maximum capacity of 18000 scrolls. However, not every room is filled (and some may be overfilled, with scrolls piled on the ground); roll 2d20 + 60 to determine the percentage of 20000 scrolls the room contains.
