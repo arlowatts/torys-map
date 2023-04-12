@@ -1,5 +1,5 @@
 PeeJi	-
-Pippin	23
-Filius	22
-Nuri	5
-Connie	3
+Pippin	18
+Filius	10
+Nuri	15
+Connie	11
