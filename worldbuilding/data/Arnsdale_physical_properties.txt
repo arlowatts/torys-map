@@ -1,6 +1,0 @@
-Arnsdale Physical Properties:
-Large Radius: 5054.25 km
-Small Radius: 1316.75 km
-
-The Heart Physical Properties:
-Radius: 1737.40 km
