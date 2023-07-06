@@ -13,15 +13,13 @@ frequency = {"a":81, "b":15, "c":23, "d":43, "e":120, "f":23, "g":20, "h":43, "i
 def getWord(length):
     word = [getLetter(letters["any"])]
 
-    if word in letters["vowel"]:
+    if word[0] in letters["vowel"]:
         word.append(getLetter(letters["consonant"]))
 
     else:
         word.append(getLetter(letters["vowel"]))
 
     for i in range(length - 1):
-        nextLetter = ""
-
         if word[-1] in letters["vowel"] and word[-2] in letters["vowel"]:
             word.append(getLetter(letters["consonant"]))
 
