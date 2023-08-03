@@ -1,9 +1,10 @@
 // point is an iterable of floats describing the point in space at which to evaluate the noise function
+// coordinates should be between 0 and the corresponding scale value
 // scale is an iterable describing the size of the total area in units
 // dimensions is the number of dimensions (should always be the same as the length of point)
 // evalAt is an internal value used for recursion (should always be 0)
 // returns a value between 0 and 1
-export function getNoise(point, scale, dimensions = point.length, evalAt = 0) {
+export function getNoise(point, scale, evalAt = 0, dimensions = point.length) {
     // note that the number of dimensions is decremented before it is used as an array index
     dimensions--;
 
@@ -18,8 +19,8 @@ export function getNoise(point, scale, dimensions = point.length, evalAt = 0) {
 
     // otherwise recursively evaluate between two faces
     return lerp(
-        getNoise(point, scale, dimensions, evalAt),
-        getNoise(point, scale, dimensions, evalAt + 1),
+        getNoise(point, scale, evalAt, dimensions),
+        getNoise(point, scale, evalAt + 1, dimensions),
         point[dimensions] % 1
     );
 }
