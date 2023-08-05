@@ -14,10 +14,7 @@ function main() {
     const pixelArray = imageData.data;
     const depthArray = new Array(canvas.width * canvas.height);
 
-    let min = 256;
-    let max = 0;
-
-    let scale = [100, 50];
+    let scale = [25, 10];
 
     // fill the canvas with random noise
     for (let i = 0; i < canvas.width * canvas.height; i++) {
@@ -28,33 +25,38 @@ function main() {
         y *= scale[1];
 
         let noise;
-        let shiftMagnitude;
+        // let shiftMagnitude;
 
-        noise = getNoise([x, y], scale, 0);
+        // noise = getNoise([x, y], scale, 0);
 
-        noise = noise * noise * (-2 * noise + 3);
+        // noise = noise * noise * (-2 * noise + 3);
+        // noise = noise * noise * (-2 * noise + 3);
 
-        noise = 2 * Math.PI * noise;
-        shiftMagnitude = 0.05 * getNoise([x, y], scale, 1);
-        x += shiftMagnitude * (1 + Math.sin(noise)) * scale[0];
-        y += shiftMagnitude * (1 + Math.cos(noise)) * scale[1];
+        // noise = 2 * Math.PI * noise;
+        // shiftMagnitude = 0.05 * getNoise([x, y], scale, 1);
+        let noiseA = getNoise([x/2, y/2], [scale[0]/2, scale[1]/2], 0);
+        let noiseB = getNoise([x/2, y/2], [scale[0]/2, scale[1]/2], 1);
+        x += noiseA * 2;
+        y += noiseB * 2;
 
-        noise = getNoise([x, y], scale, 2);
+        noise = 0;
 
-        noise = noise * 0.6 + getNoise([x*2, y*2], [scale[0]*2, scale[1]*2], 0) * 0.25
-        + getNoise([x*4, y*4], [scale[0]*4, scale[1]*4], 1) * 0.15;
+        for (let j = 0; j < 5; j++) {
+            noise += getNoise([x, y], [scale[0]*2**j, scale[1]*2**j], j + 2) * 0.5**(j+1);
+            x *= 2;
+            y *= 2;
+        }
+        // noise*=2;
 
-        // noise = noise > 0.5 ? 1 : 0;
-        noise = noise*noise;
+        // noise = noise*noise;
+        noise = noise*noise*(-2*noise + 3);
+        noise = noise*noise*(-2*noise + 3);
+        noise = noise > 0.6 ? noise : 0;
 
-        pixelArray[i*4+3] = 255 * noise;
-
-        if (pixelArray[i*4+3] > max) max = pixelArray[i*4+3];
-        if (pixelArray[i*4+3] < min) min = pixelArray[i*4+3];
+        pixelArray[i*4+3] = 255;
+        pixelArray[i*4+2] = 128 * (1 - noise);
+        pixelArray[i*4+1] = 255 * noise;
     }
-
-    console.log("Min: " + min);
-    console.log("Max: " + max);
 
     ctx.putImageData(imageData, 0, 0);
 }
