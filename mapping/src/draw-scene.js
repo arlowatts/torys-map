@@ -1,4 +1,4 @@
-export function drawScene(gl, programInfo, buffers) {
+export function drawScene(gl, programInfo, buffers, viewRotation) {
     // clear the screen to black
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
@@ -14,13 +14,10 @@ export function drawScene(gl, programInfo, buffers) {
     const projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    // create the model matrix at the center of the scene
-    const modelMatrix = mat4.create();
-    // mat4.translate(modelMatrix, modelMatrix, [0.0, 0.0, 0.0]);
-
     // create the view matrix distanced from the model to see it fully
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -15.0]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -25.0]);
+    mat4.rotate(viewMatrix, viewMatrix, viewRotation, [0.0, 1.0, 0.0]);
 
     setPositionAttribute(gl, buffers, programInfo);
 
@@ -28,25 +25,24 @@ export function drawScene(gl, programInfo, buffers) {
 
     // set the shader uniforms
     gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-    gl.uniformMatrix4fv(programInfo.uniformLocations.modelMatrix, false, modelMatrix);
     gl.uniformMatrix4fv(programInfo.uniformLocations.viewMatrix, false, viewMatrix);
-    gl.uniform4uiv(programInfo.uniformLocations.noiseScale, new Uint32Array([100, 100, 100, 100]));
 
     // set the shapes to draw
-    const offset = 0;
-    const vertexCount = 6;
-    gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.position.vertexCount);
 }
 
 // define the mapping from the buffers to the attributes
 function setPositionAttribute(gl, buffers, programInfo) {
-    const numComponents = 2; // use two values per step
-    const type = gl.FLOAT; // set the data type as 32 bit float
-    const normalize = false;
-    const stride = 0; // use default stride based on numComponents and type
-    const offset = 0; // starting position in the buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position.data);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, numComponents, type, normalize, stride, offset);
+    gl.vertexAttribPointer(
+        programInfo.attribLocations.vertexPosition,
+        buffers.position.numComponents,
+        buffers.position.type,
+        buffers.position.normalize,
+        buffers.position.stride,
+        buffers.position.offset
+    );
+
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }

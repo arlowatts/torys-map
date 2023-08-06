@@ -32,17 +32,29 @@ function main() {
         },
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-            modelMatrix: gl.getUniformLocation(shaderProgram, "uModelMatrix"),
-            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-            noiseScale: gl.getUniformLocation(shaderProgram, "uNoiseScale")
+            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix")
         }
     };
 
     // initialize the data buffers for the scene
     const buffers = initBuffers(gl);
 
-    // draw the scene
-    drawScene(gl, programInfo, buffers);
+    let then = 0.0;
+    let deltaTime = 0.0;
+    let viewRotation = 0.0;
+
+    // draw the scene and update it each frame
+    requestAnimationFrame(render);
+
+    function render(now) {
+        deltaTime = now - then;
+        then = now;
+
+        drawScene(gl, programInfo, buffers, viewRotation);
+        viewRotation += deltaTime * 0.001;
+
+        requestAnimationFrame(render);
+    }
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
