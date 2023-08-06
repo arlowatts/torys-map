@@ -18,6 +18,10 @@ function main() {
         return;
     }
 
+    // enable depth testing
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
     // initialize the shader program
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
@@ -29,7 +33,9 @@ function main() {
         },
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-            modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix")
+            modelMatrix: gl.getUniformLocation(shaderProgram, "uModelMatrix"),
+            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+            noiseScale: gl.getUniformLocation(shaderProgram, "uNoiseScale")
         }
     };
 

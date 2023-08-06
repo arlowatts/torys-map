@@ -16,7 +16,7 @@ function initPositionBuffer(gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
     // define the data as an array
-    const positions = [-12.5, -5.0, -12.5, 5.0, 12.5, -5.0, 12.5, 5.0];
+    const positions = [-15.0, 0.0, -12.5, -5.0, -12.5, 5.0, 12.5, -5.0, 12.5, 5.0, 15.0, 0.0];
 
     // convert the array to a Float32Array, then populate the buffer with the position data
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
