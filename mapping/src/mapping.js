@@ -1,9 +1,8 @@
-import * as mat4 from "./gl-matrix-min.js";
-import { getNoise } from "./noise.js";
-import { initBuffers } from "./init-buffers.js";
 import { drawScene } from "./draw-scene.js";
-import { vsSource } from "./gl-shader-vertex.js";
+import { initBuffers } from "./init-buffers.js";
+import * as mat4 from "./gl-matrix-min.js";
 import { fsSource } from "./gl-shader-fragment.js";
+import { vsSource } from "./gl-shader-vertex.js";
 
 main();
 
