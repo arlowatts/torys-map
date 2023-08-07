@@ -21,6 +21,10 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
 
+    // set the background color and clear depth
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearDepth(1.0);
+
     // initialize the shader program
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
@@ -41,7 +45,11 @@ function main() {
 
     let then = 0.0;
     let deltaTime = 0.0;
-    let viewRotation = 0.0;
+    let viewRotation = {
+        phi: 0.0,
+        theta: 0.0,
+        zoom: 10.0
+    };
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
@@ -51,7 +59,8 @@ function main() {
         then = now;
 
         drawScene(gl, programInfo, buffers, viewRotation);
-        viewRotation += deltaTime * 0.001;
+        viewRotation.phi += deltaTime * 0.0011;
+        viewRotation.theta += deltaTime * 0.0007;
 
         requestAnimationFrame(render);
     }

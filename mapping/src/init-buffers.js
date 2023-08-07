@@ -25,20 +25,20 @@ function initPositionBuffer(gl) {
     let phiStep = 5;
     let thetaStep = 10;
 
-    let x, y, z, xyOffset;
+    let x, y, z, xzOffset;
 
-    for (let phi = 0; phi <= 360; phi += phiStep) {
+    for (let phi = 0; phi < 360; phi += phiStep) {
         for (let theta = 0; theta <= 360; theta += thetaStep) {
-            z = smallRadius * Math.sin(theta * degToRad);
-            xyOffset = largeRadius + smallRadius * Math.cos(theta * degToRad);
+            y = smallRadius * Math.sin(theta * degToRad);
+            xzOffset = largeRadius + smallRadius * Math.cos(theta * degToRad);
 
-            y = Math.cos(phi * degToRad) * xyOffset;
-            x = Math.sin(phi * degToRad) * xyOffset;
+            z = Math.cos(phi * degToRad) * xzOffset;
+            x = Math.sin(phi * degToRad) * xzOffset;
 
             positions.push(x, y, z);
 
-            y = Math.cos((phi + phiStep) * degToRad) * xyOffset;
-            x = Math.sin((phi + phiStep) * degToRad) * xyOffset;
+            z = Math.cos((phi + phiStep) * degToRad) * xzOffset;
+            x = Math.sin((phi + phiStep) * degToRad) * xzOffset;
 
             positions.push(x, y, z);
         }

@@ -1,7 +1,5 @@
 export function drawScene(gl, programInfo, buffers, viewRotation) {
     // clear the screen to black
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clearDepth(1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // set the parameters for the perspective matrix
@@ -14,10 +12,12 @@ export function drawScene(gl, programInfo, buffers, viewRotation) {
     const projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    // create the view matrix distanced from the model to see it fully
+    // create the view matrix
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -25.0]);
-    mat4.rotate(viewMatrix, viewMatrix, viewRotation, [0.0, 1.0, 0.0]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -2.0 - viewRotation.zoom]);
+    mat4.rotate(viewMatrix, viewMatrix, viewRotation.theta, [1.0, 0.0, 0.0]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -8.0]);
+    mat4.rotate(viewMatrix, viewMatrix, viewRotation.phi, [0.0, 1.0, 0.0]);
 
     setPositionAttribute(gl, buffers, programInfo);
 
