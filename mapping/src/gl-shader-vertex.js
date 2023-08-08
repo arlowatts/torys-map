@@ -4,10 +4,10 @@ uniform mat4 uViewMatrix;
 
 in vec4 aVertexPosition;
 
-out vec4 aPointPosition;
+out vec4 pointPosition;
 
 void main() {
     gl_Position = uProjectionMatrix * uViewMatrix * aVertexPosition;
-    aPointPosition = aVertexPosition;
+    pointPosition = aVertexPosition;
 }
 `;

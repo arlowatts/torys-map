@@ -1,3 +1,6 @@
+import { torys } from "./properties.js";
+
+// draw the scene to the given webgl context
 export function drawScene(gl, programInfo, buffers, viewRotation) {
     // clear the screen to black
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -14,9 +17,9 @@ export function drawScene(gl, programInfo, buffers, viewRotation) {
 
     // create the view matrix
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -2.0 - viewRotation.zoom]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.smallRadius - viewRotation.zoom]);
     mat4.rotate(viewMatrix, viewMatrix, viewRotation.theta, [1.0, 0.0, 0.0]);
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -8.0]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.largeRadius]);
     mat4.rotate(viewMatrix, viewMatrix, viewRotation.phi, [0.0, 1.0, 0.0]);
 
     setPositionAttribute(gl, buffers, programInfo);

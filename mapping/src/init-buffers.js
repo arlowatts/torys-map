@@ -1,9 +1,11 @@
+import { torys } from "./properties.js";
+
 // initialize the data buffers for the scene
 export function initBuffers(gl) {
     const positionBuffer = initPositionBuffer(gl);
 
     return {
-        position: positionBuffer,
+        position: positionBuffer
     };
 }
 
@@ -18,27 +20,23 @@ function initPositionBuffer(gl) {
     // define the data as an array
     const positions = [];
 
-    let degToRad = Math.PI / 180;
-    let largeRadius = 8;
-    let smallRadius = 2;
-
-    let phiStep = 5;
-    let thetaStep = 10;
+    const degToRad = Math.PI / 180;
 
     let x, y, z, xzOffset;
 
-    for (let phi = 0; phi < 360; phi += phiStep) {
-        for (let theta = 0; theta <= 360; theta += thetaStep) {
-            y = smallRadius * Math.sin(theta * degToRad);
-            xzOffset = largeRadius + smallRadius * Math.cos(theta * degToRad);
+    for (let phi = 0; phi < 360; phi += torys.phiDegreeStep) {
+        for (let theta = 0; theta <= 360; theta += torys.thetaDegreeStep) {
+            y = torys.smallRadius * Math.sin(theta * degToRad);
+
+            xzOffset = torys.largeRadius + torys.smallRadius * Math.cos(theta * degToRad);
 
             z = Math.cos(phi * degToRad) * xzOffset;
             x = Math.sin(phi * degToRad) * xzOffset;
 
             positions.push(x, y, z);
 
-            z = Math.cos((phi + phiStep) * degToRad) * xzOffset;
-            x = Math.sin((phi + phiStep) * degToRad) * xzOffset;
+            z = Math.cos((phi + torys.phiDegreeStep) * degToRad) * xzOffset;
+            x = Math.sin((phi + torys.phiDegreeStep) * degToRad) * xzOffset;
 
             positions.push(x, y, z);
         }

@@ -1,6 +1,5 @@
 import { drawScene } from "./draw-scene.js";
 import { initBuffers } from "./init-buffers.js";
-import * as mat4 from "./gl-matrix-min.js";
 import { fsSource } from "./gl-shader-fragment.js";
 import { vsSource } from "./gl-shader-vertex.js";
 
@@ -48,7 +47,7 @@ function main() {
     let viewRotation = {
         phi: 0.0,
         theta: 0.0,
-        zoom: 10.0
+        zoom: 30.0
     };
 
     // draw the scene and update it each frame

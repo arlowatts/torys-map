@@ -1,3 +1,5 @@
+import { torys } from "./properties.js";
+
 export const fsSource = `#version 300 es
 mediump float noise4(mediump vec4, mediump vec4, uint);
 mediump float noise3(mediump vec3, mediump vec3, uint);
@@ -6,12 +8,15 @@ mediump float noise1(mediump float, mediump float, uint);
 mediump float hash(uint);
 mediump float lerp(mediump float, mediump float, mediump float);
 
-in mediump vec4 aPointPosition;
+in mediump vec4 pointPosition;
 
 out mediump vec4 fragColor;
 
 void main() {
-    fragColor = vec4(0.0, 0.0, 0.0, noise3(aPointPosition.xyz, floor(aPointPosition.xyz), 0u));
+    mediump vec4 normal = normalize(pointPosition - float(${torys.largeRadius}) * normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0)));
+    mediump float color = dot(normal, normalize(vec4(1.0, 1.0, 0.0, 0.0)));
+    color *= noise3(pointPosition.xyz, floor(pointPosition.xyz), 0u);
+    fragColor = vec4(color, color, color, 1.0);
 }
 
 mediump float noise4(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
