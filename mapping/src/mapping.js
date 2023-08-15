@@ -21,7 +21,7 @@ function main() {
     gl.depthFunc(gl.LEQUAL);
 
     // set the background color and clear depth
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.1, 0.1, 0.1, 1.0);
     gl.clearDepth(1.0);
 
     // initialize the shader program
@@ -58,8 +58,8 @@ function main() {
         then = now;
 
         drawScene(gl, programInfo, buffers, viewRotation);
-        viewRotation.phi += deltaTime * 0.0011;
-        viewRotation.theta += deltaTime * 0.0007;
+        viewRotation.phi += deltaTime * 0.0005;
+        viewRotation.theta += deltaTime * 0.0005;
 
         requestAnimationFrame(render);
     }
