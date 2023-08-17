@@ -35,7 +35,8 @@ function main() {
         },
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix")
+            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
+            lightDirection: gl.getUniformLocation(shaderProgram, "uLightDirection")
         }
     };
 
@@ -47,8 +48,9 @@ function main() {
     let viewRotation = {
         phi: 0.0,
         theta: 0.0,
-        zoom: 30.0
+        zoom: 5.0
     };
+    let lightDirection = [1.0, 0.0, 0.0, 0.0];
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
@@ -57,9 +59,11 @@ function main() {
         deltaTime = now - then;
         then = now;
 
-        drawScene(gl, programInfo, buffers, viewRotation);
-        viewRotation.phi += deltaTime * 0.0005;
-        viewRotation.theta += deltaTime * 0.0005;
+        lightDirection = [Math.sin(now * 0.001), Math.cos(now * 0.001), 0.0, 0.0];
+
+        drawScene(gl, programInfo, buffers, viewRotation, lightDirection);
+        viewRotation.phi += deltaTime * -0.000051;
+        viewRotation.theta += deltaTime * 0.00007;
 
         requestAnimationFrame(render);
     }

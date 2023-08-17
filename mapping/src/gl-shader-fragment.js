@@ -49,24 +49,23 @@ o = wv[3]u[3] + (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2] + u[3]v[3])
 
 export const fsSource = `#version 300 es
 mediump float noise4(mediump vec4, mediump vec4, uint);
-mediump float noise3(mediump vec3, mediump vec3, uint);
-mediump float noise2(mediump vec2, mediump vec2, uint);
-mediump float noise1(mediump float, mediump float, uint);
+mediump float noise3(mediump vec4, mediump vec4, uint);
+mediump float noise2(mediump vec4, mediump vec4, uint);
+mediump float noise(mediump float, mediump float, uint);
 mediump float hash(uint);
 mediump float lerp(mediump float, mediump float, mediump float);
 
+uniform mediump vec4 uLightDirection;
+
 in mediump vec4 pointPosition;
-// in mediump vec4 lightDirection;
 
 out mediump vec4 fragColor;
 
 void main() {
-    mediump vec4 lightDirection = normalize(vec4(0.0, 0.0, 1.0, 0.0)); // temporary
-
     mediump float largeRadius = float(${torys.largeRadius});
 
     mediump vec4 normal = normalize(pointPosition - largeRadius * normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0)));
-    mediump float color = dot(normal, lightDirection);
+    mediump float color = dot(normal, uLightDirection);
 
     if (color <= 0.0) {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
@@ -76,23 +75,25 @@ void main() {
     mediump float smallRadius = float(${torys.smallRadius});
 
     // these values are used a few times
-    mediump float pointLightY = pointPosition.y * lightDirection.y;
-    mediump float pointLightDot = dot(pointPosition, lightDirection);
+    mediump float pointLightY = pointPosition.y * uLightDirection.y;
+    mediump float pointLightDot = dot(pointPosition, uLightDirection);
 
     // t is the distance along the ray of light to check for intersections
-    mediump float t = smallRadius * pointLightY +
-                      smallRadius - pointLightY * pointLightY / smallRadius -
-                      2.0 * pointLightDot;
+    mediump float t =
+        smallRadius * pointLightY +
+        smallRadius - pointLightY * pointLightY / smallRadius -
+        2.0 * pointLightDot;
     
     // then evaluate the squared distance function at t and compare to the small radius squared
     if (t > 0.0) {
-        mediump float distance = (largeRadius + smallRadius) * (largeRadius - smallRadius) +
-                                dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot +
-                                t * t - 2.0 * largeRadius * sqrt(
-                                    pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z +
-                                    2.0 * t * (pointLightDot - pointLightY) +
-                                    t * t * (lightDirection.x * lightDirection.x + lightDirection.z * lightDirection.z)
-                                );
+        mediump float distance =
+            (largeRadius + smallRadius) * (largeRadius - smallRadius) +
+            dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot +
+            t * t - 2.0 * largeRadius * sqrt(
+                pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z +
+                2.0 * t * (pointLightDot - pointLightY) +
+                t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
+            );
 
         if (distance <= 0.0) {
             fragColor = vec4(0.0, 0.0, 0.0, 1.0);
@@ -100,41 +101,55 @@ void main() {
         }
     }
 
-    // color *= noise3(pointPosition.xyz, floor(pointPosition.xyz), 0u);
-    fragColor = vec4(color, color, color, 1.0);
+    mediump float surfaceValue = 0.0;
+    mediump vec4 point = pointPosition;
+    mediump float scaleFactor = 2.0;
+
+    for (uint i = 0u; i < 10u; i += 1u) {
+        surfaceValue += noise3(point, floor(point), i) / scaleFactor;
+        point *= 2.0;
+        scaleFactor *= 2.0;
+    }
+
+    fragColor = vec4(
+        surfaceValue < 0.7 ? 0.0 : color * surfaceValue,
+        surfaceValue < 0.6 ? 0.0 : color * surfaceValue,
+        color * surfaceValue,
+        1.0
+    );
 }
 
 mediump float noise4(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0xffffu + uint(int(pointFloor.w));
 
     return lerp(
-        noise3(point.xyz, pointFloor.xyz, evalAt),
-        noise3(point.xyz, pointFloor.xyz, evalAt + 1u),
+        noise3(point, pointFloor, evalAt),
+        noise3(point, pointFloor, evalAt + 1u),
         point.w - pointFloor.w
     );
 }
 
-mediump float noise3(mediump vec3 point, mediump vec3 pointFloor, uint evalAt) {
+mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0xffffu + uint(int(pointFloor.z));
 
     return lerp(
-        noise2(point.xy, pointFloor.xy, evalAt),
-        noise2(point.xy, pointFloor.xy, evalAt + 1u),
+        noise2(point, pointFloor, evalAt),
+        noise2(point, pointFloor, evalAt + 1u),
         point.z - pointFloor.z
     );
 }
 
-mediump float noise2(mediump vec2 point, mediump vec2 pointFloor, uint evalAt) {
+mediump float noise2(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0xffffu + uint(int(pointFloor.y));
 
     return lerp(
-        noise1(point.x, pointFloor.x, evalAt),
-        noise1(point.x, pointFloor.x, evalAt + 1u),
+        noise(point.x, pointFloor.x, evalAt),
+        noise(point.x, pointFloor.x, evalAt + 1u),
         point.y - pointFloor.y
     );
 }
 
-mediump float noise1(mediump float point, mediump float pointFloor, uint evalAt) {
+mediump float noise(mediump float point, mediump float pointFloor, uint evalAt) {
     evalAt = evalAt * 0xffffu + uint(int(pointFloor));
 
     return lerp(
