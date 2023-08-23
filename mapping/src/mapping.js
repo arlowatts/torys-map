@@ -2,14 +2,35 @@ import { drawScene } from "./draw-scene.js";
 import { initBuffers } from "./init-buffers.js";
 import { fsSource } from "./gl-shader-fragment.js";
 import { vsSource } from "./gl-shader-vertex.js";
+import { torys } from "./properties.js";
+
+const PAN_SENSITIVITY = 0.0002;
+const SCROLL_SENSITIVITY = 0.001;
+const MIN_ZOOM = -10000;
+const MAX_ZOOM = 15000;
+
+// load the canvas
+const canvas = document.getElementById("mapcanvas")
+const gl = canvas.getContext("webgl2");
+
+let programInfo, buffers;
+
+let view = {
+    phiPrecise: 0.0,
+    thetaPrecise: 0.0,
+    zoomPrecise: -2000.0,
+    phi: 0.0,
+    theta: 0.0,
+    zoom: 1 / 2 ** (-2000 * 0.001)
+};
+
+let lightDirection = [0.0, 3/5, 4/5, 0.0];
 
 main();
+addEventListener("mousemove", onMouseMove);
+addEventListener("wheel", onWheel);
 
 function main() {
-    // load the canvas
-    const canvas = document.getElementById("mapcanvas")
-    const gl = canvas.getContext("webgl2");
-
     // check that the webgl context opened correctly
     if (gl === null) {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -28,7 +49,7 @@ function main() {
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
     // collect information about the shaderProgram, such as attribute and uniform locations
-    const programInfo = {
+    programInfo = {
         program: shaderProgram,
         attribLocations: {
             vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition")
@@ -41,32 +62,36 @@ function main() {
     };
 
     // initialize the data buffers for the scene
-    const buffers = initBuffers(gl);
-
-    let then = 0.0;
-    let deltaTime = 0.0;
-    let viewRotation = {
-        phi: 0.0,
-        theta: 0.0,
-        zoom: 5.0
-    };
-    let lightDirection = [1.0, 0.0, 0.0, 0.0];
+    buffers = initBuffers(gl);
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
+}
 
-    function render(now) {
-        deltaTime = now - then;
-        then = now;
+function render(now) {
+    drawScene(gl, programInfo, buffers, view, lightDirection);
 
-        lightDirection = [Math.sin(now * 0.001), Math.cos(now * 0.001), 0.0, 0.0];
+    requestAnimationFrame(render);
+}
 
-        drawScene(gl, programInfo, buffers, viewRotation, lightDirection);
-        viewRotation.phi += deltaTime * -0.000051;
-        viewRotation.theta += deltaTime * 0.00007;
+// adjust the view location when the mouse is dragged
+function onMouseMove(event) {
+    if (event.buttons === 1) {
+        view.phiPrecise += event.movementX * torys.smallRadius * view.zoom;
+        view.thetaPrecise += event.movementY * torys.largeRadius * view.zoom;
 
-        requestAnimationFrame(render);
+        view.phi = view.phiPrecise * PAN_SENSITIVITY;
+        view.theta = view.thetaPrecise * PAN_SENSITIVITY;
     }
+}
+
+// zoom when the scroll wheel is used
+function onWheel(event) {
+    view.zoomPrecise += event.wheelDelta;
+
+    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, MIN_ZOOM), MAX_ZOOM);
+
+    view.zoom = 1 / 2 ** (view.zoomPrecise * SCROLL_SENSITIVITY);
 }
 
 // initialize the shader program with a vertex shader and a fragment shader

@@ -1,15 +1,15 @@
 import { torys } from "./properties.js";
 
 // draw the scene to the given webgl context
-export function drawScene(gl, programInfo, buffers, viewRotation, lightDirection) {
+export function drawScene(gl, programInfo, buffers, view, lightDirection) {
     // clear the screen to black
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // set the parameters for the perspective matrix
     const fieldOfView = 0.25 * Math.PI;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    const zNear = 0.1;
-    const zFar = 100.0;
+    const zNear = view.zoom * 0.5;
+    const zFar = 2 * (torys.largeRadius + torys.smallRadius + view.zoom);
 
     // create the projection matrix
     const projectionMatrix = mat4.create();
@@ -17,10 +17,10 @@ export function drawScene(gl, programInfo, buffers, viewRotation, lightDirection
 
     // create the view matrix
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.smallRadius - viewRotation.zoom]);
-    mat4.rotate(viewMatrix, viewMatrix, viewRotation.theta, [1.0, 0.0, 0.0]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.smallRadius - view.zoom]);
+    mat4.rotate(viewMatrix, viewMatrix, view.theta, [1.0, 0.0, 0.0]);
     mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.largeRadius]);
-    mat4.rotate(viewMatrix, viewMatrix, viewRotation.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(viewMatrix, viewMatrix, view.phi, [0.0, 1.0, 0.0]);
 
     setPositionAttribute(gl, buffers, programInfo);
 
