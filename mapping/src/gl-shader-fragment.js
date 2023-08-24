@@ -48,6 +48,7 @@ o = wv[3]u[3] + (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2] + u[3]v[3])
 */
 
 export const fsSource = `#version 300 es
+mediump float getHeight(mediump vec4);
 mediump float noise4(mediump vec4, mediump vec4, uint);
 mediump float noise3(mediump vec4, mediump vec4, uint);
 mediump float noise2(mediump vec4, mediump vec4, uint);
@@ -56,6 +57,7 @@ mediump float hash(uint);
 mediump float lerp(mediump float, mediump float, mediump float);
 
 uniform mediump vec4 uLightDirection;
+uniform mediump float uZoomLevel;
 
 in mediump vec4 pointPosition;
 
@@ -63,8 +65,22 @@ out mediump vec4 fragColor;
 
 void main() {
     mediump float largeRadius = float(${torys.largeRadius});
+    mediump float smallRadius = float(${torys.smallRadius});
+
+    mediump float surfaceValue = getHeight(pointPosition);
 
     mediump vec4 normal = normalize(pointPosition - largeRadius * normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0)));
+
+    if (surfaceValue > 0.6) {
+        mediump vec4 pointA = vec4(normalize(cross(normal.xyz, normal.yzx)) / 32.0 * uZoomLevel, 0.0);
+        mediump vec4 pointB = vec4(normalize(cross(normal.xyz, pointA.xyz)) / 32.0 * uZoomLevel, 0.0);
+
+        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * 0.1;
+        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * 0.1;
+
+        normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
+    }
+
     mediump float color = dot(normal, uLightDirection);
 
     if (color <= 0.0) {
@@ -72,35 +88,44 @@ void main() {
         return;
     }
 
-    mediump float smallRadius = float(${torys.smallRadius});
+    if (length(pointPosition.xz) < largeRadius) {
+        // these values are used a few times
+        mediump float pointLightY = pointPosition.y * uLightDirection.y;
+        mediump float pointLightDot = dot(pointPosition, uLightDirection);
 
-    // these values are used a few times
-    mediump float pointLightY = pointPosition.y * uLightDirection.y;
-    mediump float pointLightDot = dot(pointPosition, uLightDirection);
+        // t is the distance along the ray of light to check for intersections
+        mediump float t =
+            smallRadius * pointLightY
+            + smallRadius - pointLightY * pointLightY / smallRadius
+            - 2.0 * pointLightDot;
+        
+        // then evaluate the squared distance function at t
+        if (t > 0.0) {
+            mediump float distance =
+                (largeRadius + smallRadius) * (largeRadius - smallRadius)
+                + dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot
+                + t * t - 2.0 * largeRadius * sqrt(
+                    pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z
+                    + 2.0 * t * (pointLightDot - pointLightY)
+                    + t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
+                );
 
-    // t is the distance along the ray of light to check for intersections
-    mediump float t =
-        smallRadius * pointLightY +
-        smallRadius - pointLightY * pointLightY / smallRadius -
-        2.0 * pointLightDot;
-    
-    // then evaluate the squared distance function at t and compare to the small radius squared
-    if (t > 0.0) {
-        mediump float distance =
-            (largeRadius + smallRadius) * (largeRadius - smallRadius) +
-            dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot +
-            t * t - 2.0 * largeRadius * sqrt(
-                pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z +
-                2.0 * t * (pointLightDot - pointLightY) +
-                t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
-            );
-
-        if (distance <= 0.0) {
-            fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-            return;
+            if (distance <= 0.0) {
+                fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                return;
+            }
         }
     }
 
+    fragColor = vec4(
+        surfaceValue < 0.7 ? 0.0 : color * surfaceValue,
+        surfaceValue < 0.6 ? 0.0 : color * surfaceValue,
+        color * surfaceValue,
+        1.0
+    );
+}
+
+mediump float getHeight(mediump vec4 pointPosition) {
     mediump float surfaceValue = 0.0;
     mediump vec4 point = pointPosition;
     mediump float scaleFactor = 2.0;
@@ -111,12 +136,7 @@ void main() {
         scaleFactor *= 2.0;
     }
 
-    fragColor = vec4(
-        surfaceValue < 0.7 ? 0.0 : color * surfaceValue,
-        surfaceValue < 0.6 ? 0.0 : color * surfaceValue,
-        color * surfaceValue,
-        1.0
-    );
+    return surfaceValue;
 }
 
 mediump float noise4(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {

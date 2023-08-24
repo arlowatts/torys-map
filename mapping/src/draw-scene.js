@@ -9,7 +9,7 @@ export function drawScene(gl, programInfo, buffers, view, lightDirection) {
     const fieldOfView = 0.25 * Math.PI;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = view.zoom * 0.5;
-    const zFar = 2 * (torys.largeRadius + torys.smallRadius + view.zoom);
+    const zFar = (view.zoom + torys.largeRadius + torys.smallRadius) * 2;
 
     // create the projection matrix
     const projectionMatrix = mat4.create();
@@ -30,6 +30,7 @@ export function drawScene(gl, programInfo, buffers, view, lightDirection) {
     gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
     gl.uniformMatrix4fv(programInfo.uniformLocations.viewMatrix, false, viewMatrix);
     gl.uniform4fv(programInfo.uniformLocations.lightDirection, new Float32Array(lightDirection));
+    gl.uniform1f(programInfo.uniformLocations.zoomLevel, view.zoom);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.position.vertexCount);

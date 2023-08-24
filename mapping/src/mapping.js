@@ -4,10 +4,10 @@ import { fsSource } from "./gl-shader-fragment.js";
 import { vsSource } from "./gl-shader-vertex.js";
 import { torys } from "./properties.js";
 
-const PAN_SENSITIVITY = 0.0002;
+const PAN_SENSITIVITY = 0.00015;
 const SCROLL_SENSITIVITY = 0.001;
 const MIN_ZOOM = -10000;
-const MAX_ZOOM = 15000;
+const MAX_ZOOM = 10000;
 
 // load the canvas
 const canvas = document.getElementById("mapcanvas")
@@ -16,13 +16,21 @@ const gl = canvas.getContext("webgl2");
 let programInfo, buffers;
 
 let view = {
-    phiPrecise: 0.0,
-    thetaPrecise: 0.0,
-    zoomPrecise: -2000.0,
+    phiPrecise: 23760.12848418419,
+    thetaPrecise: 22429.74733499146,
+    zoomPrecise: 2000.0,
     phi: 0.0,
     theta: 0.0,
-    zoom: 1 / 2 ** (-2000 * 0.001)
+    zoom: 2 ** (2000 * SCROLL_SENSITIVITY)
 };
+
+onMouseMove(
+    {
+        buttons: 1,
+        movementX: 0.0,
+        movementY: 0.0
+    }
+);
 
 let lightDirection = [0.0, 3/5, 4/5, 0.0];
 
@@ -57,7 +65,8 @@ function main() {
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
             viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-            lightDirection: gl.getUniformLocation(shaderProgram, "uLightDirection")
+            lightDirection: gl.getUniformLocation(shaderProgram, "uLightDirection"),
+            zoomLevel: gl.getUniformLocation(shaderProgram, "uZoomLevel")
         }
     };
 
@@ -69,6 +78,8 @@ function main() {
 }
 
 function render(now) {
+    lightDirection = [Math.sin(now * 0.0005), Math.cos(now * 0.0005), 0.0, 0.0];
+
     drawScene(gl, programInfo, buffers, view, lightDirection);
 
     requestAnimationFrame(render);
@@ -76,7 +87,7 @@ function render(now) {
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
-    if (event.buttons === 1) {
+    if (event.buttons == 1) {
         view.phiPrecise += event.movementX * torys.smallRadius * view.zoom;
         view.thetaPrecise += event.movementY * torys.largeRadius * view.zoom;
 
@@ -91,7 +102,7 @@ function onWheel(event) {
 
     view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, MIN_ZOOM), MAX_ZOOM);
 
-    view.zoom = 1 / 2 ** (view.zoomPrecise * SCROLL_SENSITIVITY);
+    view.zoom = 2 ** (view.zoomPrecise * SCROLL_SENSITIVITY);
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
