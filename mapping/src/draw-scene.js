@@ -1,7 +1,7 @@
-import { torys } from "./properties.js";
+import { torys, view, light } from "./properties.js";
 
 // draw the scene to the given webgl context
-export function drawScene(gl, programInfo, buffers, view, lightDirection) {
+export function drawScene(gl, programInfo, buffers) {
     // clear the screen to black
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -29,7 +29,8 @@ export function drawScene(gl, programInfo, buffers, view, lightDirection) {
     // set the shader uniforms
     gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
     gl.uniformMatrix4fv(programInfo.uniformLocations.viewMatrix, false, viewMatrix);
-    gl.uniform4fv(programInfo.uniformLocations.lightDirection, new Float32Array(lightDirection));
+    gl.uniform4fv(programInfo.uniformLocations.lightDirection, new Float32Array(light.direction));
+    gl.uniform1f(programInfo.uniformLocations.lightAmbience, light.ambience);
     gl.uniform1f(programInfo.uniformLocations.zoomLevel, view.zoom);
 
     // set the shapes to draw

@@ -57,6 +57,7 @@ mediump float hash(uint);
 mediump float lerp(mediump float, mediump float, mediump float);
 
 uniform mediump vec4 uLightDirection;
+uniform mediump float uLightAmbience;
 uniform mediump float uZoomLevel;
 
 in mediump vec4 pointPosition;
@@ -82,12 +83,9 @@ void main() {
     }
 
     mediump float color = dot(normal, uLightDirection);
+    color = max(color, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
 
-    if (color <= 0.0) {
-        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-        return;
-    }
-
+    // test for shadows
     if (length(pointPosition.xz) < largeRadius) {
         // these values are used a few times
         mediump float pointLightY = pointPosition.y * uLightDirection.y;
@@ -111,8 +109,7 @@ void main() {
                 );
 
             if (distance <= 0.0) {
-                fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-                return;
+                color = uLightAmbience;
             }
         }
     }

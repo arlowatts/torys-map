@@ -2,41 +2,17 @@ import { drawScene } from "./draw-scene.js";
 import { initBuffers } from "./init-buffers.js";
 import { fsSource } from "./gl-shader-fragment.js";
 import { vsSource } from "./gl-shader-vertex.js";
-import { torys } from "./properties.js";
-
-const PAN_SENSITIVITY = 0.00015;
-const SCROLL_SENSITIVITY = 0.001;
-const MIN_ZOOM = -10000;
-const MAX_ZOOM = 10000;
+import { torys, view, light } from "./properties.js";
+import * as properties from "./properties.js";
 
 // load the canvas
 const canvas = document.getElementById("mapcanvas")
 const gl = canvas.getContext("webgl2");
 
+// declare objects for the shader program
 let programInfo, buffers;
 
-let view = {
-    phiPrecise: 23760.12848418419,
-    thetaPrecise: 22429.74733499146,
-    zoomPrecise: 2000.0,
-    phi: 0.0,
-    theta: 0.0,
-    zoom: 2 ** (2000 * SCROLL_SENSITIVITY)
-};
-
-onMouseMove(
-    {
-        buttons: 1,
-        movementX: 0.0,
-        movementY: 0.0
-    }
-);
-
-let lightDirection = [0.0, 3/5, 4/5, 0.0];
-
 main();
-addEventListener("mousemove", onMouseMove);
-addEventListener("wheel", onWheel);
 
 function main() {
     // check that the webgl context opened correctly
@@ -50,7 +26,7 @@ function main() {
     gl.depthFunc(gl.LEQUAL);
 
     // set the background color and clear depth
-    gl.clearColor(0.1, 0.1, 0.1, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
 
     // initialize the shader program
@@ -66,6 +42,7 @@ function main() {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
             viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
             lightDirection: gl.getUniformLocation(shaderProgram, "uLightDirection"),
+            lightAmbience: gl.getUniformLocation(shaderProgram, "uLightAmbience"),
             zoomLevel: gl.getUniformLocation(shaderProgram, "uZoomLevel")
         }
     };
@@ -75,12 +52,16 @@ function main() {
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
+    addEventListener("mousemove", onMouseMove);
+    addEventListener("wheel", onWheel);
+    onMouseMove({buttons: 1, movementX: 0.0, movementY: 0.0});
+    onWheel({wheelDelta: 0.0});
 }
 
 function render(now) {
-    lightDirection = [Math.sin(now * 0.0005), Math.cos(now * 0.0005), 0.0, 0.0];
+    light.direction = [Math.sin(now * 0.0005), Math.cos(now * 0.0005), 0.0, 0.0];
 
-    drawScene(gl, programInfo, buffers, view, lightDirection);
+    drawScene(gl, programInfo, buffers);
 
     requestAnimationFrame(render);
 }
@@ -88,21 +69,24 @@ function render(now) {
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons == 1) {
-        view.phiPrecise += event.movementX * torys.smallRadius * view.zoom;
-        view.thetaPrecise += event.movementY * torys.largeRadius * view.zoom;
+        view.phiPrecise += BigInt(Math.round(event.movementX * torys.smallRadius * view.panSensitivity));
+        view.thetaPrecise += BigInt(Math.round(event.movementY * torys.largeRadius * view.panSensitivity));
 
-        view.phi = view.phiPrecise * PAN_SENSITIVITY;
-        view.theta = view.thetaPrecise * PAN_SENSITIVITY;
+        view.phiPrecise %= properties.PAN_LIMIT;
+        view.thetaPrecise %= properties.PAN_LIMIT;
+
+        view.phi = Number(view.phiPrecise) * properties.BASE_PAN_SENSITIVITY;
+        view.theta = Number(view.thetaPrecise) * properties.BASE_PAN_SENSITIVITY;
     }
 }
 
 // zoom when the scroll wheel is used
 function onWheel(event) {
-    view.zoomPrecise += event.wheelDelta;
+    view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
+    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
 
-    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, MIN_ZOOM), MAX_ZOOM);
-
-    view.zoom = 2 ** (view.zoomPrecise * SCROLL_SENSITIVITY);
+    view.zoom = 2 ** view.zoomPrecise;
+    view.panSensitivity = 2 ** (view.zoomPrecise - properties.MIN_ZOOM);
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
