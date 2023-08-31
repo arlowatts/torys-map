@@ -44,12 +44,12 @@ See if this link works: https://www.desmos.com/calculator/8cexv4uvjr
 
 /*
 Turns out this single o-value is pretty good:
-o = wv[3]u[3] + (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2] + u[3]v[3])
+o = (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2])
 */
 
 export const fsSource = `#version 300 es
+bool isShadowed();
 mediump float getHeight(mediump vec4);
-mediump float noise4(mediump vec4, mediump vec4, uint);
 mediump float noise3(mediump vec4, mediump vec4, uint);
 mediump float noise2(mediump vec4, mediump vec4, uint);
 mediump float noise(mediump float, mediump float, uint);
@@ -64,21 +64,28 @@ in mediump vec4 pointPosition;
 
 out mediump vec4 fragColor;
 
-void main() {
-    mediump float largeRadius = float(${torys.largeRadius});
-    mediump float smallRadius = float(${torys.smallRadius});
+mediump float largeRadius = float(${torys.largeRadius});
+mediump float smallRadius = float(${torys.smallRadius});
 
+void main() {
     mediump float surfaceValue = getHeight(pointPosition);
 
     mediump vec4 normal = normalize(pointPosition - largeRadius * normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0)));
 
+    // test nearby points to determine the surface normal
     if (surfaceValue > 0.6) {
-        mediump vec4 pointA = vec4(normalize(cross(normal.xyz, normal.yzx)) / 32.0 * uZoomLevel, 0.0);
-        mediump vec4 pointB = vec4(normalize(cross(normal.xyz, pointA.xyz)) / 32.0 * uZoomLevel, 0.0);
+        mediump float normalYZScale = 1.0 / sqrt(1.0 - normal.x * normal.x);
+        mediump float testDistance = uZoomLevel / 32.0;
 
-        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * 0.1;
-        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * 0.1;
+        // generate two vectors perpendicular to the normal and perpendicular to each other
+        mediump vec4 pointA = vec4(0.0, normal.z * normalYZScale, -normal.y * normalYZScale, 0.0) * testDistance;
+        mediump vec4 pointB = vec4(normalize(cross(normal.xyz, pointA.xyz)) * testDistance, 0.0);
 
+        // shift the vectors by the terrain height
+        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * 0.25;
+        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * 0.25;
+
+        // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
     }
 
@@ -86,32 +93,8 @@ void main() {
     color = max(color, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
 
     // test for shadows
-    if (length(pointPosition.xz) < largeRadius) {
-        // these values are used a few times
-        mediump float pointLightY = pointPosition.y * uLightDirection.y;
-        mediump float pointLightDot = dot(pointPosition, uLightDirection);
-
-        // t is the distance along the ray of light to check for intersections
-        mediump float t =
-            smallRadius * pointLightY
-            + smallRadius - pointLightY * pointLightY / smallRadius
-            - 2.0 * pointLightDot;
-        
-        // then evaluate the squared distance function at t
-        if (t > 0.0) {
-            mediump float distance =
-                (largeRadius + smallRadius) * (largeRadius - smallRadius)
-                + dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot
-                + t * t - 2.0 * largeRadius * sqrt(
-                    pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z
-                    + 2.0 * t * (pointLightDot - pointLightY)
-                    + t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
-                );
-
-            if (distance <= 0.0) {
-                color = uLightAmbience;
-            }
-        }
+    if (length(pointPosition.xz) < largeRadius && isShadowed()) {
+        color = uLightAmbience;
     }
 
     fragColor = vec4(
@@ -120,6 +103,33 @@ void main() {
         color * surfaceValue,
         1.0
     );
+}
+
+bool isShadowed() {
+    // these values are used a few times
+    mediump float pointLightY = pointPosition.y * uLightDirection.y;
+    mediump float pointLightDot = dot(pointPosition, uLightDirection);
+
+    // t is the distance along the ray of light to check for intersections
+    mediump float t =
+        smallRadius - pointLightY * pointLightY / smallRadius
+        - 2.0 * (pointLightDot - pointLightY);
+
+    if (t <= 0.0) {
+        return false;
+    }
+
+    // then evaluate the squared distance function at t
+    mediump float distance =
+        (largeRadius + smallRadius) * (largeRadius - smallRadius)
+        + dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot
+        + t * t - 2.0 * largeRadius * sqrt(
+            pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z
+            + 2.0 * t * (pointLightDot - pointLightY)
+            + t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
+        );
+
+    return distance <= 0.0;
 }
 
 mediump float getHeight(mediump vec4 pointPosition) {
@@ -134,16 +144,6 @@ mediump float getHeight(mediump vec4 pointPosition) {
     }
 
     return surfaceValue;
-}
-
-mediump float noise4(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0xffffu + uint(int(pointFloor.w));
-
-    return lerp(
-        noise3(point, pointFloor, evalAt),
-        noise3(point, pointFloor, evalAt + 1u),
-        point.w - pointFloor.w
-    );
 }
 
 mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {

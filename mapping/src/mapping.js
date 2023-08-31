@@ -86,7 +86,7 @@ function onWheel(event) {
     view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
 
     view.zoom = 2 ** view.zoomPrecise;
-    view.panSensitivity = 2 ** (view.zoomPrecise - properties.MIN_ZOOM);
+    view.panSensitivity = Math.min(2 ** (view.zoomPrecise - properties.MIN_ZOOM), properties.MAX_PAN_SENSITIVITY);
 }
 
 // initialize the shader program with a vertex shader and a fragment shader

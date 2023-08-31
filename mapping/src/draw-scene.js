@@ -6,10 +6,21 @@ export function drawScene(gl, programInfo, buffers) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // set the parameters for the perspective matrix
-    const fieldOfView = 0.25 * Math.PI;
-    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    const zNear = view.zoom * 0.5;
-    const zFar = (view.zoom + torys.largeRadius + torys.smallRadius) * 2;
+    let aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    let fieldOfView, zNear, zFar;
+
+    // to avoid bad clipping, don't move the camera too close
+    // instead just narrow the field of view
+    if (view.zoomPrecise >= 0) {
+        fieldOfView = 0.25 * Math.PI;
+        zNear = view.zoom * 0.5;
+        zFar = (view.zoom + torys.largeRadius + torys.smallRadius) * 2;
+    }
+    else {
+        fieldOfView = 0.25 * Math.PI * view.zoom;
+        zNear = 0.5;
+        zFar = (torys.largeRadius + torys.smallRadius) * 2;
+    }
 
     // create the projection matrix
     const projectionMatrix = mat4.create();
@@ -17,7 +28,7 @@ export function drawScene(gl, programInfo, buffers) {
 
     // create the view matrix
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.smallRadius - view.zoom]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.smallRadius - Math.max(view.zoom, 1.0)]);
     mat4.rotate(viewMatrix, viewMatrix, view.theta, [1.0, 0.0, 0.0]);
     mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torys.largeRadius]);
     mat4.rotate(viewMatrix, viewMatrix, view.phi, [0.0, 1.0, 0.0]);
