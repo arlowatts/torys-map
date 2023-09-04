@@ -1,50 +1,11 @@
 import { torys } from "./properties.js";
 
 /*
-Let the torus have a large radius of s and a small radius of w
-
-Let the line be defined in cylindrical coordinates (omitting the theta
-coordinate) by
-L(t) = (r(t), z(t)) = (((u_x + tv_x)^2 + (u_y + tv_y)^2)^0.5, u_z + tv_z),
-for 3-vectors u and v with |v| = 1
-
-The distance between a point on the line and the circle rim of the torus is
-d(t) = ((s - r(t))^2 + z(t)^2)^0.5
-
-Then a function that is 0 at each intersection of the line with the torus is
-p(t) = d(t)^2 - w^2
-     = s^2 + r(t)^2 - 2sr(t) + z(t)^2 - w^2
-     = s^2 - w^2 - 2s((u_x + tv_x)^2 + (u_y + tv_y)^2)^0.5 + (u_x + tv_x)^2 + (u_y + tv_y)^2 + (u_z + tv_z)^2
-     = s^2 - w^2 + (u_x + tv_x)^2 + (u_y + tv_y)^2 + (u_z + tv_z)^2 - 2s((u_x + tv_x)^2 + (u_y + tv_y)^2)^0.5
-     = s^2 - w^2 + |u|^2 + 2tu.v + t^2 - 2s((u_x + tv_x)^2 + (u_y + tv_y)^2)^0.5
-     = s^2 - w^2 + |u|^2 + 2tu.v + t^2 - 2s(u_x^2 + u_y^2 + 2t(u_xv_x + u_yv_y) + (t^2)(v_x^2 + v_y^2))^0.5
-
-And the derivative of that function is
-p'(t)= 2u.v + 2t - s((u_x^2 + u_y^2 + 2t(u_xv_x + u_yv_y) + (t^2)(v_x^2 + v_y^2))^-0.5)(2(u_xv_x + u_yv_y) + 2t(v_x^2 + v_y^2))
-     = 2(u.v + t - s((u_x^2 + u_y^2 + 2t(u_xv_x + u_yv_y) + (t^2)(v_x^2 + v_y^2))^-0.5)(u_xv_x + u_yv_y + t(v_x^2 + v_y^2)))
-
-The idea
-Use Newton's Method to try to find the points of intersection. By iterating
-with p(t) and p'(t), it should converge on a solution quickly. To escape the
-first intersection point at u, run the first iteration on p(t) - s^2. This
-should hopefully step along the line far enough to enter the second dip.
-I think this only works when the dot product between the surface normal and the
-light ray is positive, but the shading already takes care of that.
-*/
-
-/*
-Disregard above comment
-New idea
-Evaluate point on the line L at the o-values shown in screenshot 3. Find the
-distance from those points to the torus. Testing only at those points should be
-good enough (make sure to cap them at > 0), and even just the first two should
-be enough for most cases.
-See if this link works: https://www.desmos.com/calculator/8cexv4uvjr
-*/
-
-/*
-Turns out this single o-value is pretty good:
-o = (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2])
+Evaluate point on the line L(o) at
+    o = (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2]).
+Find the distance from this point to the torus. Testing only at this point
+should be good enough (make sure to cap it at o > 0).
+See the formula at https://www.desmos.com/calculator/anlsdhyaat.
 */
 
 export const fsSource = `#version 300 es
@@ -67,23 +28,39 @@ out mediump vec4 fragColor;
 mediump float largeRadius = float(${torys.largeRadius});
 mediump float smallRadius = float(${torys.smallRadius});
 
+mediump float terrainNormalScale = 1.0 / 32.0;
+mediump float terrainNormalHeight = 0.2;
+mediump float terrainResolutionScale = 1.0 / 1024.0;
+
+mediump float seaLevel = 0.6;
+mediump float snowLine = 0.7;
+
 void main() {
     mediump float surfaceValue = getHeight(pointPosition);
 
-    mediump vec4 normal = normalize(pointPosition - largeRadius * normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0)));
+    // the point on the unit circle nearest the surface point
+    mediump vec4 pointXZ = normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0));
 
-    // test nearby points to determine the surface normal
-    if (surfaceValue > 0.6) {
-        mediump float normalYZScale = 1.0 / sqrt(1.0 - normal.x * normal.x);
-        mediump float testDistance = uZoomLevel / 32.0;
+    // the basic (unaltered) surface normal
+    mediump vec4 normal = (pointPosition - largeRadius * pointXZ) / smallRadius;
 
-        // generate two vectors perpendicular to the normal and perpendicular to each other
-        mediump vec4 pointA = vec4(0.0, normal.z * normalYZScale, -normal.y * normalYZScale, 0.0) * testDistance;
-        mediump vec4 pointB = vec4(normalize(cross(normal.xyz, pointA.xyz)) * testDistance, 0.0);
+    // test nearby points to determine the surface normal by finding two
+    // vectors perpendicular to the normal and perpendicular to each other,
+    // then shifting them by the surface heights and retrieving the normal
+    if (surfaceValue > seaLevel) {
+        // find a vector tangent to the circular core of the torus
+        mediump vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
+
+        // find a vector perpendicular to both the normal and the tangent
+        mediump vec4 pointB = vec4(cross(normal.xyz, pointA.xyz), 0.0);
+
+        // scale by the distance at which to test for terrain normal
+        pointA *= uZoomLevel * terrainNormalScale;
+        pointB *= uZoomLevel * terrainNormalScale;
 
         // shift the vectors by the terrain height
-        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * 0.25;
-        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * 0.25;
+        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalHeight;
+        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalHeight;
 
         // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
@@ -98,8 +75,8 @@ void main() {
     }
 
     fragColor = vec4(
-        surfaceValue < 0.7 ? 0.0 : color * surfaceValue,
-        surfaceValue < 0.6 ? 0.0 : color * surfaceValue,
+        surfaceValue < snowLine ? 0.0 : color * surfaceValue,
+        surfaceValue < seaLevel ? 0.0 : color * surfaceValue,
         color * surfaceValue,
         1.0
     );
@@ -133,17 +110,23 @@ bool isShadowed() {
 }
 
 mediump float getHeight(mediump vec4 pointPosition) {
-    mediump float surfaceValue = 0.0;
-    mediump vec4 point = pointPosition;
-    mediump float scaleFactor = 2.0;
+    mediump float terrainResolution = min(uZoomLevel * terrainResolutionScale, 0.25);
 
-    for (uint i = 0u; i < 10u; i += 1u) {
-        surfaceValue += noise3(point, floor(point), i) / scaleFactor;
+    mediump float surfaceValue = 0.0;
+    mediump float max = 0.0;
+    mediump vec4 point = pointPosition;
+    mediump float scaleFactor = 0.5;
+    uint channel = 0u;
+
+    while (scaleFactor > terrainResolution) {
+        surfaceValue += noise3(point, floor(point), channel) * scaleFactor;
+        max += scaleFactor;
         point *= 2.0;
-        scaleFactor *= 2.0;
+        scaleFactor *= 0.5;
+        channel += 1u;
     }
 
-    return surfaceValue;
+    return surfaceValue / max;
 }
 
 mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
