@@ -36,7 +36,7 @@ def getWord(length):
 
 def getLetter(array):
     string = []
-    
+
     for i in range(len(array)):
         string += [array[i]] * frequency[array[i]]
 
