@@ -59,7 +59,7 @@ function main() {
 }
 
 function render(now) {
-    light.direction = [Math.sin(now * 0.0005), Math.cos(now * 0.0005), 0.0, 0.0];
+    light.direction = [Math.cos(now * 0.0005), Math.sin(now * 0.0005), 0.0, 0.0];
 
     drawScene(gl, programInfo, buffers);
 

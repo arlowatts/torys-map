@@ -1,13 +1,5 @@
 import { torys } from "./properties.js";
 
-/*
-Evaluate point on the line L(o) at
-    o = (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2]).
-Find the distance from this point to the torus. Testing only at this point
-should be good enough (make sure to cap it at o > 0).
-See the formula at https://www.desmos.com/calculator/anlsdhyaat.
-*/
-
 export const fsSource = `#version 300 es
 bool isShadowed();
 mediump float getHeight(mediump vec4);
@@ -28,11 +20,11 @@ out mediump vec4 fragColor;
 mediump float largeRadius = float(${torys.largeRadius});
 mediump float smallRadius = float(${torys.smallRadius});
 
-mediump float terrainNormalScale = 1.0 / 32.0;
+mediump float terrainNormalScale = 1.0 / 256.0;
 mediump float terrainNormalHeight = 0.2;
 mediump float terrainResolutionScale = 1.0 / 1024.0;
 
-mediump float seaLevel = 0.6;
+mediump float seaLevel = 0.575;
 mediump float snowLine = 0.7;
 
 void main() {
@@ -80,8 +72,14 @@ void main() {
         color * surfaceValue,
         1.0
     );
+    // fragColor = vec4(color, color, color, 1.0);
 }
 
+// Evaluate point on the line L(o) at
+//     o = (w - (v[3]^2)(u[3]^2) / w) - 2(u[1]v[1] + u[2]v[2]).
+// Find the distance from this point to the torus. Testing only at this point
+// should be good enough (make sure to cap it at o > 0).
+// See the formula at https://www.desmos.com/calculator/anlsdhyaat.
 bool isShadowed() {
     // these values are used a few times
     mediump float pointLightY = pointPosition.y * uLightDirection.y;
@@ -122,6 +120,7 @@ mediump float getHeight(mediump vec4 pointPosition) {
         surfaceValue += noise3(point, floor(point), channel) * scaleFactor;
         max += scaleFactor;
         point *= 2.0;
+        point += 0.5;
         scaleFactor *= 0.5;
         channel += 1u;
     }
@@ -130,7 +129,7 @@ mediump float getHeight(mediump vec4 pointPosition) {
 }
 
 mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0xffffu + uint(int(pointFloor.z));
+    evalAt = evalAt * 0x05555555u + uint(int(pointFloor.z));
 
     return lerp(
         noise2(point, pointFloor, evalAt),
@@ -140,7 +139,7 @@ mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
 }
 
 mediump float noise2(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0xffffu + uint(int(pointFloor.y));
+    evalAt = evalAt * 0x05555555u + uint(int(pointFloor.y));
 
     return lerp(
         noise(point.x, pointFloor.x, evalAt),
@@ -150,7 +149,7 @@ mediump float noise2(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
 }
 
 mediump float noise(mediump float point, mediump float pointFloor, uint evalAt) {
-    evalAt = evalAt * 0xffffu + uint(int(pointFloor));
+    evalAt = evalAt * 0x05555555u + uint(int(pointFloor));
 
     return lerp(
         hash(evalAt),

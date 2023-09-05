@@ -22,8 +22,8 @@ export const light = {
 
 // the initial camera view
 export const view = {
-    phiPrecise: 0n,
-    thetaPrecise: 0n,
+    phiPrecise: 24670867n,
+    thetaPrecise: 33588861n,
     zoomPrecise: 2.0,
     phi: 0.0,
     theta: 0.0,
