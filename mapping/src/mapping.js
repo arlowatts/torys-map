@@ -1,7 +1,9 @@
-import { drawScene } from "./draw-scene.js";
+import { drawStars, drawTorus } from "./draw-scene.js";
 import { initBuffers } from "./init-buffers.js";
-import { fsSource } from "./gl-shader-fragment.js";
-import { vsSource } from "./gl-shader-vertex.js";
+import * as torusFragment from "./gl-shader-torus-fragment.js";
+import * as torusVertex from "./gl-shader-torus-vertex.js";
+import * as starsFragment from "./gl-shader-stars-fragment.js";
+import * as starsVertex from "./gl-shader-stars-vertex.js";
 import { torys, view, light } from "./properties.js";
 import * as properties from "./properties.js";
 
@@ -21,29 +23,34 @@ function main() {
         return;
     }
 
-    // enable depth testing
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
+    // initialize the shader programs
+    const torusProgram = initShaderProgram(gl, torusVertex.source, torusFragment.source);
+    const starsProgram = initShaderProgram(gl, starsVertex.source, starsFragment.source);
 
-    // set the background color and clear depth
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clearDepth(1.0);
-
-    // initialize the shader program
-    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-
-    // collect information about the shaderProgram, such as attribute and uniform locations
+    // collect information about the shader programs, such as attribute and uniform locations
     programInfo = {
-        program: shaderProgram,
-        attribLocations: {
-            vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition")
+        torus: {
+            program: torusProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(torusProgram, "aVertexPosition")
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(torusProgram, "uProjectionMatrix"),
+                viewMatrix: gl.getUniformLocation(torusProgram, "uViewMatrix"),
+                lightDirection: gl.getUniformLocation(torusProgram, "uLightDirection"),
+                lightAmbience: gl.getUniformLocation(torusProgram, "uLightAmbience"),
+                zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel")
+            }
         },
-        uniformLocations: {
-            projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-            viewMatrix: gl.getUniformLocation(shaderProgram, "uViewMatrix"),
-            lightDirection: gl.getUniformLocation(shaderProgram, "uLightDirection"),
-            lightAmbience: gl.getUniformLocation(shaderProgram, "uLightAmbience"),
-            zoomLevel: gl.getUniformLocation(shaderProgram, "uZoomLevel")
+        stars: {
+            program: starsProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(starsProgram, "aVertexPosition")
+            },
+            uniformLocations: {
+                viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
+                lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
+            }
         }
     };
 
@@ -61,7 +68,8 @@ function main() {
 function render(now) {
     light.direction = [Math.cos(now * 0.0005), Math.sin(now * 0.0005), 0.0, 0.0];
 
-    drawScene(gl, programInfo, buffers);
+    drawStars(gl, programInfo, buffers);
+    drawTorus(gl, programInfo, buffers);
 
     requestAnimationFrame(render);
 }
@@ -76,7 +84,7 @@ function onMouseMove(event) {
         view.thetaPrecise %= properties.PAN_LIMIT;
 
         view.phi = Number(view.phiPrecise) * properties.BASE_PAN_SENSITIVITY;
-        view.theta = Number(view.thetaPrecise) * properties.BASE_PAN_SENSITIVITY;
+        // view.theta = Number(view.thetaPrecise) * properties.BASE_PAN_SENSITIVITY;
     }
 }
 
