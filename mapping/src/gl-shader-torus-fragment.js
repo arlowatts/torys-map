@@ -1,4 +1,4 @@
-import { torys } from "./properties.js";
+import { torus } from "./properties.js";
 
 export const source = `#version 300 es
 precision mediump float;
@@ -19,15 +19,14 @@ in vec4 pointPosition;
 
 out vec4 fragColor;
 
-float largeRadius = float(${torys.largeRadius});
-float smallRadius = float(${torys.smallRadius});
+float largeRadius = float(${torus.largeRadius});
+float smallRadius = float(${torus.smallRadius});
 
-float terrainNormalScale = 1.0 / 256.0;
-float terrainNormalHeight = 0.2;
-float terrainResolutionScale = 1.0 / 1024.0;
-
-float seaLevel = 0.575;
-float snowLine = 0.7;
+float terrainResolution = float(${torus.terrainResolution});
+float terrainNormalResolution = float(${torus.terrainNormalResolution});
+float terrainNormalIntensity = float(${torus.terrainNormalIntensity});
+float seaLevel = float(${torus.seaLevel});
+float snowLevel = float(${torus.snowLevel});
 
 void main() {
     float surfaceValue = getHeight(pointPosition);
@@ -49,12 +48,12 @@ void main() {
         vec4 pointB = vec4(cross(normal.xyz, pointA.xyz), 0.0);
 
         // scale by the distance at which to test for terrain normal
-        pointA *= uZoomLevel * terrainNormalScale;
-        pointB *= uZoomLevel * terrainNormalScale;
+        pointA *= uZoomLevel * terrainNormalResolution;
+        pointB *= uZoomLevel * terrainNormalResolution;
 
         // shift the vectors by the terrain height
-        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalHeight;
-        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalHeight;
+        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
+        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalIntensity;
 
         // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
@@ -69,7 +68,7 @@ void main() {
     }
 
     fragColor = vec4(
-        surfaceValue < snowLine ? 0.0 : color * surfaceValue,
+        surfaceValue < snowLevel ? 0.0 : color * surfaceValue,
         surfaceValue < seaLevel ? 0.0 : color * surfaceValue,
         color * surfaceValue,
         1.0
@@ -110,7 +109,7 @@ bool isShadowed() {
 }
 
 float getHeight(vec4 pointPosition) {
-    float terrainResolution = min(uZoomLevel * terrainResolutionScale, 0.25);
+    float terrainResolution = min(uZoomLevel * terrainResolution, 0.25);
 
     float surfaceValue = 0.0;
     float max = 0.0;
