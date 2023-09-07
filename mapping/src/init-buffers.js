@@ -65,10 +65,10 @@ function initBackgroundBuffer(gl) {
 
     // define the data as an array
     const positions = [
-        -1.0, 1.0, 1.0,
-        -1.0, -1.0, 1.0,
-        1.0, 1.0, 1.0,
-        1.0, -1.0, 1.0
+        -1.0, 1.0,
+        -1.0, -1.0,
+        1.0, 1.0,
+        1.0, -1.0
     ];
 
     // convert the array to a Float32Array, then populate the buffer with the position data
@@ -76,8 +76,8 @@ function initBackgroundBuffer(gl) {
 
     return {
         data: positionBuffer,
-        vertexCount: positions.length / 3,
-        numComponents: 3,
+        vertexCount: positions.length / 2,
+        numComponents: 2,
         type: gl.FLOAT,
         normalize: false,
         stride: 0,

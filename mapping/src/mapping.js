@@ -69,7 +69,7 @@ function render(now) {
     light.direction = [Math.cos(now * 0.0005), Math.sin(now * 0.0005), 0.0, 0.0];
 
     drawStars(gl, programInfo, buffers);
-    drawTorus(gl, programInfo, buffers);
+    // drawTorus(gl, programInfo, buffers);
 
     requestAnimationFrame(render);
 }

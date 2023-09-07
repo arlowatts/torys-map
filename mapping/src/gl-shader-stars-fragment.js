@@ -3,29 +3,33 @@ precision mediump float;
 
 float hash(uint);
 
+uniform mat4 uViewDirectionMatrix;
+uniform mat4 uLightDirectionMatrix;
+
 in vec4 pointPosition;
 
 out vec4 fragColor;
 
-void main() {
-    float color;
+float starDensity = 500.0;
+int starfieldSize = 1000;
+float starFrequency = 0.001;
 
-    // vec4 point = normalize(pointPosition);
+void main() {
     vec4 point = pointPosition;
 
-    // color = length(point) / 2.0;
-    color = point.x;
+    point.x *= 2.5;
+    point.z -= 1.0 / tan(3.14159265 / 8.0);
+    point = uViewDirectionMatrix * point;
 
-    // color =
-    // hash(uint(int(floor(point.x * 100.0))))
-    // * hash(uint(int(floor(point.y * 100.0))))
-    // * hash(uint(int(floor(point.z * 100.0))));
+    point.w = 0.0;
+    point = normalize(point);
 
-    // color = color > 0.9 ? 1.0 : 0.0;
+    ivec4 pointHash = ivec4(floor(point * starDensity));
+    float color = hash(uint(starfieldSize * (pointHash.x + starfieldSize * (pointHash.y + starfieldSize * pointHash.z))));
 
-    // fragColor = vec4(color, color, color, 1.0);
+    color = color < starFrequency ? 1.0 : 0.0;
 
-    fragColor = floor(point * 10.0) / 10.0;
+    fragColor = vec4(color, color, color, 1.0);
 }
 
 // returns a value between 0 and 1
