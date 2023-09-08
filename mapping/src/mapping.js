@@ -65,8 +65,15 @@ function main() {
 }
 
 function render(now) {
-    light.direction = [Math.cos(now * 0.0005), Math.sin(now * 0.0005), 0.0, 0.0];
+    mat4.identity(light.directionMatrix);
+    vec4.copy(light.direction, light.baseDirection);
 
+    light.rotations.forEach((rotation) => {
+        mat4.rotate(light.directionMatrix, light.directionMatrix, now * rotation[0], rotation.slice(1));
+    });
+
+    vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
+    
     drawStars();
     drawTorus();
 

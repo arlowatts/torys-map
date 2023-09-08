@@ -1,4 +1,4 @@
-import { stars, view } from "./properties.js";
+import { stars, light, view } from "./properties.js";
 
 export const source = `#version 300 es
 precision mediump float;
@@ -16,6 +16,10 @@ float starResolution = float(${stars.resolution});
 int starfieldSize = 2 * ${Math.round(stars.resolution)};
 float starFrequency = float(${stars.frequency});
 
+vec4 sunPosition = vec4(${light.baseDirection});
+float sunSize = float(${light.sunSize});
+vec3 sunColor = vec3(${light.sunColor});
+
 float aspect = float(${view.aspect});
 float cameraDistance = float(${view.cameraDistance});
 
@@ -24,17 +28,23 @@ void main() {
 
     point.x *= aspect;
     point.z -= cameraDistance;
-    point = uViewDirectionMatrix * point;
+    point = inverse(uLightDirectionMatrix) * inverse(uViewDirectionMatrix) * point;
 
     point.w = 0.0;
     point = normalize(point);
-
+    
     ivec4 pointHash = ivec4(floor(point * starResolution));
     float color = hash(uint(starfieldSize * (pointHash.x + starfieldSize * (pointHash.y + starfieldSize * pointHash.z))));
 
-    color = color < starFrequency ? 1.0 : 0.0;
-
-    fragColor = vec4(color, color, color, 1.0);
+    if (color < starFrequency) {
+        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    else if (length(point - sunPosition) < sunSize) {
+        fragColor = vec4(sunColor, 1.0);
+    }
+    else {
+        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
 }
 
 // returns a value between 0 and 1

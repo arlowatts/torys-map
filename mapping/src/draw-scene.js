@@ -10,7 +10,7 @@ export function drawStars() {
 
     // set the shader uniforms
     gl.uniformMatrix4fv(programInfo.stars.uniformLocations.viewDirectionMatrix, false, getViewDirectionMatrix());
-    gl.uniformMatrix4fv(programInfo.stars.uniformLocations.lightDirectionMatrix, false, getLightDirectionMatrix());
+    gl.uniformMatrix4fv(programInfo.stars.uniformLocations.lightDirectionMatrix, false, light.directionMatrix);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.stars.vertexCount);
@@ -32,7 +32,7 @@ export function drawTorus() {
     // set the shader uniforms
     gl.uniformMatrix4fv(programInfo.torus.uniformLocations.projectionMatrix, false, getProjectionMatrix());
     gl.uniformMatrix4fv(programInfo.torus.uniformLocations.viewMatrix, false, getViewMatrix());
-    gl.uniform4fv(programInfo.torus.uniformLocations.lightDirection, new Float32Array(light.direction));
+    gl.uniform4fv(programInfo.torus.uniformLocations.lightDirection, light.direction);
     gl.uniform1f(programInfo.torus.uniformLocations.lightAmbience, light.ambience);
     gl.uniform1f(programInfo.torus.uniformLocations.zoomLevel, view.zoom);
 
@@ -94,15 +94,8 @@ function getViewMatrix() {
 // create a view matrix to define only the camera's angle for the stars
 function getViewDirectionMatrix() {
     const viewDirectionMatrix = mat4.create();
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.phi, [0.0, 1.0, 0.0]);
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.theta, [1.0, 0.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.theta, [1.0, 0.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.phi, [0.0, 1.0, 0.0]);
 
     return viewDirectionMatrix;
-}
-
-// create a matrix to define the direction of light
-function getLightDirectionMatrix() {
-    const lightDirectionMatrix = mat4.create();
-
-    return lightDirectionMatrix;
 }

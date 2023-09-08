@@ -65,9 +65,21 @@ export const stars = {
 }
 
 // the light direction and ambience
+// baseDirection is the base light direction at time t = 0
+// rotations is a list of quaternions to apply to the base direction in order
+// the first element of the quaternion is multiplied with the current time
+// to get the rotation in radians
 export const light = {
-    direction: [0.0, 3/5, 4/5, 0.0],
-    ambience: 0.2
+    baseDirection: vec4.fromValues(1.0, 0.0, 0.0, 0.0),
+    directionMatrix: mat4.create(),
+    direction: vec4.create(),
+    rotations: [
+        [0.0001, 0.0, 0.0, 1.0], // this rotation represents the planet's orbit
+        [0.00007, 3/5, 0.0, 4/5] // this one represents the planet's local axis
+    ],
+    ambience: 0.1,
+    sunSize: 0.05,
+    sunColor: [1.0, 0.9, 0.7]
 };
 
 // the initial camera view

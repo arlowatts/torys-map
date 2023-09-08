@@ -73,7 +73,6 @@ void main() {
         color * surfaceValue,
         1.0
     );
-    // fragColor = vec4(color, color, color, 1.0);
 }
 
 // Evaluate point on the line L(o) at
