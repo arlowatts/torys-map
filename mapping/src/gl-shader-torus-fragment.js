@@ -1,64 +1,65 @@
-import { torys } from "./properties.js";
+import { torus } from "./properties.js";
 
-export const fsSource = `#version 300 es
+export const source = `#version 300 es
+precision mediump float;
+
 bool isShadowed();
-mediump float getHeight(mediump vec4);
-mediump float noise3(mediump vec4, mediump vec4, uint);
-mediump float noise2(mediump vec4, mediump vec4, uint);
-mediump float noise(mediump float, mediump float, uint);
-mediump float hash(uint);
-mediump float lerp(mediump float, mediump float, mediump float);
+float getHeight(vec4);
+float noise3(vec4, vec4, uint);
+float noise2(vec4, vec4, uint);
+float noise(float, float, uint);
+float hash(uint);
+float lerp(float, float, float);
 
-uniform mediump vec4 uLightDirection;
-uniform mediump float uLightAmbience;
-uniform mediump float uZoomLevel;
+uniform vec4 uLightDirection;
+uniform float uLightAmbience;
+uniform float uZoomLevel;
 
-in mediump vec4 pointPosition;
+in vec4 pointPosition;
 
-out mediump vec4 fragColor;
+out vec4 fragColor;
 
-mediump float largeRadius = float(${torys.largeRadius});
-mediump float smallRadius = float(${torys.smallRadius});
+float largeRadius = float(${torus.largeRadius});
+float smallRadius = float(${torus.smallRadius});
 
-mediump float terrainNormalScale = 1.0 / 256.0;
-mediump float terrainNormalHeight = 0.2;
-mediump float terrainResolutionScale = 1.0 / 1024.0;
-
-mediump float seaLevel = 0.575;
-mediump float snowLine = 0.7;
+float terrainResolution = float(${torus.terrainResolution});
+float terrainNormalResolution = float(${torus.terrainNormalResolution});
+float terrainNormalIntensity = float(${torus.terrainNormalIntensity});
+float seaLevel = float(${torus.seaLevel});
+float snowLevel = float(${torus.snowLevel});
 
 void main() {
-    mediump float surfaceValue = getHeight(pointPosition);
+    float surfaceValue = getHeight(pointPosition);
 
     // the point on the unit circle nearest the surface point
-    mediump vec4 pointXZ = normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0));
+    vec4 pointXZ = normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0));
 
     // the basic (unaltered) surface normal
-    mediump vec4 normal = (pointPosition - largeRadius * pointXZ) / smallRadius;
+    vec4 normal = (pointPosition - largeRadius * pointXZ) / smallRadius;
 
     // test nearby points to determine the surface normal by finding two
     // vectors perpendicular to the normal and perpendicular to each other,
     // then shifting them by the surface heights and retrieving the normal
     if (surfaceValue > seaLevel) {
         // find a vector tangent to the circular core of the torus
-        mediump vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
+        vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
 
         // find a vector perpendicular to both the normal and the tangent
-        mediump vec4 pointB = vec4(cross(normal.xyz, pointA.xyz), 0.0);
+        vec4 pointB = vec4(cross(normal.xyz, pointA.xyz), 0.0);
 
         // scale by the distance at which to test for terrain normal
-        pointA *= uZoomLevel * terrainNormalScale;
-        pointB *= uZoomLevel * terrainNormalScale;
+        pointA *= uZoomLevel * terrainNormalResolution;
+        pointB *= uZoomLevel * terrainNormalResolution;
 
         // shift the vectors by the terrain height
-        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalHeight;
-        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalHeight;
+        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
+        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalIntensity;
 
         // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
     }
 
-    mediump float color = dot(normal, uLightDirection);
+    float color = dot(normal, uLightDirection);
     color = max(color, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
 
     // test for shadows
@@ -67,12 +68,11 @@ void main() {
     }
 
     fragColor = vec4(
-        surfaceValue < snowLine ? 0.0 : color * surfaceValue,
+        surfaceValue < snowLevel ? 0.0 : color * surfaceValue,
         surfaceValue < seaLevel ? 0.0 : color * surfaceValue,
         color * surfaceValue,
         1.0
     );
-    // fragColor = vec4(color, color, color, 1.0);
 }
 
 // Evaluate point on the line L(o) at
@@ -82,11 +82,11 @@ void main() {
 // See the formula at https://www.desmos.com/calculator/anlsdhyaat.
 bool isShadowed() {
     // these values are used a few times
-    mediump float pointLightY = pointPosition.y * uLightDirection.y;
-    mediump float pointLightDot = dot(pointPosition, uLightDirection);
+    float pointLightY = pointPosition.y * uLightDirection.y;
+    float pointLightDot = dot(pointPosition, uLightDirection);
 
     // t is the distance along the ray of light to check for intersections
-    mediump float t =
+    float t =
         smallRadius - pointLightY * pointLightY / smallRadius
         - 2.0 * (pointLightDot - pointLightY);
 
@@ -95,7 +95,7 @@ bool isShadowed() {
     }
 
     // then evaluate the squared distance function at t
-    mediump float distance =
+    float distance =
         (largeRadius + smallRadius) * (largeRadius - smallRadius)
         + dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot
         + t * t - 2.0 * largeRadius * sqrt(
@@ -107,13 +107,13 @@ bool isShadowed() {
     return distance <= 0.0;
 }
 
-mediump float getHeight(mediump vec4 pointPosition) {
-    mediump float terrainResolution = min(uZoomLevel * terrainResolutionScale, 0.25);
+float getHeight(vec4 pointPosition) {
+    float terrainResolution = min(uZoomLevel * terrainResolution, 0.25);
 
-    mediump float surfaceValue = 0.0;
-    mediump float max = 0.0;
-    mediump vec4 point = pointPosition;
-    mediump float scaleFactor = 0.5;
+    float surfaceValue = 0.0;
+    float max = 0.0;
+    vec4 point = pointPosition;
+    float scaleFactor = 0.5;
     uint channel = 0u;
 
     while (scaleFactor > terrainResolution) {
@@ -128,7 +128,7 @@ mediump float getHeight(mediump vec4 pointPosition) {
     return surfaceValue / max;
 }
 
-mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
+float noise3(vec4 point, vec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + uint(int(pointFloor.z));
 
     return lerp(
@@ -138,7 +138,7 @@ mediump float noise3(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
     );
 }
 
-mediump float noise2(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
+float noise2(vec4 point, vec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + uint(int(pointFloor.y));
 
     return lerp(
@@ -148,7 +148,7 @@ mediump float noise2(mediump vec4 point, mediump vec4 pointFloor, uint evalAt) {
     );
 }
 
-mediump float noise(mediump float point, mediump float pointFloor, uint evalAt) {
+float noise(float point, float pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + uint(int(pointFloor));
 
     return lerp(
@@ -159,7 +159,7 @@ mediump float noise(mediump float point, mediump float pointFloor, uint evalAt) 
 }
 
 // returns a value between 0 and 1
-mediump float hash(uint x) {
+float hash(uint x) {
     x ^= 2747636419u;
     x *= 2654435769u;
     x ^= x >> 16u;
@@ -170,7 +170,7 @@ mediump float hash(uint x) {
     return float(x) / 4294967295.0;
 }
 
-mediump float lerp(mediump float a, mediump float b, mediump float t) {
+float lerp(float a, float b, float t) {
     return a + t * (b - a);
 }
 `;
