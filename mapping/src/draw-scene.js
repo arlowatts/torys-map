@@ -25,6 +25,9 @@ export function drawTorus() {
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
 
+    // enable face culling
+    gl.enable(gl.CULL_FACE);
+
     // clear the scene
     gl.clearDepth(1.0);
     gl.clear(gl.DEPTH_BUFFER_BIT);
