@@ -151,8 +151,8 @@ function onTouchCancel() {
 // when a touch gesture moves, trigger a pan or zoom accordingly
 function onTouchMove(event) {
     // if only a single finger is on the screen, perform a pan
-    if (touches.length == 1 && event.changedTouches.length == 1) {
-        let touch = event.changedTouches.item(0);
+    if (touches.length == 1 && event.touches.length == 1) {
+        let touch = event.touches.item(0);
 
         // invoke the pan function
         onMouseMove({
@@ -165,25 +165,28 @@ function onTouchMove(event) {
         touches[0] = touch;
     }
     // if exactly two fingers are on the screen, perform a zoom
-    else if (touches.length == 2 && event.changedTouches.length == 2) {
-        let touch1 = event.changedTouches.item(0);
-        let touch2 = event.changedTouches.item(1);
+    else if (touches.length == 2 && event.touches.length == 2) {
+        let touch1 = event.touches.item(0);
+        let touch2 = event.touches.item(1);
 
+        // get the distance between the last two touches
         let touchDistance = Math.sqrt(
             (touches[0].pageX - touches[1].pageX) * (touches[0].pageX - touches[1].pageX) +
             (touches[0].pageY - touches[1].pageY) * (touches[0].pageY - touches[1].pageY)
         );
 
+        // get the distance between the current two touches
         let newTouchDistance = Math.sqrt(
             (touch1.pageX - touch2.pageX) * (touch1.pageX - touch2.pageX) +
             (touch1.pageY - touch2.pageY) * (touch1.pageY - touch2.pageY)
         );
 
-        document.getElementById("scalevalue").innerText = touchDistance;
+        // invoke the zoom function
+        onWheel({
+            wheelDelta: newTouchDistance - touchDistance
+        });
 
-        // onWheel({
-        //     wheelDelta: newTouchDistance - touchDistance
-        // });
+        document.getElementById("scalevalue").innerText = newTouchDistance - touchDistance;
 
         touches[0] = touch1;
         touches[1] = touch2;
