@@ -173,9 +173,12 @@ function onTouchMove(event) {
             (touches[0].pageY - touches[1].pageY)**2
         );
 
-        let newTouchDistance = touchDistance;
+        let newTouchDistance = Math.sqrt(
+            (touch1.pageX - touch2.pageX)**2 +
+            (touch1.pageY - touch2.pageY)**2
+        );
 
-        document.getElementById("scalevalue").innerText = touches.length;
+        document.getElementById("scalevalue").innerText = touchDistance;
 
         onWheel({
             wheelDelta: newTouchDistance - touchDistance
