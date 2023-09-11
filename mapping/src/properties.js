@@ -12,6 +12,10 @@ export const BASE_PAN_SENSITIVITY = 0.1 * 2 ** (MIN_ZOOM - MAX_ZOOM);
 export const MAX_PAN_SENSITIVITY = 2 ** (4.0 - MIN_ZOOM);
 export const PAN_LIMIT = BigInt(Math.round(2.0 * Math.PI / BASE_PAN_SENSITIVITY));
 
+// constants for touchscreen panning and zooming
+export const TOUCH_PAN_SENSITIVITY = 0.5;
+export const TOUCH_SCROLL_SENSITIVITY = 2.0;
+
 // the length of the vertical scale/measuring bar in screen units
 export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
 

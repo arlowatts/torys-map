@@ -127,7 +127,6 @@ function onTouchStart(event) {
     for (let i = 0; i < event.changedTouches.length; i++) {
         touches.push(event.changedTouches.item(i));
     }
-    document.getElementById("scalevalue").innerText = touches.length;
 }
 
 // when a touch gesture ends, remove all touches that ended
@@ -139,13 +138,11 @@ function onTouchEnd(event) {
             }
         }
     }
-    document.getElementById("scalevalue").innerText = touches.length;
 }
 
 // when touch gestures are canceled, clear the list
 function onTouchCancel() {
     touches.splice(0, touches.length);
-    document.getElementById("scalevalue").innerText = touches.length;
 }
 
 // when a touch gesture moves, trigger a pan or zoom accordingly
@@ -157,8 +154,8 @@ function onTouchMove(event) {
         // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: touch.pageX - touches[0].pageX,
-            movementY: touch.pageY - touches[0].pageY
+            movementX: (touch.pageX - touches[0].pageX) * properties.TOUCH_PAN_SENSITIVITY,
+            movementY: (touch.pageY - touches[0].pageY) * properties.TOUCH_PAN_SENSITIVITY
         });
 
         // update to the latest touch point
@@ -183,10 +180,8 @@ function onTouchMove(event) {
 
         // invoke the zoom function
         onWheel({
-            wheelDelta: newTouchDistance - touchDistance
+            wheelDelta: (newTouchDistance - touchDistance) * properties.TOUCH_SCROLL_SENSITIVITY
         });
-
-        document.getElementById("scalevalue").innerText = newTouchDistance - touchDistance;
 
         touches[0] = touch1;
         touches[1] = touch2;
