@@ -12,10 +12,14 @@ export const BASE_PAN_SENSITIVITY = 0.1 * 2 ** (MIN_ZOOM - MAX_ZOOM);
 export const MAX_PAN_SENSITIVITY = 2 ** (4.0 - MIN_ZOOM);
 export const PAN_LIMIT = BigInt(Math.round(2.0 * Math.PI / BASE_PAN_SENSITIVITY));
 
+// the length of the vertical scale/measuring bar in screen units
+export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
+
 // the planet dimensions and vertex properties
 export const torus = {
     largeRadius: 8.0,       // commonly denoted as R
     smallRadius: 2.0,       // commonly denoted as r
+    unitToKm: 637.1,        // the ratio of the above units to kilometers
     phiDegreeStep: 5,       // the degree precision of the surface mesh around the large radius
     thetaDegreeStep: 10,    // the degree precision of the surface mesh around the small radius
     terrainResolution: 1.0 / 1024.0,        // the base resolution of the terrain

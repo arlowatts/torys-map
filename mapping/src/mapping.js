@@ -106,6 +106,11 @@ function onWheel(event) {
     // recompute the exponential zoom value and the updated pan sensitivity
     view.zoom = 2 ** view.zoomPrecise;
     view.panSensitivity = Math.min(2 ** (view.zoomPrecise - properties.MIN_ZOOM), properties.MAX_PAN_SENSITIVITY);
+
+    // update the scale value on the bar
+    document.getElementById("scalevalue").innerText =
+        (torus.unitToKm * view.zoom / view.cameraDistance * properties.SCALE_LENGTH).toFixed(2)
+        + "km";
 }
 
 // initialize the shader program with a vertex shader and a fragment shader

@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#mapcanvas {
+    z-index: 0;
+}
+
+#scalebar {
+    position: absolute;
+    top: 10%;
+    right: 10px;
+    width: 2px;
+    height: 80%;
+    border: 2px solid black;
+    background-color: white;
+    z-index: 1;
+}
+
+#scalevalue {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    background-color: white;
+}
