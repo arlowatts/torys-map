@@ -66,6 +66,7 @@ function main() {
     // create event listeners for touchscreen support
     addEventListener("touchstart", onTouchStart);
     addEventListener("touchend", onTouchEnd);
+    addEventListener("touchcancel", onTouchCancel);
     addEventListener("touchmove", onTouchMove);
 
     // draw the scene and update it each frame
@@ -121,6 +122,7 @@ function onWheel(event) {
         + "km";
 }
 
+// when a touch gesture begins, record all finger contacts
 function onTouchStart(event) {
     for (let i = 0; i < event.changedTouches.length; i++) {
         touches.push(event.changedTouches.item(i));
@@ -128,6 +130,7 @@ function onTouchStart(event) {
     document.getElementById("scalevalue").innerText = touches.length;
 }
 
+// when a touch gesture ends, remove all touches that ended
 function onTouchEnd(event) {
     for (let i = 0; i < event.changedTouches.length; i++) {
         for (let j = 0; j < touches.length; j++) {
@@ -139,14 +142,47 @@ function onTouchEnd(event) {
     document.getElementById("scalevalue").innerText = touches.length;
 }
 
+// when touch gestures are canceled, clear the list
+function onTouchCancel() {
+    touches.splice(0, touches.length);
+    document.getElementById("scalevalue").innerText = touches.length;
+}
+
+// when a touch gesture moves, trigger a pan or zoom accordingly
 function onTouchMove(event) {
+    // if only a single finger is on the screen, perform a pan
     if (touches.length == 1 && event.changedTouches.length == 1) {
+        let touch = event.changedTouches.item(0);
+
+        // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: event.changedTouches.item(0).pageX - touches[0].pageX,
-            movementY: event.changedTouches.item(0).pageY - touches[0].pageY
+            movementX: touch.pageX - touches[0].pageX,
+            movementY: touch.pageY - touches[0].pageY
         });
-        touches[0] = event.changedTouches.item(0);
+
+        // update to the latest touch point
+        touches[0] = touch;
+    }
+    else if (touches.length == 2 && event.changedTouches.length == 2) {
+        let touch1 = event.changedTouches.item(0);
+        let touch2 = event.changedTouches.item(1);
+
+        let touchDistance = Math.sqrt(
+            (touches[0].pageX - touches[1].pageX)**2 +
+            (touches[0].pageY - touches[1].pageY)**2
+        );
+
+        let newTouchDistance = touchDistance;
+
+        document.getElementById("scalevalue").innerText = touches.length;
+
+        onWheel({
+            wheelDelta: newTouchDistance - touchDistance
+        });
+
+        touches[0] = touch1;
+        touches[1] = touch2;
     }
 }
 
