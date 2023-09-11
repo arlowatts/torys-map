@@ -7,6 +7,9 @@ import * as torusVertex from "./gl-shader-torus-vertex.js";
 import * as starsFragment from "./gl-shader-stars-fragment.js";
 import * as starsVertex from "./gl-shader-stars-vertex.js";
 
+// arrays of touch event data for touchscreen support
+const touches = [];
+
 main();
 
 function main() {
@@ -60,6 +63,11 @@ function main() {
     addEventListener("mousemove", onMouseMove);
     addEventListener("wheel", onWheel);
 
+    // create event listeners for touchscreen support
+    addEventListener("touchstart", onTouchStart);
+    addEventListener("touchend", onTouchEnd);
+    addEventListener("touchmove", onTouchMove);
+
     // draw the scene and update it each frame
     requestAnimationFrame(render);
 }
@@ -94,6 +102,31 @@ function onMouseMove(event) {
         // compute the actual angles as Numbers
         view.phi = Number(view.phiPrecise) * properties.BASE_PAN_SENSITIVITY;
         view.theta = Number(view.thetaPrecise) * properties.BASE_PAN_SENSITIVITY;
+    }
+}
+
+function onTouchStart(event) {
+    event.changedTouches.forEach((touch) => {
+        touches.push(touch);
+    });
+    document.getElementById("scalevalue").innerText = touches.length;
+}
+
+function onTouchEnd(event) {
+    event.changedTouches.forEach((touch) => {
+        for (let i = 0; i < touches.length; i++) {
+            if (touches[i].identifier == touch.identifier) {
+                touches.splice(i, 1);
+                break;
+            }
+        }
+    });
+    document.getElementById("scalevalue").innerText = touches.length;
+}
+
+function onTouchMove(event) {
+    if (touches.length == 1) {
+
     }
 }
 
