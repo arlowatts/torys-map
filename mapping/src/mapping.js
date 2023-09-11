@@ -169,13 +169,13 @@ function onTouchMove(event) {
         let touch2 = event.changedTouches.item(1);
 
         let touchDistance = Math.sqrt(
-            (touches[0].pageX - touches[1].pageX)**2 +
-            (touches[0].pageY - touches[1].pageY)**2
+            (touches[0].pageX - touches[1].pageX) * (touches[0].pageX - touches[1].pageX) +
+            (touches[0].pageY - touches[1].pageY) * (touches[0].pageY - touches[1].pageY)
         );
 
         let newTouchDistance = Math.sqrt(
-            (touch1.pageX - touch2.pageX)**2 +
-            (touch1.pageY - touch2.pageY)**2
+            (touch1.pageX - touch2.pageX) * (touch1.pageX - touch2.pageX) +
+            (touch1.pageY - touch2.pageY) * (touch1.pageY - touch2.pageY)
         );
 
         document.getElementById("scalevalue").innerText = touchDistance;
