@@ -164,6 +164,7 @@ function onTouchMove(event) {
         // update to the latest touch point
         touches[0] = touch;
     }
+    // if exactly two fingers are on the screen, perform a zoom
     else if (touches.length == 2 && event.changedTouches.length == 2) {
         let touch1 = event.changedTouches.item(0);
         let touch2 = event.changedTouches.item(1);
@@ -180,9 +181,9 @@ function onTouchMove(event) {
 
         document.getElementById("scalevalue").innerText = touchDistance;
 
-        onWheel({
-            wheelDelta: newTouchDistance - touchDistance
-        });
+        // onWheel({
+        //     wheelDelta: newTouchDistance - touchDistance
+        // });
 
         touches[0] = touch1;
         touches[1] = touch2;
