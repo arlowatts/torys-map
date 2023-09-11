@@ -1,7 +1,9 @@
 body {
     margin: 0;
     padding: 0;
-    overscroll-behavior: contain;
+    touch-action: none;
+    /* overscroll-behavior-x: contain;
+    overscroll-behavior-y: contain; */
 }
 
 #mapcanvas {
