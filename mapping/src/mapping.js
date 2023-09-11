@@ -105,31 +105,6 @@ function onMouseMove(event) {
     }
 }
 
-function onTouchStart(event) {
-    event.changedTouches.forEach((touch) => {
-        touches.push(touch);
-    });
-    document.getElementById("scalevalue").innerText = touches.length;
-}
-
-function onTouchEnd(event) {
-    event.changedTouches.forEach((touch) => {
-        for (let i = 0; i < touches.length; i++) {
-            if (touches[i].identifier == touch.identifier) {
-                touches.splice(i, 1);
-                break;
-            }
-        }
-    });
-    document.getElementById("scalevalue").innerText = touches.length;
-}
-
-function onTouchMove(event) {
-    if (touches.length == 1) {
-
-    }
-}
-
 // zoom when the scroll wheel is used
 function onWheel(event) {
     // track the precise zoom value to avoid loss of precision
@@ -144,6 +119,35 @@ function onWheel(event) {
     document.getElementById("scalevalue").innerText =
         (torus.unitToKm * view.zoom / view.cameraDistance * properties.SCALE_LENGTH).toFixed(2)
         + "km";
+}
+
+function onTouchStart(event) {
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        touches.push(event.changedTouches.item(i));
+    }
+    document.getElementById("scalevalue").innerText = touches.length;
+}
+
+function onTouchEnd(event) {
+    for (let i = 0; i < event.changedTouches.length; i++) {
+        for (let j = 0; j < touches.length; j++) {
+            if (event.changedTouches.item(i).identifier == touches[j].identifier) {
+                touches.splice(j, 1);
+            }
+        }
+    }
+    document.getElementById("scalevalue").innerText = touches.length;
+}
+
+function onTouchMove(event) {
+    if (touches.length == 1 && event.changedTouches.length == 1) {
+        onMouseMove({
+            buttons: 1,
+            movementX: event.changedTouches.item(0).pageX - touches[0].pageX,
+            movementY: event.changedTouches.item(0).pageY - touches[0].pageY
+        });
+        touches[0] = event.changedTouches.item(0);
+    }
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
