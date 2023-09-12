@@ -2,10 +2,10 @@ import { drawStars, drawTorus } from "./draw-scene.js";
 import { initTorusBuffer, initBackgroundBuffer } from "./init-buffers.js";
 import { gl, programInfo, torus, view, light } from "./properties.js";
 import * as properties from "./properties.js";
-import * as torusFragment from "./gl-shader-torus-fragment.js";
-import * as torusVertex from "./gl-shader-torus-vertex.js";
-import * as starsFragment from "./gl-shader-stars-fragment.js";
-import * as starsVertex from "./gl-shader-stars-vertex.js";
+import * as torusFragment from "./shaders/torus-fragment.js";
+import * as torusVertex from "./shaders/torus-vertex.js";
+import * as starsFragment from "./shaders/stars-fragment.js";
+import * as starsVertex from "./shaders/stars-vertex.js";
 
 // arrays of touch event data for touchscreen support
 const touches = [];

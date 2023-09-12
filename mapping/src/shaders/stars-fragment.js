@@ -1,4 +1,4 @@
-import { stars, light, view } from "./properties.js";
+import { stars, light, view } from "../properties.js";
 
 export const source = `#version 300 es
 precision mediump float;
