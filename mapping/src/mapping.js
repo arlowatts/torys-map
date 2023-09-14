@@ -143,8 +143,8 @@ function onTouchMove(event) {
         // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: (touch.pageX - touches[0].pageX) * properties.TOUCH_PAN_SENSITIVITY,
-            movementY: (touch.pageY - touches[0].pageY) * properties.TOUCH_PAN_SENSITIVITY
+            movementX: (touch.pageX - touches[0].pageX),
+            movementY: (touch.pageY - touches[0].pageY)
         });
 
         // update to the latest touch point
@@ -169,7 +169,7 @@ function onTouchMove(event) {
 
         // invoke the zoom function
         onWheel({
-            wheelDelta: (newTouchDistance - touchDistance) * properties.TOUCH_SCROLL_SENSITIVITY
+            wheelDelta: (newTouchDistance - touchDistance)
         });
 
         // update to the latest touch points
