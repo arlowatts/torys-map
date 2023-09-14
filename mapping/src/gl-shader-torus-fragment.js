@@ -3,7 +3,7 @@ import { torus } from "./properties.js";
 export const source = `#version 300 es
 precision mediump float;
 
-bool isShadowed();
+bool isShadowed(vec4);
 float getHeight(vec4);
 float noise3(vec4, vec4, uint);
 float noise2(vec4, vec4, uint);
@@ -29,13 +29,16 @@ float seaLevel = float(${torus.seaLevel});
 float snowLevel = float(${torus.snowLevel});
 
 void main() {
-    float surfaceValue = getHeight(pointPosition);
-
     // the point on the unit circle nearest the surface point
     vec4 pointXZ = normalize(vec4(pointPosition.x, 0.0, pointPosition.z, 0.0));
 
     // the basic (unaltered) surface normal
-    vec4 normal = (pointPosition - largeRadius * pointXZ) / smallRadius;
+    vec4 normal = normalize(pointPosition - pointXZ * largeRadius);
+
+    // adjust the point to be precisely on the torus
+    vec4 point = pointXZ * largeRadius + normal * smallRadius;
+
+    float surfaceValue = getHeight(point);
 
     // test nearby points to determine the surface normal by finding two
     // vectors perpendicular to the normal and perpendicular to each other,
@@ -52,8 +55,8 @@ void main() {
         pointB *= uZoomLevel * terrainNormalResolution;
 
         // shift the vectors by the terrain height
-        pointA += normal * (getHeight(pointPosition + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
-        pointB += normal * (getHeight(pointPosition + pointB) - surfaceValue) * smallRadius * terrainNormalIntensity;
+        pointA += normal * (getHeight(point + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
+        pointB += normal * (getHeight(point + pointB) - surfaceValue) * smallRadius * terrainNormalIntensity;
 
         // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
@@ -63,7 +66,7 @@ void main() {
     color = max(color, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
 
     // test for shadows
-    if (length(pointPosition.xz) < largeRadius && isShadowed()) {
+    if (length(point.xz) < largeRadius && isShadowed(point)) {
         color = uLightAmbience;
     }
 
@@ -80,10 +83,10 @@ void main() {
 // Find the distance from this point to the torus. Testing only at this point
 // should be good enough (make sure to cap it at o > 0).
 // See the formula at https://www.desmos.com/calculator/anlsdhyaat.
-bool isShadowed() {
+bool isShadowed(vec4 point) {
     // these values are used a few times
-    float pointLightY = pointPosition.y * uLightDirection.y;
-    float pointLightDot = dot(pointPosition, uLightDirection);
+    float pointLightY = point.y * uLightDirection.y;
+    float pointLightDot = dot(point, uLightDirection);
 
     // t is the distance along the ray of light to check for intersections
     float t =
@@ -97,9 +100,9 @@ bool isShadowed() {
     // then evaluate the squared distance function at t
     float distance =
         (largeRadius + smallRadius) * (largeRadius - smallRadius)
-        + dot(pointPosition, pointPosition) + 2.0 * t * pointLightDot
+        + dot(point, point) + 2.0 * t * pointLightDot
         + t * t - 2.0 * largeRadius * sqrt(
-            pointPosition.x * pointPosition.x + pointPosition.z * pointPosition.z
+            point.x * point.x + point.z * point.z
             + 2.0 * t * (pointLightDot - pointLightY)
             + t * t * (uLightDirection.x * uLightDirection.x + uLightDirection.z * uLightDirection.z)
         );
@@ -107,20 +110,20 @@ bool isShadowed() {
     return distance <= 0.0;
 }
 
-float getHeight(vec4 pointPosition) {
+float getHeight(vec4 point) {
     float terrainResolution = min(uZoomLevel * terrainResolution, 0.25);
 
     float surfaceValue = 0.0;
     float max = 0.0;
-    vec4 point = pointPosition;
+    vec4 noisePoint = point;
     float scaleFactor = 0.5;
     uint channel = 0u;
 
     while (scaleFactor > terrainResolution) {
-        surfaceValue += noise3(point, floor(point), channel) * scaleFactor;
+        surfaceValue += noise3(noisePoint, floor(noisePoint), channel) * scaleFactor;
         max += scaleFactor;
-        point *= 2.0;
-        point += 0.5;
+        noisePoint *= 2.0;
+        noisePoint += 0.5;
         scaleFactor *= 0.5;
         channel += 1u;
     }
