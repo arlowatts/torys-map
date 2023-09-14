@@ -10,7 +10,7 @@ const fov = 0.25 * Math.PI;
 
 // constants for panning and zooming
 export const SCROLL_SENSITIVITY = 0.0015;
-export const PINCH_SENSITIVITY = 0.003;
+export const PINCH_SENSITIVITY_MODIFIER = 2.0;
 export const MIN_ZOOM = -10;
 export const MAX_ZOOM = 10;
 export const BASE_PAN_SENSITIVITY = 50.0 / window.innerHeight * 2 ** (MIN_ZOOM - MAX_ZOOM);
