@@ -1,20 +1,20 @@
 // load the webgl context
 const canvas = document.getElementById("mapcanvas");
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight - 4;
+canvas.height = window.innerHeight;
 export const gl = canvas.getContext("webgl2");
+
+// compute viewport properties
+const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+const fov = 0.25 * Math.PI;
 
 // constants for panning and zooming
 export const SCROLL_SENSITIVITY = 0.001;
 export const MIN_ZOOM = -10;
 export const MAX_ZOOM = 10;
-export const BASE_PAN_SENSITIVITY = 0.1 * 2 ** (MIN_ZOOM - MAX_ZOOM);
+export const BASE_PAN_SENSITIVITY = 50.0 / window.innerHeight * 2 ** (MIN_ZOOM - MAX_ZOOM);
 export const MAX_PAN_SENSITIVITY = 2 ** (4.0 - MIN_ZOOM);
 export const PAN_LIMIT = BigInt(Math.round(2.0 * Math.PI / BASE_PAN_SENSITIVITY));
-
-// constants for touchscreen panning and zooming
-export const TOUCH_PAN_SENSITIVITY = 0.5;
-export const TOUCH_SCROLL_SENSITIVITY = 2.0;
 
 // the length of the vertical scale/measuring bar in screen units
 export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
@@ -57,9 +57,8 @@ export const light = {
 };
 
 // the initial camera view
-const fov = 0.25 * Math.PI;
 export const view = {
-    aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
+    aspect: aspect,
     fov: fov,
     cameraDistance: 1 / Math.tan(0.5 * fov),
     // precise angles are stored as BigInts to avoid loss of precision at very

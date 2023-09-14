@@ -66,7 +66,7 @@ function main() {
     // create event listeners for touchscreen support
     addEventListener("touchstart", onTouchStart);
     addEventListener("touchend", onTouchEnd);
-    addEventListener("touchcancel", onTouchCancel);
+    addEventListener("touchcancel", onTouchEnd);
     addEventListener("touchmove", onTouchMove);
 
     // draw the scene and update it each frame
@@ -129,19 +129,8 @@ function onTouchStart(event) {
     }
 }
 
-// when a touch gesture ends, remove all touches that ended
-function onTouchEnd(event) {
-    for (let i = 0; i < event.changedTouches.length; i++) {
-        for (let j = 0; j < touches.length; j++) {
-            if (event.changedTouches.item(i).identifier == touches[j].identifier) {
-                touches.splice(j, 1);
-            }
-        }
-    }
-}
-
-// when touch gestures are canceled, clear the list
-function onTouchCancel() {
+// when touch gestures end, clear the list
+function onTouchEnd() {
     touches.splice(0, touches.length);
 }
 
@@ -154,8 +143,8 @@ function onTouchMove(event) {
         // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: (touch.pageX - touches[0].pageX) * properties.TOUCH_PAN_SENSITIVITY,
-            movementY: (touch.pageY - touches[0].pageY) * properties.TOUCH_PAN_SENSITIVITY
+            movementX: (touch.pageX - touches[0].pageX),
+            movementY: (touch.pageY - touches[0].pageY)
         });
 
         // update to the latest touch point
@@ -180,11 +169,16 @@ function onTouchMove(event) {
 
         // invoke the zoom function
         onWheel({
-            wheelDelta: (newTouchDistance - touchDistance) * properties.TOUCH_SCROLL_SENSITIVITY
+            wheelDelta: (newTouchDistance - touchDistance)
         });
 
+        // update to the latest touch points
         touches[0] = touch1;
         touches[1] = touch2;
+    }
+    // otherwise something has gone wrong with the tracking, clear all touches
+    else {
+        onTouchEnd();
     }
 }
 
