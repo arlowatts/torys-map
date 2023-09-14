@@ -23,5 +23,6 @@ body {
     position: absolute;
     top: 50%;
     right: 0px;
+    font-size: 3vh;
     background-color: white;
 }
