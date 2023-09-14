@@ -9,7 +9,7 @@ const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
 const fov = 0.25 * Math.PI;
 
 // constants for panning and zooming
-export const SCROLL_SENSITIVITY = 0.001;
+export const SCROLL_SENSITIVITY = 0.002;
 export const MIN_ZOOM = -10;
 export const MAX_ZOOM = 10;
 export const BASE_PAN_SENSITIVITY = 50.0 / window.innerHeight * 2 ** (MIN_ZOOM - MAX_ZOOM);
