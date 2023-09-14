@@ -169,7 +169,7 @@ function onTouchMove(event) {
 
         // invoke the zoom function
         onWheel({
-            wheelDelta: (newTouchDistance - touchDistance)
+            wheelDelta: (newTouchDistance - touchDistance) * properties.PINCH_SENSITIVITY_MODIFIER
         });
 
         // update to the latest touch points
