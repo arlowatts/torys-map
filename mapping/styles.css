@@ -24,11 +24,6 @@ body {
     position: absolute;
     top: 50%;
     right: 0px;
+    font-size: 8mm;
     background-color: white;
-}
-
-@media (max-height: 500px) {
-    #scalevalue {
-        font-size: 2rem;
-    }
 }
