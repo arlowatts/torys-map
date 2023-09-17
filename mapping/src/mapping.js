@@ -36,7 +36,9 @@ function main() {
         viewMatrix: gl.getUniformLocation(torusProgram, "uViewMatrix"),
         lightDirection: gl.getUniformLocation(torusProgram, "uLightDirection"),
         lightAmbience: gl.getUniformLocation(torusProgram, "uLightAmbience"),
-        zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel")
+        zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel"),
+        terrainResolution: gl.getUniformLocation(torusProgram, "uTerrainResolution"),
+        terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution")
     };
 
     // the stars (background) program
@@ -92,17 +94,17 @@ function render(now) {
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons == 1) {
-        // track the precise angle values as BigInts to avoid loss of precision
-        view.phiPrecise += BigInt(Math.round(event.movementX * torus.smallRadius * view.panSensitivity));
-        view.thetaPrecise += BigInt(Math.round(event.movementY * torus.largeRadius * view.panSensitivity));
+        // track the precise angle values as integers to avoid loss of precision
+        view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
+        view.thetaPrecise += event.movementY * view.panSensitivity;
 
-        // wrap the values when they have completed a full rotation
+        // wrap the values past a full rotation to avoid overflow
         view.phiPrecise %= properties.PAN_LIMIT;
         view.thetaPrecise %= properties.PAN_LIMIT;
 
         // compute the actual angles as Numbers
-        view.phi = Number(view.phiPrecise) * properties.BASE_PAN_SENSITIVITY;
-        view.theta = Number(view.thetaPrecise) * properties.BASE_PAN_SENSITIVITY;
+        view.phi = view.phiPrecise * properties.PRECISE_PAN_TO_RADIANS;
+        view.theta = view.thetaPrecise * properties.PRECISE_PAN_TO_RADIANS;
     }
 }
 
@@ -112,9 +114,9 @@ function onWheel(event) {
     view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
     view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
 
-    // recompute the exponential zoom value and the updated pan sensitivity
+    // compute the exponential zoom value and the updated pan sensitivity
     view.zoom = 2 ** view.zoomPrecise;
-    view.panSensitivity = Math.min(2 ** (view.zoomPrecise - properties.MIN_ZOOM), properties.MAX_PAN_SENSITIVITY);
+    view.panSensitivity = 2 ** (view.zoomPrecise - properties.MIN_ZOOM) * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
 
     // update the scale value on the bar
     document.getElementById("scalevalue").innerText =
