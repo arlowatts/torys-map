@@ -34,13 +34,19 @@ void main() {
     point = normalize(point);
     
     ivec4 pointHash = ivec4(floor(point * starResolution));
-    float color = hash(uint(starfieldSize * (pointHash.x + starfieldSize * (pointHash.y + starfieldSize * pointHash.z))));
+    float color = hash(uint(
+        starfieldSize * (
+            pointHash.x + starfieldSize * (
+                pointHash.y + starfieldSize * pointHash.z
+            )
+        )
+    ));
 
-    if (color < starFrequency) {
-        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-    else if (length(point - sunPosition) < sunSize) {
+    if (length(point - sunPosition) < sunSize) {
         fragColor = vec4(sunColor, 1.0);
+    }
+    else if (color < starFrequency) {
+        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
     }
     else {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
@@ -56,6 +62,7 @@ float hash(uint x) {
     x ^= x >> 16u;
     x *= 2654435769u;
 
-    return float(x) / 4294967295.0;
+    // equal to float(x) / (2**32 - 1);
+    return float(x) * 2.3283064370807974e-10;
 }
 `;

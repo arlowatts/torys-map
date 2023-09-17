@@ -32,12 +32,16 @@ function main() {
     };
 
     programInfo.torus.uniformLocations = {
+        // matrices
         projectionMatrix: gl.getUniformLocation(torusProgram, "uProjectionMatrix"),
         viewMatrix: gl.getUniformLocation(torusProgram, "uViewMatrix"),
+        // vectors
         lightDirection: gl.getUniformLocation(torusProgram, "uLightDirection"),
         lightAmbience: gl.getUniformLocation(torusProgram, "uLightAmbience"),
+        // scalars
         zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel"),
         terrainResolution: gl.getUniformLocation(torusProgram, "uTerrainResolution"),
+        terrainHeightScale: gl.getUniformLocation(torusProgram, "uTerrainHeightScale"),
         terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution")
     };
 

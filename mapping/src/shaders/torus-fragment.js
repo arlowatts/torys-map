@@ -5,15 +5,19 @@ precision mediump float;
 
 bool isShadowed(vec4);
 float getHeight(vec4);
-float noise3(vec4, vec4, uint);
-float noise2(vec4, vec4, uint);
-float noise(float, float, uint);
+float noise3(vec4, vec4, uvec4, uint);
+float noise2(vec4, vec4, uvec4, uint);
+float noise(float, float, uint, uint);
 float hash(uint);
 float lerp(float, float, float);
 
 uniform vec4 uLightDirection;
 uniform float uLightAmbience;
 uniform float uZoomLevel;
+
+uniform float uTerrainResolution;
+uniform float uTerrainHeightScale;
+uniform float uTerrainNormalResolution;
 
 in vec4 pointPosition;
 
@@ -22,9 +26,8 @@ out vec4 fragColor;
 float largeRadius = float(${torus.largeRadius});
 float smallRadius = float(${torus.smallRadius});
 
-float terrainResolution = float(${torus.terrainResolution});
-float terrainNormalResolution = float(${torus.terrainNormalResolution});
 float terrainNormalIntensity = float(${torus.terrainNormalIntensity});
+
 float seaLevel = float(${torus.seaLevel});
 float snowLevel = float(${torus.snowLevel});
 
@@ -51,8 +54,8 @@ void main() {
         vec4 pointB = vec4(cross(normal.xyz, pointA.xyz), 0.0);
 
         // scale by the distance at which to test for terrain normal
-        pointA *= uZoomLevel * terrainNormalResolution;
-        pointB *= uZoomLevel * terrainNormalResolution;
+        pointA *= uTerrainNormalResolution;
+        pointB *= uTerrainNormalResolution;
 
         // shift the vectors by the terrain height
         pointA += normal * (getHeight(point + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
@@ -111,53 +114,61 @@ bool isShadowed(vec4 point) {
 }
 
 float getHeight(vec4 point) {
-    float terrainResolution = min(uZoomLevel * terrainResolution, 0.25);
+    float height = 0.0;
 
-    float surfaceValue = 0.0;
-    float max = 0.0;
     vec4 noisePoint = point;
+    vec4 pointFloor;
+
     float scaleFactor = 0.5;
     uint channel = 0u;
 
-    while (scaleFactor > terrainResolution) {
-        surfaceValue += noise3(noisePoint, floor(noisePoint), channel) * scaleFactor;
-        max += scaleFactor;
+    do {
+        pointFloor = floor(noisePoint);
+
+        height += scaleFactor * noise3(
+            noisePoint,
+            noisePoint - pointFloor,
+            uvec4(ivec4(pointFloor)),
+            channel
+        );
+
         noisePoint *= 2.0;
         noisePoint += 0.5;
         scaleFactor *= 0.5;
         channel += 1u;
     }
+    while (scaleFactor > uTerrainResolution);
 
-    return surfaceValue / max;
+    return height * uTerrainHeightScale;
 }
 
-float noise3(vec4 point, vec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + uint(int(pointFloor.z));
+float noise3(vec4 point, vec4 pointFract, uvec4 pointFloor, uint evalAt) {
+    evalAt = evalAt * 0x05555555u + pointFloor.z;
 
     return lerp(
-        noise2(point, pointFloor, evalAt),
-        noise2(point, pointFloor, evalAt + 1u),
-        point.z - pointFloor.z
+        noise2(point, pointFract, pointFloor, evalAt),
+        noise2(point, pointFract, pointFloor, evalAt + 1u),
+        pointFract.z
     );
 }
 
-float noise2(vec4 point, vec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + uint(int(pointFloor.y));
+float noise2(vec4 point, vec4 pointFract, uvec4 pointFloor, uint evalAt) {
+    evalAt = evalAt * 0x05555555u + pointFloor.y;
 
     return lerp(
-        noise(point.x, pointFloor.x, evalAt),
-        noise(point.x, pointFloor.x, evalAt + 1u),
-        point.y - pointFloor.y
+        noise(point.x, pointFract.x, pointFloor.x, evalAt),
+        noise(point.x, pointFract.x, pointFloor.x, evalAt + 1u),
+        pointFract.y
     );
 }
 
-float noise(float point, float pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + uint(int(pointFloor));
+float noise(float point, float pointFract, uint pointFloor, uint evalAt) {
+    evalAt = evalAt * 0x05555555u + pointFloor;
 
     return lerp(
         hash(evalAt),
         hash(evalAt + 1u),
-        point - pointFloor
+        pointFract
     );
 }
 
@@ -170,7 +181,8 @@ float hash(uint x) {
     x ^= x >> 16u;
     x *= 2654435769u;
 
-    return float(x) / 4294967295.0;
+    // equal to float(x) / (2**32 - 1);
+    return float(x) * 2.3283064370807974e-10;
 }
 
 float lerp(float a, float b, float t) {

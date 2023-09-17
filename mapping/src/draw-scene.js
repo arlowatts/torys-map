@@ -35,9 +35,14 @@ export function drawTorus() {
     // set the shader uniforms
     gl.uniformMatrix4fv(programInfo.torus.uniformLocations.projectionMatrix, false, getProjectionMatrix());
     gl.uniformMatrix4fv(programInfo.torus.uniformLocations.viewMatrix, false, getViewMatrix());
+
     gl.uniform4fv(programInfo.torus.uniformLocations.lightDirection, light.direction);
+
     gl.uniform1f(programInfo.torus.uniformLocations.lightAmbience, light.ambience);
     gl.uniform1f(programInfo.torus.uniformLocations.zoomLevel, view.zoom);
+    gl.uniform1f(programInfo.torus.uniformLocations.terrainResolution, view.zoom * torus.terrainResolution);
+    gl.uniform1f(programInfo.torus.uniformLocations.terrainHeightScale, getTerrainHeightScale());
+    gl.uniform1f(programInfo.torus.uniformLocations.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.torus.vertexCount);
@@ -101,4 +106,17 @@ function getViewDirectionMatrix() {
     mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.phi, [0.0, 1.0, 0.0]);
 
     return viewDirectionMatrix;
+}
+
+function getTerrainHeightScale() {
+    let scale = 0.0;
+    let height = 0.5;
+
+    do {
+        scale += height;
+        height *= 0.5;
+    }
+    while (height > view.zoom * torus.terrainResolution);
+
+    return 1.0 / scale;
 }
