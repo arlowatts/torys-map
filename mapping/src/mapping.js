@@ -120,7 +120,9 @@ function onWheel(event) {
 
     // compute the exponential zoom value and the updated pan sensitivity
     view.zoom = 2 ** view.zoomPrecise;
-    view.panSensitivity = 2 ** (view.zoomPrecise - properties.MIN_ZOOM) * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
+    view.panSensitivity =
+        2 ** (Math.min(view.zoomPrecise, properties.MAX_PAN_SENSITIVITY) - properties.MIN_ZOOM)
+        * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
 
     // update the scale value on the bar
     document.getElementById("scalevalue").innerText =

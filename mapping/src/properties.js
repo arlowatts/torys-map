@@ -10,6 +10,7 @@ export const SCROLL_SENSITIVITY = 0.0015;
 export const MIN_ZOOM = -10;
 export const MAX_ZOOM = 10;
 export const BASE_PAN_SENSITIVITY = 1.0 / window.innerHeight;
+export const MAX_PAN_SENSITIVITY = 4.0;
 export const PRECISE_PAN_TO_RADIANS = 2 ** MIN_ZOOM;
 export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 
