@@ -6,7 +6,7 @@ export const gl = canvas.getContext("webgl2");
 
 // constants for panning and zooming
 export const SCROLL_SENSITIVITY = 0.0015;
-// export const PINCH_SENSITIVITY_MODIFIER = 2.0;
+export const PINCH_SENSITIVITY_MODIFIER = 2.0;
 export const MIN_ZOOM = -10;
 export const MAX_ZOOM = 10;
 export const BASE_PAN_SENSITIVITY = 1.0 / window.innerHeight;
