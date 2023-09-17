@@ -17,6 +17,9 @@ export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 // the length of the vertical scale/measuring bar in screen units
 export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
 
+// the delay between each refresh of the query params in milliseconds
+export const QUERY_PARAM_REFRESH_RATE = 1000;
+
 // the planet dimensions and vertex properties
 // phi is associated with the large radius
 // theta is associated with the small radius
@@ -64,6 +67,9 @@ export const light = {
 // compute viewport properties
 const fov = 0.25 * Math.PI;
 
+// load query parameters
+const params = new URLSearchParams(window.location.search);
+
 // the initial camera view
 export const view = {
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
@@ -71,9 +77,9 @@ export const view = {
     cameraDistance: 1 / Math.tan(0.5 * fov),
 
     // precise angles are tracked as integers to avoid loss of precision
-    phiPrecise: 0,
-    thetaPrecise: 0,
-    zoomPrecise: 2.0,
+    phiPrecise: Number(params.get("phi")),
+    thetaPrecise: Number(params.get("theta")),
+    zoomPrecise: Number(params.get("zoom") || 2.0),
 
     // the actual values in radians are computed from the precise values
     phi: 0.0,

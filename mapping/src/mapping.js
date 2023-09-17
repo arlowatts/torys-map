@@ -75,6 +75,9 @@ function main() {
     addEventListener("touchcancel", onTouchEnd);
     addEventListener("touchmove", onTouchMove);
 
+    // create an interval timer to update the url query parameters
+    setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
+
     // draw the scene and update it each frame
     requestAnimationFrame(render);
 }
@@ -93,6 +96,15 @@ function render(now) {
     drawTorus();
 
     requestAnimationFrame(render);
+}
+
+// update the url search params
+function updateQueryParameters() {
+    let urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
+    urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
+    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
+    history.pushState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
 
 // adjust the view location when the mouse is dragged
