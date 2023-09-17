@@ -55,8 +55,8 @@ export const light = {
     // to get the rotation in radians, then the direction vector is rotated
     // by that amount around the axis defined by the remaining three components
     rotations: [
-        [0.0000365, 3/5, 0.0, 4/5], // this rotation represents the planet's local axis
-        [0.0000001, 0.0, 0.0, 1.0]  // this rotation represents the planet's orbit
+        [0.0365, 3/5, 0.0, 4/5], // this rotation represents the planet's local axis
+        [0.0001, 0.0, 0.0, 1.0]  // this rotation represents the planet's orbit
     ],
 
     ambience: 0.2,              // the base uniform light level
@@ -76,10 +76,15 @@ export const view = {
     fov: fov,
     cameraDistance: 1 / Math.tan(0.5 * fov),
 
+    // the world time in seconds
+    time: params.has("time") && !isNaN(params.get("time")) ? Number(params.get("time")) : 0,
+    // time since the page was loaded in milliseconds
+    pageTime: 0,
+
     // precise angles are tracked as integers to avoid loss of precision
-    phiPrecise: params.has("phi") ? Number(params.get("phi")) : 0,
-    thetaPrecise: params.has("theta") ? Number(params.get("theta")) : 0,
-    zoomPrecise: params.has("zoom") ? Number(params.get("zoom")) : 2.0,
+    phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
+    thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 0,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 2.0,
 
     // the actual values in radians are computed from the precise values
     phi: 0.0,

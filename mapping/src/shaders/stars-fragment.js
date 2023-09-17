@@ -32,7 +32,7 @@ void main() {
 
     point.w = 0.0;
     point = normalize(point);
-    
+
     ivec4 pointHash = ivec4(floor(point * starResolution));
     float color = hash(uint(
         starfieldSize * (

@@ -47,7 +47,7 @@ function main() {
 
     // the stars (background) program
     programInfo.stars.program = starsProgram;
-    
+
     programInfo.stars.attribLocations= {
         vertexPosition: gl.getAttribLocation(starsProgram, "aVertexPosition")
     };
@@ -86,15 +86,23 @@ function main() {
 }
 
 function render(now) {
+    // update the world time
+    view.time += (now - view.pageTime) / 1000;
+    view.pageTime = now;
+
+    // create the light direction matrix and vector
     mat4.identity(light.directionMatrix);
     vec4.copy(light.direction, light.baseDirection);
 
+    // apply the rotations to the matrix
     light.rotations.forEach((rotation) => {
-        mat4.rotate(light.directionMatrix, light.directionMatrix, now * rotation[0], rotation.slice(1));
+        mat4.rotate(light.directionMatrix, light.directionMatrix, view.time * rotation[0], rotation.slice(1));
     });
 
+    // apply the matrix to get the current light direction vector
     vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
-    
+
+    // render the scene
     drawStars();
     drawTorus();
 
@@ -199,9 +207,12 @@ function onTouchMove(event) {
 // update the url search params
 function updateQueryParameters() {
     let urlSearchParams = new URLSearchParams(window.location.search);
+
     urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
     urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
     urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
+    urlSearchParams.set("time", view.time.toFixed(4));
+
     history.pushState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
 
