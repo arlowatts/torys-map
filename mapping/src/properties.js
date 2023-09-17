@@ -77,9 +77,9 @@ export const view = {
     cameraDistance: 1 / Math.tan(0.5 * fov),
 
     // precise angles are tracked as integers to avoid loss of precision
-    phiPrecise: Number(params.get("phi")),
-    thetaPrecise: Number(params.get("theta")),
-    zoomPrecise: Number(params.get("zoom") || 2.0),
+    phiPrecise: params.has("phi") ? Number(params.get("phi")) : 0,
+    thetaPrecise: params.has("theta") ? Number(params.get("theta")) : 0,
+    zoomPrecise: params.has("zoom") ? Number(params.get("zoom")) : 2.0,
 
     // the actual values in radians are computed from the precise values
     phi: 0.0,
