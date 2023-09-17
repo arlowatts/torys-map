@@ -75,6 +75,9 @@ function main() {
     addEventListener("touchcancel", onTouchEnd);
     addEventListener("touchmove", onTouchMove);
 
+    // create the event listener to reload on resize
+    addEventListener("resize", onResize);
+
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
 
@@ -96,15 +99,6 @@ function render(now) {
     drawTorus();
 
     requestAnimationFrame(render);
-}
-
-// update the url search params
-function updateQueryParameters() {
-    let urlSearchParams = new URLSearchParams(window.location.search);
-    urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
-    urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
-    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
-    history.pushState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
 
 // adjust the view location when the mouse is dragged
@@ -200,6 +194,21 @@ function onTouchMove(event) {
     else {
         onTouchEnd();
     }
+}
+
+// update the url search params
+function updateQueryParameters() {
+    let urlSearchParams = new URLSearchParams(window.location.search);
+    urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
+    urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
+    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
+    history.pushState(null, "", window.location.pathname + "?" + urlSearchParams);
+}
+
+// reload the page on window resize
+function onResize() {
+    updateQueryParameters();
+    location.reload();
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
