@@ -79,7 +79,7 @@ function main() {
     addEventListener("resize", onResize);
 
     // create an interval timer to update the url query parameters
-    // setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
+    setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
