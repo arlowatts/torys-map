@@ -13,12 +13,6 @@ const touches = [];
 main();
 
 function main() {
-    // check that the webgl context opened correctly
-    if (gl === null) {
-        alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-        return;
-    }
-
     // initialize the shader programs
     const torusProgram = initShaderProgram(torusVertex.source, torusFragment.source);
     const starsProgram = initShaderProgram(starsVertex.source, starsFragment.source);

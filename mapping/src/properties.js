@@ -4,6 +4,11 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 export const gl = canvas.getContext("webgl2");
 
+// check that the webgl context opened correctly
+if (gl === null) {
+    alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+}
+
 // constants for panning and zooming
 export const SCROLL_SENSITIVITY = 0.0015;
 export const PINCH_SENSITIVITY_MODIFIER = 2.0;
