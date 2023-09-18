@@ -72,7 +72,19 @@ function getProjectionMatrix() {
     // instead just narrow the field of view at high zoom levels
     if (view.zoomPrecise >= 0) {
         fov = view.fov;
-        zNear = view.zoom * 0.5;
+
+        // adjust the near clipping plane to clip the near side of the torus
+        // when viewing the far side at a distance
+        if (view.zoom > 2 * (torus.largeRadius + torus.smallRadius)) {
+            zNear = view.zoom - 2 * torus.largeRadius;
+        }
+        else if (view.zoom > torus.largeRadius + torus.smallRadius) {
+            zNear = view.zoom - torus.largeRadius;
+        }
+        else {
+            zNear = view.zoom * 0.5;
+        }
+
         zFar = (view.zoom + torus.largeRadius + torus.smallRadius) * 2;
     }
     else {
