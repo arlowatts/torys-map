@@ -207,7 +207,7 @@ function updateQueryParameters() {
     urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
     urlSearchParams.set("time", view.time.toFixed(4));
 
-    history.pushState(null, "", window.location.pathname + "?" + urlSearchParams);
+    history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
 
 // reload the page on window resize
