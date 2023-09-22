@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Torys</title>
-    <style>
-      .row {
-        display: flex;
-      }
-      .column {
-        flex: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Torys</h1>
-    <h2>Table of Contents</h2>
-    <div class="row">
-      <div class="column">
-        <h3>Locations</h3>
-        <ul>
-          <li><a href="locations/andal/">Andal</a></li>
-          <ul>
-            <li><a href="locations/andal/days-end/">Day's End</a></li>
-            <ul>
-              <li><a href="locations/andal/days-end/ahahbus-house.html">Ahahbu's House</a></li>
+# Torys
+
+## Table of Contents
+
+- [Andal](locations/andal/)
+  - [Day's End](locations/andal/days-end/)
+    - [Ahahbu's House](locations/andal/days-end/ahahbus-house.md)
+    - [The Dungeon of Day's End](locations/andal/days-end/dungeon/)
+      - [Oeged Naaftet Oecheisev](locations/andal/days-end/dungeon/oeged.html)
+    - [Elking Wood](locations/andal/days-end/elking-wood.html)
+
+```
               <li><a href="locations/andal/days-end/dungeon/">The Dungeon of Day's End</a></li>
               <ul>
                 <li><a href="locations/andal/days-end/dungeon/oeged.html">Oeged Naaftet Oecheisev</a></li>
@@ -67,3 +54,4 @@
     </div>
   </body>
 </html>
+```
