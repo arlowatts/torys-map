@@ -1,6 +1,4 @@
-# Torys
-
-## Table of Contents
+# Table of Contents
 
 ### Locations
 
@@ -16,11 +14,11 @@
   - [Sayrenvar](locations/andal/sayrenvar.md)
 - [Arastes](locations/arastes/)
 - [Leuber](locations/leuber/)
-  - [Firecomb](locations/leuber/firecomb/)
-  - [Ruemin Cavern](locations/leuber/ruemin-cavern.html)
+  - [Firecomb](locations/leuber/firecomb.md)
+  - [Ruemin Cavern](locations/leuber/ruemin-cavern.md)
 - [Sibal](locations/sibal/)
 - [Soale](locations/soale/)
-- [Evening, Morning, and Noon-night Horizons](locations/horizons.html)
+- [Evening, Morning, and Noon-night Horizons](locations/horizons.md)
 
 ### Adventures
 

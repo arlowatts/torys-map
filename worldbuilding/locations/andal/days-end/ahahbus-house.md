@@ -2,7 +2,7 @@
 
 Ahahbu lives in and works from a small building in Day's End. It contains a central living room adjacent to a kitchen and a sickroom. Upstairs is a bedroom, and a small cellar holds food and medicinal supplies. Also in the cellar is evidence of Ahahbu's druidcraft: a book of druidic magic and an ash wand.
 
-## Entrance
+### Entrance
 
 The front door opens into the living room of the house. The room contains two chairs and a desk, on which is some stationery, Ahahbu's patient records, and seven books:
 
@@ -18,19 +18,19 @@ Also on the desk is a small statuette of a cat, carved out of the wood of an ash
 
 An open doorway leads to the kitchen and two doors lead to the sickroom and the washroom. Stairs lead up to the bedroom and down to the cellar.
 
-## Kitchen
+### Kitchen
 
 The kitchen contains a small washbasin, a pantry, and a wood stove. Ahahbu uses the wood stove to cook food, brew teas and potions, and heat the house in the winter. The pantry contains mostly regular food, but the top shelf also holds medicinal ingredients.
 
-## Sickroom
+### Sickroom
 
 The sickroom has one bed for patients and a table beside it. The table holds surgeons' tools, including small knives, tweezers, and a magnifying glass. At the back of the room is a wardrobe containing extra bedding and a box of healing potions, brewed by Ahahbu; roll 1d4 - 1 to determine how many she has at a given time.
 
-## Bedroom
+### Bedroom
 
 Upstairs from the main floor is Ahahbu's bedroom, which contains a bed and a clothes closet. The window in this room doesn't close properly, much to Ahahbu's dismay in the winter. She's been meaning to get it fixed, but she hasn't gotten around to it yet.
 
-## Cellar
+### Cellar
 
 Downstairs from the main floor is the cellar. This is where Ahahbu keeps canned food and other products that last.
 

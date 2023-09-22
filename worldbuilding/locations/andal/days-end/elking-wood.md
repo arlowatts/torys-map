@@ -9,21 +9,21 @@ Cultures of Elking Wood
 
 Elking Wood is inhabited by four distinct peoples: elves, gnomes, druids, and lycanthropes.
 
-## Elves
+### Elves
 
 The elves who live in the Elking Wood are the only surviving remnants of the ancient elven kingdom, once ruled by King Oeged. The kingdom collapsed long enough ago that elves alive now have only heard of the kingdom and its fall from their grandparents or great-grandparents.
 
 The elves live in small groups spread out through the forest. After the kingdom's fall, werewolves and basilisks slowly wore away the people's strength until they were forced to retreat to more defensible hideouts. Now they struggle to get by as their numbers slowly dwindle.
 
-## Gnomes
+### Gnomes
 
 Gnomes have lived in the Elking Wood since long before the elven kingdom arose, and will likely continue to dwell there long after the last elf on the continent is dead. The gnomes have adapted to life under the eclipse and have learned to use magic based on plants and fungi rather than darkness. This gives them the ability to protect themselves from hostile creatures, cultivate nourishing crops, and in the time of the elven kingdom it helped them stay mostly hidden from elven law.
 
-## Druids
+### Druids
 
 The druids of the forest are people of many different races who have taken the power of the eclipse into their hearts and allowed it to shape them. Though this power grants them many abilities, such as shapechanging and powerful magic, it also twists their desires and drives them to greed and hatred. Though they generally live alone or in pairs, there is a sort of community between some of the druids. They may provide help to each other in times of need, or offer food and shelter to another druid far from home.
 
-## Lycanthropes
+### Lycanthropes
 
 The lycanthropes are the most individualistic of all the cultures in Elking Wood. They almost exclusively live alone, rarely communicate with one another, and compete fiercely for territory and resources. However, there are some common traits that most lycanthropes share. For example, when a humanoid is infected with lycanthropy, they generally become more direct and lose some of their ability to plan ahead. This leads to decisions favoring immediate gain, such as fighting and killing trespassers rather than asking too many questions.
 
