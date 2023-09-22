@@ -2,7 +2,7 @@
 
 Ahahbu lives in and works from a small building in Day's End. It contains a central living room adjacent to a kitchen and a sickroom. Upstairs is a bedroom, and a small cellar holds food and medicinal supplies. Also in the cellar is evidence of Ahahbu's druidcraft: a book of druidic magic and an ash wand.
 
-Entrance
+## Entrance
 
 The front door opens into the living room of the house. The room contains two chairs and a desk, on which is some stationery, Ahahbu's patient records, and seven books:
 
@@ -36,4 +36,4 @@ Downstairs from the main floor is the cellar. This is where Ahahbu keeps canned 
 
 Additionally, one of the floor tiles here has been loosened and is removable; a successful DC 14 Wisdom (Perception) or Intelligence (Investigation) check is required to spot it. The tile can be easily lifted, revealing a small hollow containing an old and worn book and an ash wand. This is Ahahbu's druidic equipment; she keeps it hidden because she knows she would be executed if anyone discovered that she was a druid of the eclipse.
 
-The book is titled "Magics Under The Noon-Night" and describes a number of techniques, practices, and even specific spells that a Druid of the Eclipse can use to improve their powers. The wand, made from the wood of an ash tree, is Ahahbu's Druidic Focus.
+The book is titled *Magics Under The Noon-Night* and describes a number of techniques, practices, and even specific spells that a Druid of the Eclipse can use to improve their powers. The wand, made from the wood of an ash tree, is Ahahbu's Druidic Focus.
