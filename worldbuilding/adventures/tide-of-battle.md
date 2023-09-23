@@ -2,6 +2,14 @@
 
 Tide of Battle is an adventure meant for 5th-level characters and takes place across Andal, Leuber, Sibal, and the waters between them. The story of the adventure follows a war of conquest between Andal and Leuber and the outcome depends entirely on the characters' choices.
 
+## Outline
+
+This adventure takes place in a time when Leuber is still populated almost entirely by the race of giants, with only the exception of Firecomb on the southern coast. For thousands of years the giants have held their lands from invasion and repelled all diplomatic advances. However, despite their great strength and long lives, they have shown no interest in leaving Leuber for any reason. They dwell in their ancestral homes and live at peace with each other.
+
+But this peace will soon be disrupted, for explorers based in Firecomb have learned a deeply-kept secret of the giants. Their great statures and long lives are no accident: it all sources from Taor'taemed, a river flowing out of the north side of the mountains directly across Leuber's northern plains. The water of this river grants any who drink it long life and great strength. Taor'taemed is also the name of a storm god whom the giants worship, and it is to her that they credit the river's magical properties.
+
+These explorer-spies, whose names are yet known only to a few, returned to Firecomb and plotted their next move. Seeking riches, they decided to head to Andal, one of the wealhiest countries, to sell their secrets. Now the leadership of Andal is preparing for a full-scale invasion of Leuber to claim this precious resource. They have, in secret, sourced thousands of weapons, purchased dozens of ships, and conscripted an entire army of soldiers and mages. Soon they will be ready to set sail to Leuber, and to war.
+
 ## Chapter 1 - Call to Action
 
 The adventure begins in Sayrenvar, the capital city of Andal. Sayrenvar is a sprawling coastal city that bulges out from its huge Inner Harbour into the inland plains. On the northern coast of Andal, Sayrenvar is also just east of the Evening Horizon and so does not experience eclipses.
@@ -24,13 +32,20 @@ Captain Eltora is a lively Human of 27 years. If she didn't spend hours each day
 
 #### First Mate Laurie
 
-Laurie, the First Mate of the Dulcet Swine, is a Dwarf of exceptional intelligence. His immediate grasp of unfamiliar topics is unrivaled and his memory is faultless. Laurie has known Eltora since her childhood and considers himself largely responsible for her success, which he proudly flaunts at every opportunity. He likes using big words and showing off his deep understanding of every science under the sun.
+Laurie, the First Mate of the Dulcet Swine, is a Dwarf of exceptional intelligence. His immediate grasp of unfamiliar topics is unrivaled and his memory is faultless. Laurie has known Eltora since her childhood and considers himself largely responsible for her success, which he proudly flaunts at every opportunity. He likes using big words and showing off his understanding of every science under the sun.
 
 #### Raadi
 
-Raadi is a Human sailor from the distant land of Soale. He speaks with a thick accent but otherwise has fully adopted the Andalese way of life. He is quite talkative and very friendly, both trusting and earning trust easily. He loves to play tricks on his friends (almost everyone) and tell stories.
+Raadi is a Human sailor from the distant land of Soale. He speaks with a thick accent but otherwise has fully adopted the Andalese way of life. He is quite talkative and very friendly, both trusting and earning trust easily. He loves to play tricks on his friends (which is almost everyone) and tell stories.
 
-#### Di
+#### Aro
 
-Di is an Elf sailor of mysterious origins. She claims to be from Sibal but never seems to get the details straight - her story changes at every telling. Despite this, she enjoys good company and, while being slower to make friends than Raadi, can still become a kind and loving companion in time.
+Aro is an Elf sailor of mysterious origins. She claims to be from Sibal but never seems to get the details straight - her story changes at every telling. Despite this, she enjoys good company and, while being slower to make friends than Raadi, can still become a kind and loving companion in time.
 
+The Dulcet Swine sails at dawn, so the characters won't have much time to prepare or to explore Sayrenvar. However, they should have enough time to make any purchases they feel are necessary.
+
+## Chapter 2 - Encounter at Sea
+
+Captain Eltora will guide the Dulcet Swine out of the Inner Harbour the morning after another mystery ship leaves. Her plan is to catch up to the ship out of sight of Sayrenvar to avoid any possible suspicion. This will give Captain Eltora and her crew time to get to know the characters and the characters to get to know each other. Eltora will start by asking each of the characters who told them about the Dulcet Swine and what they know about its mission. Once everyone has answered, Eltora will tell them that she works for a merchant's guild based in Sibal. This guild, called simply the Merchant's Union, presents itself as an organization supporting international merchants by supplying resources to its members for a monthly fee. However, Eltora will also tell that the Merchant's Union promotes illegal trading. Eltora is sometimes entrusted with these tasks. The Merchant's Union offers additional protection for her business and occasionally supplies her with additional members, such as this one.
+
+*I don't know much about any of you*, she'll say. *All I know is that you've been selected to join my crew for this mission of intelligence. The Union sometimes makes mistakes, but I'm hoping you won't let me down.*
