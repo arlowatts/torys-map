@@ -22,15 +22,15 @@
 
 ### Adventures
 
-- [Nightfall](adventures/nightfall.html)
-- [Stormstruck](adventures/stormstruck.html)
-- [Tide of Battle](adventures/tide-of-battle.html)
+- [Nightfall](adventures/nightfall.md)
+- [Stormstruck](adventures/stormstruck.md)
+- [Tide of Battle](adventures/tide-of-battle.md)
 
 ### Races
 
-- [Booksmith](races/booksmith.html)
-- [Dancer](races/dancer.html)
-- [Dwarf](races/dwarf.html)
-- [Elf](races/elf.html)
-- [Human](races/human.html)
-- [Merfolk](races/merfolk.html)
+- [Booksmith](races/booksmith.md)
+- [Dancer](races/dancer.md)
+- [Dwarf](races/dwarf.md)
+- [Elf](races/elf.md)
+- [Human](races/human.md)
+- [Merfolk](races/merfolk.md)
