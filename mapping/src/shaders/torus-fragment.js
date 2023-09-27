@@ -142,33 +142,33 @@ float getHeight(vec4 point) {
     return height * uTerrainHeightScale;
 }
 
-float noise3(vec4 point, vec4 pointFract, uvec4 pointFloor, uint evalAt) {
+float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.z;
 
     return lerp(
-        noise2(point, pointFract, pointFloor, evalAt),
-        noise2(point, pointFract, pointFloor, evalAt + 1u),
-        pointFract.z
+        noise2(point, pointFrac, pointFloor, evalAt),
+        noise2(point, pointFrac, pointFloor, evalAt + 1u),
+        pointFrac.z
     );
 }
 
-float noise2(vec4 point, vec4 pointFract, uvec4 pointFloor, uint evalAt) {
+float noise2(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.y;
 
     return lerp(
-        noise(point.x, pointFract.x, pointFloor.x, evalAt),
-        noise(point.x, pointFract.x, pointFloor.x, evalAt + 1u),
-        pointFract.y
+        noise(point.x, pointFrac.x, pointFloor.x, evalAt),
+        noise(point.x, pointFrac.x, pointFloor.x, evalAt + 1u),
+        pointFrac.y
     );
 }
 
-float noise(float point, float pointFract, uint pointFloor, uint evalAt) {
+float noise(float point, float pointFrac, uint pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor;
 
     return lerp(
         hash(evalAt),
         hash(evalAt + 1u),
-        pointFract
+        pointFrac
     );
 }
 
