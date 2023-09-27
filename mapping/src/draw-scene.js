@@ -1,4 +1,5 @@
 import { gl, programInfo, buffers, torus, view, light } from "./properties.js";
+import * as properties from "./properties.js";
 
 // draw the starry background
 export function drawStars() {
@@ -8,9 +9,11 @@ export function drawStars() {
     // disable depth testing
     gl.disable(gl.DEPTH_TEST);
 
+    let uniforms = programInfo.stars.uniformLocations;
+
     // set the shader uniforms
-    gl.uniformMatrix4fv(programInfo.stars.uniformLocations.viewDirectionMatrix, false, getViewDirectionMatrix());
-    gl.uniformMatrix4fv(programInfo.stars.uniformLocations.lightDirectionMatrix, false, light.directionMatrix);
+    gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
+    gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, light.directionMatrix);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.stars.vertexCount);
@@ -32,17 +35,19 @@ export function drawTorus() {
     gl.clearDepth(1.0);
     gl.clear(gl.DEPTH_BUFFER_BIT);
 
+    let uniforms = programInfo.torus.uniformLocations;
+
     // set the shader uniforms
-    gl.uniformMatrix4fv(programInfo.torus.uniformLocations.projectionMatrix, false, getProjectionMatrix());
-    gl.uniformMatrix4fv(programInfo.torus.uniformLocations.viewMatrix, false, getViewMatrix());
+    gl.uniformMatrix4fv(uniforms.projectionMatrix, false, getProjectionMatrix());
+    gl.uniformMatrix4fv(uniforms.viewMatrix, false, getViewMatrix());
 
-    gl.uniform4fv(programInfo.torus.uniformLocations.lightDirection, light.direction);
+    gl.uniform4fv(uniforms.lightDirection, light.direction);
 
-    gl.uniform1f(programInfo.torus.uniformLocations.lightAmbience, light.ambience);
-    gl.uniform1f(programInfo.torus.uniformLocations.zoomLevel, view.zoom);
-    gl.uniform1f(programInfo.torus.uniformLocations.terrainResolution, view.zoom * torus.terrainResolution);
-    gl.uniform1f(programInfo.torus.uniformLocations.terrainHeightScale, getTerrainHeightScale());
-    gl.uniform1f(programInfo.torus.uniformLocations.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
+    gl.uniform1f(uniforms.lightAmbience, light.ambience);
+    gl.uniform1f(uniforms.zoomLevel, view.zoom);
+    gl.uniform1f(uniforms.terrainResolution, view.zoom * torus.terrainResolution);
+    gl.uniform1f(uniforms.terrainHeightScale, getTerrainHeightScale());
+    gl.uniform1f(uniforms.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.torus.vertexCount);
@@ -70,7 +75,7 @@ function getProjectionMatrix() {
 
     // to avoid bad clipping, don't move the camera too close
     // instead just narrow the field of view at high zoom levels
-    if (view.zoomPrecise >= 0) {
+    if (view.zoom > properties.MIN_CAMERA_DISTANCE) {
         fov = view.fov;
 
         // adjust the near clipping plane to clip the near side of the torus
@@ -88,8 +93,8 @@ function getProjectionMatrix() {
         zFar = (view.zoom + torus.largeRadius + torus.smallRadius) * 2;
     }
     else {
-        fov = view.fov * view.zoom;
-        zNear = 0.5;
+        fov = view.fov * view.zoom / properties.MIN_CAMERA_DISTANCE;
+        zNear = properties.MIN_CAMERA_DISTANCE * 0.5;
         zFar = (torus.largeRadius + torus.smallRadius) * 2;
     }
 
@@ -103,7 +108,7 @@ function getProjectionMatrix() {
 // create a view matrix to define the camera's position and angle
 function getViewMatrix() {
     const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torus.smallRadius - Math.max(view.zoom, 1.0)]);
+    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torus.smallRadius - Math.max(view.zoom, properties.MIN_CAMERA_DISTANCE)]);
     mat4.rotate(viewMatrix, viewMatrix, view.theta, [1.0, 0.0, 0.0]);
     mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torus.largeRadius]);
     mat4.rotate(viewMatrix, viewMatrix, view.phi, [0.0, 1.0, 0.0]);
@@ -128,7 +133,7 @@ function getTerrainHeightScale() {
         scale += height;
         height *= 0.5;
     }
-    while (height > view.zoom * torus.terrainResolution);
+    while (height >= view.zoom * torus.terrainResolution);
 
     return 1.0 / scale;
 }

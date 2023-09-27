@@ -19,6 +19,9 @@ export const MAX_PAN_SENSITIVITY = 4.0;
 export const PRECISE_PAN_TO_RADIANS = 2 ** MIN_ZOOM;
 export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 
+// the minimum distance from the camera to the surface before narrowing the fov
+export const MIN_CAMERA_DISTANCE = 1.0;
+
 // the length of the vertical scale/measuring bar in screen units
 export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
 
