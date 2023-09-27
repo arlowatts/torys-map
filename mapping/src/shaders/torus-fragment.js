@@ -46,7 +46,7 @@ void main() {
     // test nearby points to determine the surface normal by finding two
     // vectors perpendicular to the normal and perpendicular to each other,
     // then shifting them by the surface heights and retrieving the normal
-    if (surfaceValue > seaLevel) {
+    if (surfaceValue >= seaLevel) {
         // find a vector tangent to the circular core of the torus
         vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
 
@@ -137,7 +137,7 @@ float getHeight(vec4 point) {
         scaleFactor *= 0.5;
         channel += 1u;
     }
-    while (scaleFactor > uTerrainResolution);
+    while (scaleFactor >= uTerrainResolution);
 
     return height * uTerrainHeightScale;
 }
