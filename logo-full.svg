@@ -3,13 +3,6 @@
   <circle cx="18" cy="8" r="7" stroke="black" fill="transparent" stroke-width="2"/>
   <circle cx="19" cy="7" r="7" stroke="white" fill="transparent" stroke-width="2"/>
 
-  <style>
-    @font-face {
-      font-family: Tahoma;
-      src: url(tahoma.ttf);
-    }
-  </style>
-
   <text fill="#000000" dominant-baseline="hanging" font-family="Tahoma">
     <tspan y="2">T</tspan>
     <tspan x="26" y="2">RYS</tspan>
