@@ -4,7 +4,7 @@
     {%- assign default_paths = site.pages | map: "path" -%}
     {%- assign page_paths = site.header_pages | default: default_paths -%}
     {%- assign titles_size = site.pages | map: 'title' | join: '' | size -%}
-    <a href="/torys"><img src="/torys/logo-full.svg" width="20%"/></a>
+    <a href="/torys"><img src="/torys/assets/images/logo-full.svg" width="20%"/></a>
 
     {%- if titles_size > 0 -%}
     <nav class="site-nav">
