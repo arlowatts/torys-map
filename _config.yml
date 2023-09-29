@@ -2,4 +2,7 @@ theme: minima
 
 assets:
   sources:
-    -_assets/fonts
+    - assets/fonts
+
+header_pages:
+  - worldbuilding/
