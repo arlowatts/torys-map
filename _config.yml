@@ -1,8 +1,4 @@
 theme: minima
 
-assets:
-  sources:
-    - assets/fonts
-
 header_pages:
-  - worldbuilding/
+  - worldbuilding/index.md
