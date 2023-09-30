@@ -2,3 +2,4 @@ theme: minima
 
 header_pages:
   - worldbuilding/index.md
+  - mapping/index.html
