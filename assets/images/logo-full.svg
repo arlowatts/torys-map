@@ -1,11 +1,10 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="54" height="16">
 
-    <circle cx="18" cy="8" r="7" stroke="black" fill="transparent" stroke-width="2"/>
-    <circle cx="19" cy="7" r="7" stroke="white" fill="transparent" stroke-width="2"/>
+    <image x="10" href="logo.svg" />
 
     <text fill="#000000" dominant-baseline="hanging" font-family="Tahoma">
-        <tspan y="2">T</tspan>
-        <tspan x="26" y="2">RYS</tspan>
+        <tspan y="1">T</tspan>
+        <tspan x="26" y="1">RYS</tspan>
     </text>
 
 </svg>
