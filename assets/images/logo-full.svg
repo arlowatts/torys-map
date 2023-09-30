@@ -12,9 +12,66 @@
     <circle cx="19" cy="7" r="6" fill="black" mask="url(#shadow1)" />
     <circle cx="18" cy="8" r="7" fill="transparent" stroke="black" stroke-width="2" mask="url(#shadow2)" />
 
-    <text fill="#000000" dominant-baseline="hanging" font-family="Tahoma">
-        <tspan y="1">T</tspan>
-        <tspan x="26" y="1">RYS</tspan>
-    </text>
+    <!-- T glyph -->
+    <path d="M 0 2
+        h 10
+        v 2
+        h -4
+        v 10
+        h -2
+        v -10
+        h -4
+        v -2"
+    />
+
+    <!-- R glyph -->
+    <path d="M 27 2
+        h 3.5
+        a 4.5 4 0 0 1 0 8
+        h -1.75
+        v -1.75
+        h 1.75
+        a 2.75 2.25 0 0 0 0 -4.5
+        h -1.75
+        v 10.25
+        h -1.75
+        v 12"
+    />
+    <path d="M 29.75 9
+        h 2.25
+        l 4 5
+        h -2.25
+        l -4 -5"
+    />
+
+    <!-- Y glyph -->
+    <path d="M 36 2
+        h 2
+        l 3 6
+        l 3 -6
+        h 2
+        l -4 8
+        v 4
+        h -2
+        v -4
+        l -4 -8"
+    />
+
+    <!-- S glyph -->
+    <path d="M 54 3
+        c -1 -0.5 -2 -1 -4 -1
+        s -4 1 -4 3
+        s 2 3 4 4
+        s 2 1.25 2 2.25
+        s -1.5 1.25 -1.5 1.25
+        s -2.5 0.5 -4.5 -1.5
+        v 2
+        c 1 0.5 2 1 4 1
+        s 4 -1 4 -3
+        s -2 -3 -4 -4
+        s -2 -1.25 -2 -2.25
+        s 1.5 -1.25 1.5 -1.25
+        s 2.5 -0.5 4.5 1.5"
+    />
 
 </svg>
