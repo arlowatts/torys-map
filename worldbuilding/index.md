@@ -6,7 +6,7 @@
   - [Day's End](locations/andal/days-end/)
     - [Ahahbu's House](locations/andal/days-end/ahahbus-house.md)
     - [The Dungeon of Day's End](locations/andal/days-end/dungeon/)
-      - [Oeged Naaftet Oecheisev](locations/andal/days-end/dungeon/oeged.md)
+      - [Oeged](locations/andal/days-end/dungeon/oeged.md)
     - [Elking Wood](locations/andal/days-end/elking-wood.md)
     - [Graveyard](locations/andal/days-end/graveyard.md)
     - [Mayoral Seat](locations/andal/days-end/mayoral-seat.md)
