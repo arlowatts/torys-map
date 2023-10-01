@@ -91,13 +91,14 @@ export const view = {
 
     // precise angles are tracked as integers to avoid loss of precision
     phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
-    thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 0,
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 2.0,
-
+    thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 500,
     // the actual values in radians are computed from the precise values
     phi: 0.0,
     theta: 0.0,
+
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 4.0,
     zoom: 0.0,
+
     panSensitivity: 0.0
 };
 
