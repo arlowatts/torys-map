@@ -1,4 +1,6 @@
-# Merfolk
+---
+title: Merfolk
+---
 
 Merfolk are aquatic humanoids with webbed hands and feet. Some can only breathe in water while others can breathe in both water and air. They live in shallow lakes and near the shore in oceans where there is still plenty of light and life. Merfolk hunt with spears and nets, and compose riddles of deadly cunning.
 

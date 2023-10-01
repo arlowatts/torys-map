@@ -1,4 +1,6 @@
-# Mayoral Seat
+---
+title: Mayoral Seat
+---
 
 The Mayoral Seat of Day's End is inside the only remaining building of elven construction in the town. The building is a round tower of three stories with a balcony on the top and a spiral staircase around the inside wall. Its diameter is 50 feet and it is made of smooth grey stone with many windows in its surface. The ceiling is 16 feet high at the ground floor, 13 feet high at the second floor, and 10 feet high at the third floor.
 

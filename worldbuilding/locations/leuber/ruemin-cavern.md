@@ -1,4 +1,6 @@
-# Ruemin Cavern
+---
+title: Ruemin Cavern
+---
 
 Ruemin Cavern is the primary library of the Ruemins, the largest Booksmith colony on Torys. Its ceiling is over 100 feet high and spotted with glowing gemstones of varying color. It lies within the borders of Leuber but generally ignores its governance.
 

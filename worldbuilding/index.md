@@ -1,4 +1,6 @@
-# Table of Contents
+---
+title: Table of Contents
+---
 
 ### Locations
 

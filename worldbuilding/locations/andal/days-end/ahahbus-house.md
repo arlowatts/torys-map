@@ -1,4 +1,6 @@
-# Ahahbu's House
+---
+title: Ahahbu's House
+---
 
 Ahahbu lives in and works from a small building in Day's End. It contains a central living room adjacent to a kitchen and a sickroom. Upstairs is a bedroom, and a small cellar holds food and medicinal supplies. Also in the cellar is evidence of Ahahbu's druidcraft: a book of druidic magic and an ash wand.
 

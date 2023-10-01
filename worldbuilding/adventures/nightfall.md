@@ -1,4 +1,6 @@
-# Nightfall
+---
+title: Nightfall
+---
 
 Nightfall is an entry-level adventure that takes place in and around Day's End. The typical adventure path follows the rise of a deadly fungus into an occupation of Day's End and finally to the eventual conclusion of both issues. This adventure does not assume any knowledge of the setting in which it takes place but leaves characters with a strong foundation on which more advanced adventures can be run.
 

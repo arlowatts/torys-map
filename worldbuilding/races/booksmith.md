@@ -1,4 +1,6 @@
-# Booksmith
+---
+title: Booksmith
+---
 
 The Booksmith is a subrace of gnome that lives far beneath the surface in isolated communities. Booksmiths are known for their interest in history and their insistence on supporting every claim with factual, often written, evidence. The culture of Booksmiths revolves around binding, writing, and maintaining books.
 

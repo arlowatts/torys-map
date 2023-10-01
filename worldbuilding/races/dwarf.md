@@ -1,4 +1,6 @@
-# Dwarf
+---
+title: Dwarf
+---
 
 Dwarves are bold and creative humanoids that work metal in ways other races can hardly fathom. They live in enormous metropoli above and below ground on steep mountainsides, normally where a large ore deposit is found. Many Dwarves have forges in their homes, and are used to working hard for long periods of time in hot and smoky conditions.
 

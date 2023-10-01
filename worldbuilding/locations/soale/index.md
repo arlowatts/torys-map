@@ -1,1 +1,3 @@
-# Soale
+---
+title: Soale
+---

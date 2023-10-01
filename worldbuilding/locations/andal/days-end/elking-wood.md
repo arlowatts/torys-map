@@ -1,4 +1,6 @@
-# Elking Wood
+---
+title: Elking Wood
+---
 
 Elking Wood is a large forest enclosing the westward end of Andal. It hosts ash, beech, oak, and fir trees, alongside many types of shrubs and ferns. Among the undergrowth and on trees grow many different types of fungi: edible, deadly, and everything in between. The fungi are very common and are normally found in clumps. In terms of animals, the forest is populated primarily by wolves and elk, but also by various birds, giant spiders, and a few basilisks.
 

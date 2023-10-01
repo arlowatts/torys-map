@@ -1,4 +1,6 @@
-# Evening, Morning, and Noon-night Horizons
+---
+title: Evening, Morning, and Noon-night Horizons
+---
 
 On Torys, directions like north, south, east, and west can't mean what they do on a spherical planet. However, there are still poles, and the sun does still rise and set. So, north is the direction to the north pole, south is the direction to the south pole, east is the direction to the sunrise, and west is the direction to the sunset. Near the poles this isn't necessarily very useful, but closer to the equator the four directions are mostly perpendicular.
 

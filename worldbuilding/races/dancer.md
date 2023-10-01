@@ -1,4 +1,6 @@
-# Dancer
+---
+title: Dancer
+---
 
 Dancers are a race of humanoids with long, powerful wings in place of arms and four-fingered claws that serve as hands. They live in expansive, feather-light palaces in the clouds that drift with the currents. They wield powerful innate magic that enables them to control the weather and sing songs only some can hear.
 

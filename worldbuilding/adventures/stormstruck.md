@@ -1,4 +1,6 @@
-# Stormstruck
+---
+title: Stormstruck
+---
 
 Stormstruck is an adventure for 5th-level characters and follows events beginning in Sibal and extending into Leuber. It is designed to be run in a single session of several hours with an experienced group. No initial understanding of the setting is expected.
 

@@ -1,4 +1,6 @@
-# The Dungeon of Day's End
+---
+title: The Dungeon of Day's End
+---
 
 The small town of Day's End is hiding an ancient secret; under the Mayoral Seat is a set of large chambers, magically sealed since the time of the last elven king. However, the passing of centuries has weakened the magic around the door. Another entrance, hidden under a pond in the Graveyard, and has not been touched in centuries.
 

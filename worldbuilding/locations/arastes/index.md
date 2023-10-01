@@ -1,1 +1,3 @@
-# Arastes
+---
+title: Arastes
+---

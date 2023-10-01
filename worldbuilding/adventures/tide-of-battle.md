@@ -1,4 +1,6 @@
-# Tide of Battle
+---
+title: Tide of Battle
+---
 
 Tide of Battle takes place across Andal, Leuber, Sibal, and the waters between them. The story of the adventure follows a war of conquest between Andal and Leuber and the outcome depends entirely on the characters' choices.
 

@@ -1,4 +1,6 @@
-# Graveyard
+---
+title: Graveyard
+---
 
 The graveyard of Day's End lies just outside of the town's wall to the south. It is a grim place, and is always permeated by a fell presence. Unbeknownst to the population of Day's End, this presence is not that of the dead who are buried there; it is the dark shadow of Oeged Naaftet Oecheisev, an elven king turned Shadow Dragon lying dormant underground. The graves in the graveyard are dated as far back as 300 years, when Day's End was founded.
 
