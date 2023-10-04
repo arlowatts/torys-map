@@ -71,3 +71,7 @@ In addition to the information provided in the adventure outline, Estavi knows t
 If Captain Estavi is not able to share this information (perhaps because he is unconscious or dead), there are still written journals and letters containing the relevant information. They can all be found in drawers in Estavi's cabin. Additionally, a Helm of Free Will can be found in a small locked chest under Estavi's bed, they key to which is worn on Estavi's belt. A humanoid that is attuned to and wearing this helm cannot have their thoughts and emotions magically sensed, read or manipulated. Only one creature can be attuned to the helm at a time - if a creature is already attuned to it, no new creatures can attune to it until the attunement ends.
 
 #### The Hold
+
+The hold of the Tidesoul contains, in addition to standard food and water barrels, crates filled with weapons, alchemical equipment, and magical devices. The weapons include longswords, longbows, greataxes, and grappling hooks. The alchemical equipment includes flasks, measuring devices, glass tubing, and burners. The magical equipment, of which there is far less than weapons of alchemical equipment, consists of several arcane focuses and a few select divination spell scrolls. In addition to the equipment are a few maps of Leuber - they are copies of maps made by the explorers who discovered Taor'taemed's properties and show a path to it from Firecomb around Skybreak Peak.
+
+## Chapter 3 - Aranak
