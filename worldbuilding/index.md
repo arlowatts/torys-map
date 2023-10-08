@@ -4,22 +4,22 @@ title: Table of Contents
 
 ### Locations
 
-- [Andal](locations/andal/)
-  - [Day's End](locations/andal/days-end/)
+- [Andal](locations/andal/index.md)
+  - [Day's End](locations/andal/days-end/index.md)
     - [Ahahbu's House](locations/andal/days-end/ahahbus-house.md)
-    - [The Dungeon of Day's End](locations/andal/days-end/dungeon/)
+    - [The Dungeon of Day's End](locations/andal/days-end/dungeon/index.md)
       - [Oeged](locations/andal/days-end/dungeon/oeged.md)
     - [Elking Wood](locations/andal/days-end/elking-wood.md)
     - [Graveyard](locations/andal/days-end/graveyard.md)
     - [Mayoral Seat](locations/andal/days-end/mayoral-seat.md)
     - [The Old Prince](locations/andal/days-end/old-prince.md)
   - [Sayrenvar](locations/andal/sayrenvar.md)
-- [Arastes](locations/arastes/)
-- [Leuber](locations/leuber/)
+- [Arastes](locations/arastes/index.md)
+- [Leuber](locations/leuber/index.md)
   - [Firecomb](locations/leuber/firecomb.md)
   - [Ruemin Cavern](locations/leuber/ruemin-cavern.md)
-- [Sibal](locations/sibal/)
-- [Soale](locations/soale/)
+- [Sibal](locations/sibal/index.md)
+- [Soale](locations/soale/index.md)
 - [Evening, Morning, and Noon-night Horizons](locations/horizons.md)
 
 ### Adventures
