@@ -48,6 +48,8 @@ export function drawTorus() {
     gl.uniform1f(uniforms.terrainResolution, view.zoom * torus.terrainResolution);
     gl.uniform1f(uniforms.terrainHeightScale, getTerrainHeightScale());
     gl.uniform1f(uniforms.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
+    gl.uniform1f(uniforms.time, view.time);
+    gl.uniform1i(uniforms.showClouds, view.zoomPrecise > 1 ? 1 : 0);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.torus.vertexCount);

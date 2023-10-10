@@ -6,7 +6,9 @@ precision mediump float;
 bool isShadowed(vec4);
 float getAltitude(vec4);
 float getTemperature(vec4);
-vec4 getColor(float, float, float);
+float getCloud(vec4);
+vec4 getColor(float, float, bool, float);
+float noise4(vec4, vec4, uvec4, uint);
 float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
 float noise(float, float, uint, uint);
@@ -21,6 +23,9 @@ uniform float uTerrainResolution;
 uniform float uTerrainHeightScale;
 uniform float uTerrainNormalResolution;
 
+uniform float uTime;
+uniform int uShowClouds;
+
 in vec4 pointPosition;
 
 out vec4 fragColor;
@@ -33,6 +38,9 @@ float terrainNormalIntensity = float(${torus.terrainNormalIntensity});
 float seaLevel = float(${torus.seaLevel});
 float desertTemperature = float(${torus.desertTemperature});
 float iceTemperature = float(${torus.iceTemperature});
+
+float cloudSpeed = float(${torus.cloudSpeed});
+float cloudThreshold = float(${torus.cloudThreshold});
 
 void main() {
     // the point on the unit circle nearest the surface point
@@ -47,10 +55,18 @@ void main() {
     float altitude = getAltitude(point);
     float temperature = getTemperature(point);
 
+    bool isCloud = false;
+
+    if (uShowClouds == 1) {
+        vec4 cloudPoint = vec4(point.xyz, uTime * cloudSpeed);
+
+        isCloud = getCloud(cloudPoint) > cloudThreshold;
+    }
+
     // test nearby points to determine the surface normal by finding two
     // vectors perpendicular to the normal and perpendicular to each other,
     // then shifting them by the surface heights and retrieving the normal
-    if (altitude >= seaLevel) {
+    if (altitude >= seaLevel && !isCloud) {
         // find a vector tangent to the circular core of the torus
         vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
 
@@ -77,7 +93,7 @@ void main() {
         shade = uLightAmbience;
     }
 
-    fragColor = getColor(altitude, temperature, shade);
+    fragColor = getColor(altitude, temperature, isCloud, shade);
 }
 
 // Evaluate point on the line L(o) at
@@ -170,10 +186,44 @@ float getTemperature(vec4 point) {
     return temp * uTerrainHeightScale;
 }
 
-vec4 getColor(float altitude, float temperature, float shade) {
+float getCloud(vec4 point) {
+    float value = 0.0;
+
+    vec4 noisePoint = point;
+    vec4 pointFloor;
+
+    float scaleFactor = 0.5;
+    uint channel = 0x5555u;
+
+    do {
+        pointFloor = floor(noisePoint);
+
+        value += scaleFactor * noise4(
+            noisePoint,
+            noisePoint - pointFloor,
+            uvec4(ivec4(pointFloor)),
+            channel
+        );
+
+        noisePoint *= 2.0;
+        noisePoint += 0.5;
+        scaleFactor *= 0.5;
+        channel += 1u;
+    }
+    while (scaleFactor >= uTerrainResolution);
+
+    return value * uTerrainHeightScale;
+}
+
+vec4 getColor(float altitude, float temperature, bool isCloud, float shade) {
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
-    if (altitude < seaLevel) {
+    if (isCloud) {
+        color.r = 0.8;
+        color.g = 0.8;
+        color.b = 0.8;
+    }
+    else if (altitude < seaLevel) {
         if (temperature > iceTemperature) {
             color.b = temperature;
         }
@@ -205,6 +255,16 @@ vec4 getColor(float altitude, float temperature, float shade) {
     color *= shade;
     color.w = 1.0;
     return color;
+}
+
+float noise4(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
+    evalAt = evalAt * 0x05555555u + pointFloor.w;
+
+    return lerp(
+        noise3(point, pointFrac, pointFloor, evalAt),
+        noise3(point, pointFrac, pointFloor, evalAt + 1u),
+        pointFrac.w
+    );
 }
 
 float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {

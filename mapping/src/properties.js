@@ -45,7 +45,10 @@ export const torus = {
 
     seaLevel: 0.575,        // terrain below the sea level is water
     desertTemperature: 0.6, // temperatures above the desert temperature are hot and dry
-    iceTemperature: 0.2     // temperatures below the ice temperature are freezing
+    iceTemperature: 0.2,    // temperatures below the ice temperature are freezing
+
+    cloudSpeed: 0.00005,
+    cloudThreshold: 0.6
 };
 
 export const stars = {

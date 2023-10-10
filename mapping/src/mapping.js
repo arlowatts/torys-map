@@ -36,7 +36,10 @@ function main() {
         zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel"),
         terrainResolution: gl.getUniformLocation(torusProgram, "uTerrainResolution"),
         terrainHeightScale: gl.getUniformLocation(torusProgram, "uTerrainHeightScale"),
-        terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution")
+        terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution"),
+        time: gl.getUniformLocation(torusProgram, "uTime"),
+        // booleans
+        showClouds: gl.getUniformLocation(torusProgram, "uShowClouds")
     };
 
     // the stars (background) program
