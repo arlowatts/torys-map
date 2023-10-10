@@ -43,8 +43,9 @@ export const torus = {
     terrainNormalResolution: 1.0 / 128.0,   // the level of precision in the terrain shading
     terrainNormalIntensity: 0.2,            // the intensity of the terrain shading
 
-    seaLevel: 0.575,        // terrain below the sea level is water (blue)
-    snowLevel: 0.7          // terrain above the snow level is snow (white)
+    seaLevel: 0.575,        // terrain below the sea level is water
+    desertTemperature: 0.6, // temperatures above the desert temperature are hot and dry
+    iceTemperature: 0.2     // temperatures below the ice temperature are freezing
 };
 
 export const stars = {

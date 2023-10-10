@@ -4,7 +4,9 @@ export const source = `#version 300 es
 precision mediump float;
 
 bool isShadowed(vec4);
-float getHeight(vec4);
+float getAltitude(vec4);
+float getTemperature(vec4);
+vec4 getColor(float, float, float);
 float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
 float noise(float, float, uint, uint);
@@ -29,7 +31,8 @@ float smallRadius = float(${torus.smallRadius});
 float terrainNormalIntensity = float(${torus.terrainNormalIntensity});
 
 float seaLevel = float(${torus.seaLevel});
-float snowLevel = float(${torus.snowLevel});
+float desertTemperature = float(${torus.desertTemperature});
+float iceTemperature = float(${torus.iceTemperature});
 
 void main() {
     // the point on the unit circle nearest the surface point
@@ -41,12 +44,13 @@ void main() {
     // adjust the point to be precisely on the torus
     vec4 point = pointXZ * largeRadius + normal * smallRadius;
 
-    float surfaceValue = getHeight(point);
+    float altitude = getAltitude(point);
+    float temperature = getTemperature(point);
 
     // test nearby points to determine the surface normal by finding two
     // vectors perpendicular to the normal and perpendicular to each other,
     // then shifting them by the surface heights and retrieving the normal
-    if (surfaceValue >= seaLevel) {
+    if (altitude >= seaLevel) {
         // find a vector tangent to the circular core of the torus
         vec4 pointA = vec4(pointXZ.z, 0.0, -pointXZ.x, 0.0);
 
@@ -58,27 +62,22 @@ void main() {
         pointB *= uTerrainNormalResolution;
 
         // shift the vectors by the terrain height
-        pointA += normal * (getHeight(point + pointA) - surfaceValue) * smallRadius * terrainNormalIntensity;
-        pointB += normal * (getHeight(point + pointB) - surfaceValue) * smallRadius * terrainNormalIntensity;
+        pointA += normal * (getAltitude(point + pointA) - altitude) * smallRadius * terrainNormalIntensity;
+        pointB += normal * (getAltitude(point + pointB) - altitude) * smallRadius * terrainNormalIntensity;
 
         // retrieve the modified normal vector
         normal = normalize(vec4(cross(pointA.xyz, pointB.xyz), 0.0));
     }
 
-    float color = dot(normal, uLightDirection);
-    color = max(color, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
+    float shade = dot(normal, uLightDirection);
+    shade = max(shade, 0.0) * (1.0 - uLightAmbience) + uLightAmbience;
 
     // test for shadows
     if (length(point.xz) < largeRadius && isShadowed(point)) {
-        color = uLightAmbience;
+        shade = uLightAmbience;
     }
 
-    fragColor = vec4(
-        surfaceValue < snowLevel ? 0.0 : color * surfaceValue,
-        surfaceValue < seaLevel ? 0.0 : color * surfaceValue,
-        color * surfaceValue,
-        1.0
-    );
+    fragColor = getColor(altitude, temperature, shade);
 }
 
 // Evaluate point on the line L(o) at
@@ -113,7 +112,7 @@ bool isShadowed(vec4 point) {
     return distance <= 0.0;
 }
 
-float getHeight(vec4 point) {
+float getAltitude(vec4 point) {
     float height = 0.0;
 
     vec4 noisePoint = point;
@@ -140,6 +139,72 @@ float getHeight(vec4 point) {
     while (scaleFactor >= uTerrainResolution);
 
     return height * uTerrainHeightScale;
+}
+
+float getTemperature(vec4 point) {
+    float temp = 0.0;
+
+    vec4 noisePoint = point * 0.5;
+    vec4 pointFloor;
+
+    float scaleFactor = 0.5;
+    uint channel = 0xffffu;
+
+    do {
+        pointFloor = floor(noisePoint);
+
+        temp += scaleFactor * noise3(
+            noisePoint,
+            noisePoint - pointFloor,
+            uvec4(ivec4(pointFloor)),
+            channel
+        );
+
+        noisePoint *= 2.0;
+        noisePoint += 0.5;
+        scaleFactor *= 0.5;
+        channel += 1u;
+    }
+    while (scaleFactor >= uTerrainResolution);
+
+    return temp * uTerrainHeightScale;
+}
+
+vec4 getColor(float altitude, float temperature, float shade) {
+    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+    if (altitude < seaLevel) {
+        if (temperature > iceTemperature) {
+            color.b = temperature;
+        }
+        else {
+            color.r = 0.8;
+            color.g = 0.8;
+            color.b = 1.0;
+        }
+    }
+    else {
+        temperature = temperature * 1.0 - 0.75 * (altitude - seaLevel) / (1.0 - seaLevel);
+
+        if (temperature > desertTemperature) {
+            color.r = temperature;
+            color.g = temperature;
+            color.b = temperature / 1.5;
+        }
+        else if (temperature > iceTemperature) {
+            color.g = 1.0 - temperature;
+            color.b = 1.0 - temperature;
+        }
+        else {
+            color.r = 0.8;
+            color.g = 0.8;
+            color.b = 0.8;
+        }
+    }
+
+    color *= shade;
+    color.w = 1.0;
+    return color;
 }
 
 float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
