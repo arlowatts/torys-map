@@ -74,9 +74,16 @@ function main() {
 
     // create listeners to track whether the user is interacting with input
     view.daySlider.addEventListener("mousedown", blockPanning);
-    view.yearSlider.addEventListener("mousedown", blockPanning);
+    view.daySlider.addEventListener("touchstart", blockPanning);
     view.daySlider.addEventListener("mouseup", unblockPanning);
+    view.daySlider.addEventListener("touchend", unblockPanning);
+    view.daySlider.addEventListener("touchcancel", unblockPanning);
+
+    view.yearSlider.addEventListener("mousedown", blockPanning);
+    view.yearSlider.addEventListener("touchstart", blockPanning);
     view.yearSlider.addEventListener("mouseup", unblockPanning);
+    view.yearSlider.addEventListener("touchend", unblockPanning);
+    view.yearSlider.addEventListener("touchcancel", unblockPanning);
 
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);

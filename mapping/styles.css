@@ -11,6 +11,12 @@ p {
     padding: 3px;
 }
 
+@media screen and (orientation: portrait) {
+    p {
+        font-size: 3em;
+    }
+}
+
 .slidercontainer {
     position: absolute;
     width: 50%;
@@ -43,10 +49,4 @@ p {
     position: absolute;
     top: 0;
     right: 0;
-}
-
-@media screen and (orientation: portrait) {
-    #scalevalue {
-        font-size: 3em;
-    }
 }
