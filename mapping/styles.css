@@ -5,6 +5,30 @@ body {
     overflow: hidden;
 }
 
+p {
+    background-color: white;
+    width: fit-content;
+    padding: 3px;
+}
+
+.slidercontainer {
+    position: absolute;
+    width: 50%;
+    display: flex;
+}
+
+.timeslider {
+    width: 50%;
+}
+
+#dayslidercontainer {
+    bottom: 10%;
+}
+
+#yearslidercontainer {
+    bottom: 5%;
+}
+
 #scalebar {
     position: absolute;
     top: 10%;
@@ -17,8 +41,8 @@ body {
 
 #scalevalue {
     position: absolute;
+    top: 0;
     right: 0;
-    background-color: white;
 }
 
 @media screen and (orientation: portrait) {

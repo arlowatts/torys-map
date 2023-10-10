@@ -11,9 +11,22 @@ title: Map of Torys
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+
     <canvas id="mapcanvas">Your browser does not support the canvas element.</canvas>
+
     <div id="scalebar">
-      <div id="scalevalue"></div>
+      <p id="scalevalue"></p>
     </div>
+
+    <div id="dayslidercontainer" class="slidercontainer">
+      <p>Time of day</p>
+      <input id="dayslider" class="timeslider" type="range" min="0"/>
+    </div>
+
+    <div id="yearslidercontainer" class="slidercontainer">
+      <p>Time of year</p>
+      <input id="yearslider" class="timeslider" type="range" step="1" min="0"/>
+    </div>
+
   </body>
 </html>

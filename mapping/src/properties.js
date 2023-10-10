@@ -58,14 +58,12 @@ export const light = {
     directionMatrix: mat4.create(), // the rotation matrix to get the light direction
     direction: vec4.create(),       // the light direction as a vector
 
-    // rotations is a list to apply to the base direction in order
-    // the first element of each rotation is multiplied with the current time
-    // to get the rotation in radians, then the direction vector is rotated
-    // by that amount around the axis defined by the remaining three components
-    rotations: [
-        [0.0365, 3/5, 0.0, 4/5], // this rotation represents the planet's local axis
-        [0.0001, 0.0, 0.0, 1.0]  // this rotation represents the planet's orbit
-    ],
+    // the axes of rotation for days and years
+    dayAxis: [3/5, 0.0, 4/5], // this rotation represents the planet's local axis
+    yearAxis: [0.0, 0.0, 1.0],  // this rotation represents the planet's orbit
+
+    dayLength: 86400,   // number of seconds in one day
+    yearLength: 365,    // number of days in one year
 
     ambience: 0.2,              // the base uniform light level
     sunSize: 0.05,              // the approximate radius of the sun in the sky
@@ -89,6 +87,10 @@ export const view = {
     // time since the page was loaded in milliseconds
     pageTime: 0,
 
+    // the sliders controlling the world time
+    daySlider: document.getElementById("dayslider"),
+    yearSlider: document.getElementById("yearslider"),
+
     // precise angles are tracked as integers to avoid loss of precision
     phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
     thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 500,
@@ -99,8 +101,15 @@ export const view = {
     zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 4.0,
     zoom: 0.0,
 
-    panSensitivity: 0.0
+    panSensitivity: 0.0,
+    allowPanning: true
 };
+
+// update the slider parameters
+view.daySlider.max = light.dayLength - 1;
+view.yearSlider.max = light.yearLength - 1;
+view.daySlider.value = view.time % light.dayLength;
+view.yearSlider.value = (view.time - view.time % light.dayLength) / light.dayLength;
 
 // store information about the shader programs, such as uniform locations
 // initialized before the first frame is rendered

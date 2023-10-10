@@ -72,6 +72,12 @@ function main() {
     // create the event listener to reload on resize
     addEventListener("resize", onResize);
 
+    // create listeners to track whether the user is interacting with input
+    view.daySlider.addEventListener("mousedown", blockPanning);
+    view.yearSlider.addEventListener("mousedown", blockPanning);
+    view.daySlider.addEventListener("mouseup", unblockPanning);
+    view.yearSlider.addEventListener("mouseup", unblockPanning);
+
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
 
@@ -80,18 +86,15 @@ function main() {
 }
 
 function render(now) {
-    // update the world time
-    view.time += (now - view.pageTime) / 1000;
-    view.pageTime = now;
+    updateTime(now);
 
     // create the light direction matrix and vector
     mat4.identity(light.directionMatrix);
     vec4.copy(light.direction, light.baseDirection);
 
     // apply the rotations to the matrix
-    light.rotations.forEach((rotation) => {
-        mat4.rotate(light.directionMatrix, light.directionMatrix, view.time * rotation[0], rotation.slice(1));
-    });
+    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
+    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
 
     // apply the matrix to get the current light direction vector
     vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
@@ -103,9 +106,15 @@ function render(now) {
     requestAnimationFrame(render);
 }
 
+function updateTime(now) {
+    view.pageTime = now;
+
+    view.time = Number(view.daySlider.value) + light.dayLength * Number(view.yearSlider.value);
+}
+
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
-    if (event.buttons == 1) {
+    if (event.buttons == 1 && view.allowPanning) {
         // track the precise angle values as integers to avoid loss of precision
         view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
         view.thetaPrecise += event.movementY * view.panSensitivity;
@@ -205,7 +214,7 @@ function updateQueryParameters() {
     urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
     urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
     urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
-    urlSearchParams.set("time", view.time.toFixed(4));
+    urlSearchParams.set("time", view.time);
 
     history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
@@ -214,6 +223,16 @@ function updateQueryParameters() {
 function onResize() {
     updateQueryParameters();
     location.reload();
+}
+
+// track when the user is interacting with input elements to block panning
+function blockPanning() {
+    view.allowPanning = false;
+}
+
+// track when the user is interacting with input elements to block panning
+function unblockPanning() {
+    view.allowPanning = true;
 }
 
 // initialize the shader program with a vertex shader and a fragment shader
