@@ -4,9 +4,6 @@ title: Table of Contents
 
 ### Locations
 
-- [Abakalamana](locations/abakalamana/index.md)
-  - [Bekebel](locations/abakalamana/bekebel/index.md)
-  - [Oro-oro-ponoro-poron](locations/abakalamana/oro-oro-ponoro-poron/index.md)
 - [Andal](locations/andal/index.md)
   - [Day's End](locations/andal/days-end/index.md)
     - [Ahahbu's House](locations/andal/days-end/ahahbus-house.md)
@@ -22,6 +19,9 @@ title: Table of Contents
 - [Leuber](locations/leuber/index.md)
   - [Firecomb](locations/leuber/firecomb.md)
   - [Ruemin Cavern](locations/leuber/ruemin-cavern.md)
+- [Oro-oro-ponoro-poron](locations/oro-oro-ponoro-poron/index.md)
+  - [Abakalamana](locations/oro-oro-ponoro-poron/abakalamana/index.md)
+  - [Bekebel](locations/oro-oro-ponoro-poron/bekebel/index.md)
 - [Sibal](locations/sibal/index.md)
 - [Soale](locations/soale/index.md)
 
@@ -30,6 +30,7 @@ title: Table of Contents
 - [Nightfall](adventures/nightfall.md)
 - [Stormstruck](adventures/stormstruck.md)
 - [Tide of Battle](adventures/tide-of-battle.md)
+- [Tuvdak's Gift](adventures/tuvdaks-gift.md)
 
 ### Races
 
