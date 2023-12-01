@@ -4,6 +4,9 @@ title: Table of Contents
 
 ### Locations
 
+- [Abakalamana](locations/abakalamana/index.md)
+  - [Bekebel](locations/abakalamana/bekebel/index.md)
+  - [Oro-oro-ponoro-poron](locations/abakalamana/oro-oro-ponoro-poron/index.md)
 - [Andal](locations/andal/index.md)
   - [Day's End](locations/andal/days-end/index.md)
     - [Ahahbu's House](locations/andal/days-end/ahahbus-house.md)
@@ -15,12 +18,12 @@ title: Table of Contents
     - [The Old Prince](locations/andal/days-end/old-prince.md)
   - [Sayrenvar](locations/andal/sayrenvar.md)
 - [Arastes](locations/arastes/index.md)
+- [Evening, Morning, and Noon-night Horizons](locations/horizons.md)
 - [Leuber](locations/leuber/index.md)
   - [Firecomb](locations/leuber/firecomb.md)
   - [Ruemin Cavern](locations/leuber/ruemin-cavern.md)
 - [Sibal](locations/sibal/index.md)
 - [Soale](locations/soale/index.md)
-- [Evening, Morning, and Noon-night Horizons](locations/horizons.md)
 
 ### Adventures
 
