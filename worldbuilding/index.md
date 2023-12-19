@@ -20,7 +20,6 @@ title: Table of Contents
   - [Firecomb](locations/leuber/firecomb.md)
   - [Ruemin Cavern](locations/leuber/ruemin-cavern.md)
 - [Oro-oro-ponoro-poron](locations/oro-oro-ponoro-poron/index.md)
-  - [Abakalamana](locations/oro-oro-ponoro-poron/abakalamana/index.md)
   - [Bekebel](locations/oro-oro-ponoro-poron/bekebel/index.md)
 - [Sibal](locations/sibal/index.md)
 - [Soale](locations/soale/index.md)
