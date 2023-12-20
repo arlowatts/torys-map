@@ -14,9 +14,9 @@ Many types of dragons inhabit Oro-oro-ponoro-poron. Green dragons lurk in the th
 
 Over 600 years old, Tuvdak the Magnificent is the oldest red dragon on Oro-oro-ponoro-poron. Tuvdak is the undisputed king of the caldera, having driven off or killed a total of eight younger challengers desiring his hoard. He won his lair in from the red dragon Sarvol after an epic battle lasting days, which cemented Tuvdak's reputation as one to be reckoned with. By that time, Sarvol had driven off over a dozen younger dragons in contest for her lair, always leaving them with a crippling injury to remember her by, differentiating Tuvdak by his success.
 
-#### Morsha the All-Knowing
+#### Mosha the All-Knowing
 
-One of the smaller green dragons, Morsha roams the jungle near the foot of the mountain and creeps unseen upon her prey. She wanders free from any lair and often visits the outposts and villages of the Lukurru clan, offering wisdom to strengthen them against their enemies. Though she accepts no offerings, Morsha expects greatness from her devotees and punishes their failures, often with death. Though she may not be truly all-knowing, she is indeed capable of seeing more than her eyes alone would tell, appearing to observe events across great distances and through magical barriers.
+One of the smaller green dragons, Mosha roams the jungle near the foot of the mountain and creeps unseen upon her prey. She wanders free from any lair and often visits the outposts and villages of the Lukurru clan, offering wisdom to strengthen them against their enemies. Though she accepts no offerings, Mosha expects greatness from her devotees and punishes their failures, often with death. Though she may not be truly all-knowing, she is indeed capable of seeing more than her eyes alone would tell, appearing to observe events across great distances and through magical barriers.
 
 #### Ice
 
@@ -38,4 +38,4 @@ See [Bekebel](bekebel/index.md).
 
 #### Lukurru
 
-The Lukurru clan, while not very large, remains one of the most influential clans due to their large territory and unrivaled ability to travel quickly through the jungle. They worship all green dragons, including Morsha the All-knowing whom they both fear and make their prayers to. The Lukurru are the sworn enemies of the Bekebel.
+The Lukurru clan, while not very large, remains one of the most influential clans due to their expansive territory and unrivaled stealth. They worship all green dragons, including Mosha the All-knowing whom they both fear and make their prayers to. The Lukurru are the sworn enemies of the Bekebel.
