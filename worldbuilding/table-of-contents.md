@@ -2,7 +2,14 @@
 title: Table of Contents
 ---
 
-### Locations
+## Adventures
+
+- [Nightfall](adventures/nightfall.md)
+- [Stormstruck](adventures/stormstruck.md)
+- [Tide of Battle](adventures/tide-of-battle.md)
+- [Tuvdak's Gift](adventures/tuvdaks-gift.md)
+
+## Locations
 
 - [Andal](locations/andal/index.md)
   - [Day's End](locations/andal/days-end/index.md)
@@ -24,14 +31,7 @@ title: Table of Contents
 - [Sibal](locations/sibal/index.md)
 - [Soale](locations/soale/index.md)
 
-### Adventures
-
-- [Nightfall](adventures/nightfall.md)
-- [Stormstruck](adventures/stormstruck.md)
-- [Tide of Battle](adventures/tide-of-battle.md)
-- [Tuvdak's Gift](adventures/tuvdaks-gift.md)
-
-### Races
+## Races
 
 - [Booksmith](races/booksmith.md)
 - [Dancer](races/dancer.md)

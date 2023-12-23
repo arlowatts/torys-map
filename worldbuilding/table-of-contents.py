@@ -1,56 +1,64 @@
 import os
 
-homeDir = __file__[: __file__.rfind("/")]
-
 def main():
+    os.chdir(os.path.dirname(__file__))
+
+    # add the front matter
     content = "---\ntitle: Table of Contents\n---\n"
 
-    content += "\n" + read(homeDir + "/locations", 0)
-    content += "\n" + read(homeDir + "/adventures", 0)
-    content += "\n" + read(homeDir + "/races", 0)
+    content += read("adventures")
+    content += read("locations")
+    content += read("races")
 
-    with open(homeDir + "/index.md", "w") as file:
+    with open("table-of-contents.md", "w") as file:
         file.write(content)
 
-def read(rootDir: str, depth: int):
-    content = ""
+# recursively list files in the given directory
+def read(dirname: str, depth: int = 0):
+    paths = sorted(os.listdir(dirname))
 
-    relativeDir = rootDir[len(homeDir) + 1 :]
+    content = getDirEntry(dirname, depth)
 
-    paths = sorted(os.listdir(rootDir))
+    for subpath in paths:
+        path = os.path.join(dirname, subpath)
 
-    title = rootDir.split("/")[-1].capitalize()
+        if os.path.isdir(path):
+            content += read(path, depth + 1)
 
-    if "index.md" in paths:
-        with open(rootDir + "/index.md") as file:
-            for line in file:
-                if line.startswith("title"):
-                    title = line[line.find(":") + 1 :].strip()
-                    break
+        if os.path.isfile(path) and os.path.basename(path) != "index.md":
+            content += getFileEntry(path, depth + 1)
 
-        content += "  " * (depth - 1) + "- [" + title + "](" + relativeDir + "/index.md)\n"
-
-    elif depth > 0:
-        content += "  " * (depth - 1) + "- " + title + "\n"
-    
-    else:
-        content += "### " + title + "\n\n"
-
-    for path in paths:
-        if os.path.isdir(rootDir + "/" + path):
-            content += read(rootDir + "/" + path, depth + 1)
-
-        if path != "index.md" and os.path.isfile(rootDir + "/" + path):
-            title = path.capitalize()
-
-            with open(rootDir + "/" + path) as file:
-                for line in file:
-                    if line.startswith("title"):
-                        title = line[line.find(":") + 1 :].strip()
-                        break
-
-            content += "  " * depth + "- [" + title + "](" + relativeDir + "/" + path + ")\n"
-    
     return content
+
+# get the table of contents line for this path, given the recursion depth
+def getDirEntry(path: str, depth: int = 0):
+    if depth <= 0:
+        return "\n## " + getDirTitle(path) + "\n\n"
+
+    indexPath = os.path.join(path, "index.md")
+    if os.path.isfile(indexPath):
+        return getFileEntry(indexPath, depth)
+
+    return "  " * (depth - 1) + "- " + getDirTitle(path) + "\n"
+
+# get the table of contents line for this path, given the recursion depth
+def getFileEntry(path: str, depth: int = 0):
+    return "  " * (depth - 1) + "- [" + getFileTitle(path) + "](" + path + ")\n"
+
+# get the title from the contents or name of the directory
+# if the directory contains index.md, the title will be inherited from it
+# otherwise the name of the directory is capitalized and returned
+def getDirTitle(path: str):
+    return os.path.basename(path).capitalize()
+
+# get the title from the contents of the file
+# if no title is defined in the file, return the filename
+def getFileTitle(path: str):
+    with open(path) as file:
+        for line in file:
+            if line.startswith("title:"):
+                return line[line.find(":") + 1 :].strip()
+
+    return os.path.basename(path)
 
 if __name__ == "__main__": main()
