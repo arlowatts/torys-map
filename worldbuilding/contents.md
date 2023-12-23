@@ -35,7 +35,3 @@ title: Table of Contents
 
 - [Booksmith](races/booksmith.md)
 - [Dancer](races/dancer.md)
-- [Dwarf](races/dwarf.md)
-- [Elf](races/elf.md)
-- [Human](races/human.md)
-- [Merfolk](races/merfolk.md)

@@ -30,19 +30,19 @@ If it is appropriate, any of the characters may be a part of the crew in place o
 
 #### Captain Eltora
 
-Captain Eltora is a lively Human of 27 years. If she didn't spend hours each day in the rigging of her ship, there would be no doubt that she has spent more time on a deck than on land. A seafarer since her youth, she learned how to sail on her father's ship and has earned a mighty reputation aboard her own vessel, the Dulcet Swine. Eltora is known for her quick way of speaking and her snappy decisions - some might even say impulsive. When profit is to be had Eltora is always first on the scene and when danger looms she's the first to turn tail. She'll suffer no back talk on her ship nor hesitance to obey her orders.
+Captain Eltora is a lively human of 27 years. If she didn't spend hours each day in the rigging of her ship, there would be no doubt that she has spent more time on a deck than on land. A seafarer since her youth, she learned how to sail on her father's ship and has earned a mighty reputation aboard her own vessel, the Dulcet Swine. Eltora is known for her quick way of speaking and her snappy decisions - some might even say impulsive. When profit is to be had Eltora is always first on the scene and when danger looms she's the first to turn tail. She'll suffer no back talk on her ship nor hesitance to obey her orders.
 
 #### First Mate Laurie
 
-Laurie, the First Mate of the Dulcet Swine, is a Dwarf of exceptional intelligence. His immediate grasp of unfamiliar topics is unrivaled and his memory is faultless. Laurie has known Eltora since her childhood and considers himself largely responsible for her success, which he proudly flaunts at every opportunity. He likes using big words and showing off his understanding of every science under the sun.
+Laurie, the First Mate of the Dulcet Swine, is a dwarf of exceptional intelligence. His immediate grasp of unfamiliar topics is unrivaled and his memory is faultless. Laurie has known Eltora since her childhood and considers himself largely responsible for her success, which he proudly flaunts at every opportunity. He likes using big words and showing off his understanding of every science under the sun.
 
 #### Raadi
 
-Raadi is a Human sailor from the distant land of Soale. He speaks with a thick accent but otherwise has fully adopted the Andalese way of life. He is quite talkative and very friendly, both trusting and earning trust easily. He loves to play tricks on his friends (which is almost everyone) and tell stories.
+Raadi is a human sailor from the distant land of Soale. He speaks with a thick accent but otherwise has fully adopted the Andalese way of life. He is quite talkative and very friendly, both trusting and earning trust easily. He loves to play tricks on his friends (which is almost everyone) and tell stories.
 
 #### Aro
 
-Aro is an Elf sailor of mysterious origins. She claims to be from Sibal but never seems to get the details straight - her story changes at every telling. Despite this, she enjoys good company and, while being slower to make friends than Raadi, can still become a kind and loving companion in time.
+Aro is an elf sailor of mysterious origins. She claims to be from Sibal but never seems to get the details straight - her story changes at every telling. Despite this, she enjoys good company and, while being slower to make friends than Raadi, can still become a kind and loving companion in time.
 
 The Dulcet Swine sails at dawn, so the characters won't have much time to prepare or to explore Sayrenvar. However, they should have enough time to make any purchases they feel are necessary.
 
