@@ -60,7 +60,7 @@ This time the cheering of the amassed kobolds seems to make the ground itself sh
 
 As Babanak lifts the crown from a box at his feet, the crowd goes wild. Some are chanting Babanak's name and others Tuvdak's, but most are simply expressing themselves with a lot of noise. Babanak revels in the crowd's adoration and holds the crown aloft for all to see.
 
-But as Babanak stands at the front of the stage, a few kobolds begin to notice movement near the ceiling. Someone is standing on a high ledge, holding the end of a rope anchored to a hook in the roof. Before anyone can act, the kobold leaps off the ledge and swings down. Many kobolds cry out in alarm, but it's too late - the swinging kobold slams directly into Babanak's side, sending both of them flying into the crowd. The crown, too, tumbles through the air before landing far from the stage.
+But as Babanak stands at the front of the stage, a few kobolds begin to notice movement near the ceiling. Someone is standing on a high ledge, holding the end of a rope anchored to a hook in the roof. Before anyone can act, the masked kobold leaps off the ledge and swings down. Many kobolds cry out in alarm, but it's too late - the swinging kobold slams directly into Babanak's side, sending both of them flying into the crowd. The crown, too, tumbles through the air before landing far from the stage.
 
 Immediate chaos ensues. Those near the fallen Babanak try to push back, while those too far away to see clearly try to push forward. Babanak, however, recovers quickly and flies into the air, holding the attacker by their neck. Both are briefly concealed by bright flames, and when then Babanak hovers in the air alone. Then he turns his gaze to the crowd, seeking the crown, but all the kobolds in the hall are already running in too many directions and he must concede defeat.
 
@@ -98,10 +98,24 @@ The study includes a writing desk and two bookshelves. On the writing desk is an
 
 The open book on the desk is a partial record of all magical artifacts created over the centuries, whether by kobolds or dragons. When the characters find it, it is open to a page summarizing the properties of various magical crowns. It explains that crowns typically bestow mental powers to their users. For example, the book describes the Crown of Dominion as an ancient artifact that would grant the wearer the ability to control the minds of others. Alternatively, a crown called Citherei granted its wearer full clarity and independence of mind, blocking any attempts to magical influence the wearer's thoughts.
 
-One of the books on the bookshelves has a page bookmarked, which is visible without opening the book (although it must be removed from the shelf first). It is an index of all the dragons that have lived on Oro-oro-ponoro-poron for the past 800 years. The book is a few decades out of date, but dragons live for centuries so any differences are minor. It is bookmarked on the page about Ice, the island's only black dragon. Read the section about [Ice](../locations/oro-oro-ponoro-poron/index.md#ice) to the characters. This should give the characters a strong indication of what Paparnad wants to do with the Crown of Noruchtohl if they can make the connection.
+If the characters closely investigate the bookshelf, they might notice that one of the shelves has a shallower back than the others, implying that there is some space between it and the wall. By carefully prying at the backboard, they might find that it is removable. Behind it is a single book, describing all the dragons that have lived on Oro-oro-ponoro-poron for the past 800 years. The book is a few decades out of date, but dragons live for centuries so any differences are minor. It is bookmarked to the page about Ice, the island's only black dragon. Read the section about [Ice](../locations/oro-oro-ponoro-poron/index.md#ice) to the characters. This should give the characters a strong indication of what Paparnad plans to do with the Crown of Noruchtohl if they can make the connection.
 
 ### Paparnad's workshop
 
-### Cob alley
+As one of the clan's leading magical researchers, Paparnad has access to his own private workshop where he tests and develops new spells and magic items. The workshop houses a writing desk where Paparnad makes research notes, and a worktable where he enchants magical items. In the corner is also an empty coat rack.
+
+On the desk is a pile of notes about the Cloak of Invisibility that Paparnad has been developing. The latest notes, dated over the past month, describe various successful tests of the cloak. The final page states that the cloak is almost ready for use - it makes the wearer fully transparent, but a faint shimmer in the air around them would give away their presence to a careful observer.
+
+With the help of the Gorgor Counter, the characters might find that there is no Cloak of Invisibility in this room, allowing them to possibly infer that Paparnad is using it to escape.
 
 ### The Great Hall
+
+Since the Great Hall stands at a crossroads of many important tunnels beneath the Bekebel Citadel, it is normally filled with kobolds running to and fro. However, since the lockdown was imposed on the entire citadel, the Great Hall stands eerily empty, the characters footsteps echoing beneath the lofty ceiling. To add to the lonely feeling, the rope Taccar swung from still hangs above the stage.
+
+The characters might start by finding the place where the Crown of Noruchtohl landed in the crowd. In fact, just where they would expect the crown to have fallen, there is a blackened and cracked floor tile, as though lightning had struck that spot. The Gorgor Counter clicks when brought close.
+
+From that spot, the nearest exit is directly north. If the characters choose to investigate the exit, they will find a small scrap of fabric snagged on a splinter of rock. This was Satasha's pocket - and indeed, nearby is a small scrap of paper that reads "229 SOOT RD".
+
+## Chapter 3 - Pursuit
+
+Either from the notepad in Paparnad's chambers or the scrap of paper in the Great Hall, the characters hopefully now know where Paparnad and Satasha met to hand off the Crown of Noruchtohl.
