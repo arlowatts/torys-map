@@ -10,7 +10,7 @@ def main():
     content += read("locations")
     content += read("races")
 
-    with open("table-of-contents.md", "w") as file:
+    with open("contents.md", "w") as file:
         file.write(content)
 
 # recursively list files in the given directory

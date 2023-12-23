@@ -1,5 +1,5 @@
 theme: minima
 
 header_pages:
-  - worldbuilding/table-of-contents.md
+  - worldbuilding/contents.md
   - mapping/index.html
