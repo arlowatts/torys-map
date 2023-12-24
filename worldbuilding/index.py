@@ -44,7 +44,7 @@ def read(dirname: str, index: dict):
 def getFileEntries(path: str, index: dict):
     with open(path) as file:
         # split the file along bold indicators
-        content = file.read().split("**")
+        content = file.read().replace("***", "**").split("**")
 
     # every other part of the split file is inside the bold indicators
     for i in range(1, len(content), 2):

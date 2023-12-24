@@ -16,13 +16,13 @@ Over 600 years old, **Tuvdak the Magnificent** is the oldest red dragon on Oro-o
 
 #### Mosha the All-Knowing
 
-One of the smaller green dragons, **Mosha the All-knowing** roams the jungle near the foot of the mountain and creeps unseen upon her prey. She wanders free from any lair and often visits the outposts and villages of the **Lukurru** clan, offering wisdom to strengthen them against their enemies. Though she accepts no offerings, Mosha expects greatness from her devotees and punishes their failures with death. Though she may not be truly all-knowing, she is nonetheless capable of seeing more than her eyes alone would tell, appearing to observe events across great distances and through many barriers.
+One of the smaller green dragons, **Mosha the All-knowing** roams the jungle near the foot of the mountain and creeps unseen upon her prey. She wanders free from any lair and often visits the outposts and villages of the **Lukurru** clan, offering wisdom to strengthen them against their enemies. Though she accepts no offerings, Mosha expects greatness from her devotees and punishes their failures with death. While she may not be truly all-knowing, she is nonetheless capable of seeing more than her eyes alone would tell, appearing to observe events across great distances and through many barriers.
 
 #### Ice
 
 While red, green, and blue dragons generally make their presence known, a single black dragon known as **Ice** resides always just out of sight. Ice is rarely seen on Oro-oro-ponoro-poron, appearing only to stalk and kill roving groups of kobolds or smaller dragons. Ice's true name is not known, and no kobold clan worships them - some even doubt Ice is real. However, those seeking power beyond their means might leave a small offering out in the jungle, hoping Ice will discover it and pay a visit.
 
-This has been attempted before with varying success - over the centuries, many kobolds have tried to form an alliance of sorts with Ice. Some have reported their stories themselves, and other tales are recounted only second- or third-hand. One such story, told second-hand, describes how the druid known as **Dreth the Merciless** gained Ice's blessing by bringing a powerful artifact into the forest and destroying it, thus demonstrating his dedication. When Dreth returned to his clan, he could reportedly twist the minds of others and transform one material into another, all as easily as most sorcerers can summon fire.
+This has been attempted before with varying success - over the centuries, many kobolds have tried to form an alliance of sorts with Ice. Some have reported their stories themselves, and other tales are recounted only second- or third-hand. One such story, told second-hand, describes how the druid known as **Dreth the Merciless** gained Ice's blessing by bringing a powerful artifact into the forest and destroying it, thus demonstrating his dedication. When Dreth returned to his clan, he could reportedly twist the minds of others and transform one material into another.
 
 ## Kobolds
 
