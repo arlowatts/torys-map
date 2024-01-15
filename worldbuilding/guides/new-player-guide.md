@@ -20,7 +20,7 @@ A kobold is a small humanoid creature with scaly skin and reptilian qualities, i
 
 *A kobold warrior by Brett-Neufeld*
 
-The population of the Bekebel clan is incredibly diverse, boasting 20 unique cultures and 3 distinct dialects of the common language. Most are unified in their worship of Tuvdak the Magnificent and reverence of Tiamat, god of all dragons, but some dissent. Please feel free to express yourself and your character however you wish - the sky is the limit!
+The population of the Bekebel clan is incredibly diverse, boasting 20 unique cultures and 3 distinct dialects of the common language. Most are unified in their worship of **Tuvdak the Magnificent** and reverence of **Tiamat**, god of all dragons, but some dissent. Please feel free to express yourself and your character however you wish - the sky is the limit!
 
 Oh, and one more thing - did you know all kobolds give themselves a title? Well, they do! When you're making a character, try to think of a fun title like "the Great" or "the Mystic" to add some spice.
 
