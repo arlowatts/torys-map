@@ -16,7 +16,7 @@ It is customary for the Bekebel clan to give a gift to Tuvdak on every ninth day
 
 A kobold is a small humanoid creature with scaly skin and reptilian qualities, including a long face and a tail.
 
-![A kobold warrior by Brett-Neufeld](https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/06e23c38-1ecf-4757-8619-6b4b94c885a4/dd9p5ro-16def6e4-0176-4bf2-aa1b-ecb998e1240f.jpg/v1/fill/w_873,h_915,q_70,strp/lizard_adventurer_by_brett_neufeld_dd9p5ro-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTIzIiwicGF0aCI6IlwvZlwvMDZlMjNjMzgtMWVjZi00NzU3LTg2MTktNmI0Yjk0Yzg4NWE0XC9kZDlwNXJvLTE2ZGVmNmU0LTAxNzYtNGJmMi1hYTFiLWVjYjk5OGUxMjQwZi5qcGciLCJ3aWR0aCI6Ijw9ODgxIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.5dyoKjCpt22QfSNzHjV4nLpxkJy6CBDeV-0cA1L55ec)
+![A kobold warrior by Brett-Neufeld](https://i.pinimg.com/736x/7a/a3/8e/7aa38e3649c9411a315a47960b2facef.jpg)
 
 *A kobold warrior by Brett-Neufeld*
 
