@@ -9,6 +9,7 @@ def main():
     index = {}
 
     read("adventures", index)
+    read("guides", index)
     read("locations", index)
     read("races", index)
 
