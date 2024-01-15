@@ -70,7 +70,7 @@ Your character also has a couple other properties like hit points and spell poin
 
 The game is mostly roleplaying, but there will be some dice involved to settle random outcomes. We'll use all kinds of dice, so feel free to bring whatever you have!
 
-Many of the game's other mechanics will be taken directly from, or at least inspired by, Dungeons & Dragons 5e. If you know them, that's great - if you don't, that's also great! Everything I'm including is fairly intuitive, so I'm not worried that anyone will have any trouble catching on.
+Many of the game's other mechanics will be taken directly from, or at least inspired by, the fifth edition of Dungeons & Dragons. If you know them, that's great - if you don't, that's also great! Everything included in this simplified version is fairly intuitive, so it should be relatively easy to catch on.
 
 ### A note about magic
 
@@ -78,4 +78,4 @@ If you've played D&D before, you may have noticed that we don't have classes her
 
 ## Questions?
 
-I can answer questions! Just send them right on and I'll respond when I feel like it. Luckily for you, I love answering questions and will absolutely prioritize them over my schoolwork whether you like it or not.
+I can answer questions! Just send them right on and I'll respond when I feel like it. Luckily for you, I love answering questions!
