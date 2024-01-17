@@ -1,4 +1,4 @@
-import os
+import os, re
 
 def main():
     os.chdir(os.path.dirname(__file__))
@@ -44,20 +44,26 @@ def read(dirname: str, index: dict):
 # get the index entries for this path and add them to the given dict
 def getFileEntries(path: str, index: dict):
     with open(path) as file:
-        # split the file along bold indicators
-        content = file.read().replace("***", "**").split("**")
+        # split the file along bold indicators (two or more *)
+        content = re.split("(\*\*+)", file.read())
 
-    # every other part of the split file is inside the bold indicators
-    for i in range(1, len(content), 2):
+    # index the phrases inside the bold indicators
+    # every fourth element in the split file is in bold
+    for i in range(2, len(content), 4):
         key = content[i].strip()
+        urlKey = re.sub("[^0-9a-zA-Z]", "-", key.lower())
 
         if not key in index:
             index[key] = []
 
-        link = "[" + getFileTitle(path) + "](" + path + ")"
+        link = "[" + getFileTitle(path) + "](" + path + "#" + urlKey + ")"
 
         if not link in index[key]:
             index[key].append(link)
+            content[i] = "<a name=\"" + urlKey + "\">" + content[i] + "</a>"
+
+    with open(path, "w") as file:
+        file.write("".join(content))
 
 # get the title from the contents of the file
 # if no title is defined in the file, return the filename
