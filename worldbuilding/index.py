@@ -60,7 +60,7 @@ def getFileEntries(path: str, index: dict):
 
         if not link in index[key]:
             index[key].append(link)
-            content[i] = "<a name=\"" + urlKey + "\">" + content[i] + "</a>"
+            content[i] = "<span id=\"" + urlKey + "\">" + content[i] + "</span>"
 
     with open(path, "w") as file:
         file.write("".join(content))
