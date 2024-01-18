@@ -51,7 +51,7 @@ def getFileEntries(path: str, index: dict):
     # every fourth element in the split file is in bold
     for i in range(2, len(content), 4):
         key = content[i].strip()
-        urlKey = re.sub("[^0-9a-zA-Z]", "-", key.lower())
+        urlKey = "index-" + re.sub("[^0-9a-zA-Z]", "-", key.lower())
 
         if not key in index:
             index[key] = []
