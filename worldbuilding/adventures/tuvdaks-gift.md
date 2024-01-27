@@ -2,7 +2,7 @@
 title: Tuvdak's Gift
 ---
 
-Tuvdak's Gift is a lighthearted standalone adventure designed to be completed in one session. The adventure takes place in the citadel of **Bekebel**, beneath the shadow of the fiery mountain **Oro-oro-ponoro-poron**. Since Bekebel is inhabited only by kobolds, all the characters in this adventure should also be kobolds.
+Tuvdak's Gift is a lighthearted standalone adventure designed to be completed in one session. The adventure takes place in **Bekebel Citadel**, beneath the shadow of the fiery mountain **Oro-oro-ponoro-poron**. Since **Bekebel** is inhabited only by kobolds, all the characters in this adventure should also be kobolds.
 
 For additional information about the setting of this adventure, see also:
 - [Oro-oro-ponoro-poron](../locations/oro-oro-ponoro-poron/index.md)
@@ -12,15 +12,21 @@ For additional information about the setting of this adventure, see also:
 
 The first chapter of Tuvdak's Gift introduces the **Crown of Noruchtohl** and explains its importance as a gift to **Tuvdak the Magnificent**. It also covers the characters' perspective of the incident causing its loss.
 
-What the characters will discover over the course of the adventure is that the crown was stolen by **Paparnad the Mystic** and two of his students, **Taccar the Arcane** and **Satasha the Runed**. The scheme was as follows: Taccar would swing from the ceiling, knocking the crown into the crowd, where Satasha would take it using any means necessary and flee beneath the cover of a Cloak of Invisibility. Then she would meet up with Paparnad far beneath the **Great Hall**, give him the crown and the cloak, and return magically disguised as Paparnad to delay any suspicions.
+What the characters will discover over the course of the adventure is that the crown was stolen by **Paparnad the Mystic** and two of his students, **Taccar the Arcane** and **Satasha the Runed**. The scheme was as follows: Taccar would swing from the ceiling, knocking the crown into the crowd, where Satasha would take it using any means necessary and flee beneath the cover of a Cloak of Invisibility. Then she would meet up with Paparnad, give him the crown and the cloak, and return magically disguised as Paparnad to delay any suspicions.
 
-The plan was executed well, and Satasha managed to grab the crown and escape. Taccar was sadly incinerated, but everything comes at a cost. Satasha then met with Paparnad roughly half an hour after the crown was taken and began making her way back up to the surface. If the characters follow the typical adventure path, they will encounter her as they themselves descend to the same specified location.
+The plan was executed well, and Satasha managed to grab the crown and escape. Taccar was sadly incinerated. Satasha then met with Paparnad roughly half an hour after the crown was taken and began making her way back up to the surface. If the characters follow the typical adventure path, they will encounter her as they themselves descend to the same specified location.
 
-The second chapter sends the characters on their way to find the crown. They are advised to first search the private chambers of **Paparnad the Mystic**, who has not been seen since the crown went missing. In Paparnad's rooms, they might find a fragment of a hidden note leading them deeper into the tunnels in pursuit of Paparnad. On their way there, they will probably encounter Satasha, disguised as Paparnad, on her way back up. This encounter might or might not become violent, but either way the characters will probably discover that Satasha does not have the crown and that the real Paparnad is descending with it to a secret exit.
+The first chapter concludes in the throne room of **Babanak the Great**, where he instructs the characters to seek and retrieve the crown. He also mentions that Paparnad is nowhere to be found - a hint of his guilt.
 
-The third chapter details the characters' pursuit of Paparnad through the tunnels and caverns below **Bekebel Citadel**. Along the way they might find hints of Paparnad's passing in the form of footprints or torn pieces of fabric. As they descend ever deeper, leaving the carved tunnels and entering the natural caves, the characters will have to fight dark monsters and might encounter an unfriendly dragon.
+The second chapter sends the characters on their way to find the crown. They will likely wish to search the **Great Hall** first, where the crown was sent tumbling into a crowd of thousands. There they may find a scrap of fabric - a torn piece of Satasha's Cloak of Invisibility. Knowing that Cloaks of Invisibility are virtually unheard of on Oro-oro-ponoro-poron, the characters should begin to suspect that whoever orchestrated this plot must have significant resources at their disposal and strong connections in high places.
 
-The fourth and final chapter sees the characters finally catch up with Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to Tuvdak. The characters are rewarded for their hard work with Tuvdak's older crown, which he no longer needs.
+In their explorations of the citadel's underground, the characters may encounter **Satasha the Runed** on her way to see Babanak. Magically disguised as Paparnad, her goal is to provide him with an alibi. Satasha's lies and misdirection may lead the characters on a wild goose chase before they discover her deception. Alternatively, with the right incentives, she could become a useful ally.
+
+During this time, the characters may wish to search the private chambers of **Paparnad the Mystic**. In Paparnad's rooms, they might find a hidden note leading them deeper into the tunnels in pursuit.
+
+The third chapter details the characters' pursuit of Paparnad through the tunnels and caverns below **Bekebel Citadel**. Along the way they might find hints of Paparnad's passing, but magical tools like the **Gorgor Counter** will likely be of more use. As they descend ever deeper, leaving the carved tunnels and entering the natural caves, the characters will have to fight dark monsters and might encounter an unfriendly dragon.
+
+The fourth and final chapter sees the characters finally catch up with Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to **Tuvdak the Magnificent**. Finally, now with a preferable replacement, Tuvdak drops his older crown on the ground in front of the characters as a reward for their tremendous efforts.
 
 ## Chapter 1 - The Gift
 
