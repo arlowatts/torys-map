@@ -22,25 +22,23 @@ One of the smaller green dragons, **Mosha the All-knowing** roams the jungle nea
 
 While red, green, and blue dragons generally make their presence known, a single black dragon known as **Ice** resides always just out of sight. Ice is rarely seen on Oro-oro-ponoro-poron, appearing only to stalk and kill roving groups of kobolds or smaller dragons. Ice's true name is not known, and no kobold clan worships them - some even doubt Ice is real. However, those seeking power beyond their means might leave a small offering out in the jungle, hoping Ice will discover it and pay a visit.
 
-This has been attempted before with varying success - over the centuries, many kobolds have tried to form an alliance of sorts with Ice. Some have reported their stories themselves, and other tales are recounted only second- or third-hand. One such story, told second-hand, describes how the druid known as **Dreth the Merciless** gained Ice's blessing by bringing a powerful artifact into the forest and destroying it, thus demonstrating his dedication. When Dreth returned to his clan, he could reportedly twist the minds of others and transform one material into another.
-
 ## Kobolds
 
 In addition to its draconic inhabitants, Oro-oro-ponoro-poron is home to the many kobold clans who worship them. The kobolds thrive in the island's warm environment and work industriously to ensure their clan's success, often in direct competition with one another. Nearly all clans worship one or more dragons, and a clan's dragon overlord often determines the nature of their alliances.
 
-However, all the kobold clans are united in reverence (and fear) of **Tiamat**, the evil god of all dragons. It is said that one day, when she is least expected, Tiamat will erupt from Oro-oro-ponoro-poron's volcanic crater and lay waste to those who fail to meet her demands.
+Whatever their loyalties, all the kobold clans are united in reverence (and fear) of **Tiamat**, the evil god of all dragons. It is said that one day, when she is least expected, Tiamat will erupt from Oro-oro-ponoro-poron's volcanic crater and lay waste to those who fail to meet her demands.
 
 ### Notable clans
 
 #### Bekebel
 
-The **Bekebel** clan is the largest kobold clan on Oro-oro-ponoro-poron. They inhabit **Bekebel Citadel** and are led by **Babanak the Great**. The clan worships **Tuvdak the Magnificent**, regularly offering him gifts befitting his title to add to his lair. The Bekebel are the sworn enemies of the Lukurru.
+The **Bekebel** clan is the largest kobold clan on Oro-oro-ponoro-poron. They inhabit **Bekebel Citadel** and are led by **Babanak the Great**. The clan worships **Tuvdak the Magnificent**, regularly offering him gifts befitting his title to add to his hoard. The Bekebel are the sworn enemies of the Lukurru.
 
 See [Bekebel](bekebel/index.md).
 
 #### Lukurru
 
-The **Lukurru** clan, while not very large, remains one of the most influential clans due to their expansive territory and unrivaled stealth. They worship all green dragons, including **Mosha the All-knowing** whom they both fear and make their prayers to. The Lukurru are the sworn enemies of the Bekebel.
+The **Lukurru** clan, while not very large, remains a very influential clans due to their expansive territory and unrivaled fighting force. They worship all green dragons, including **Mosha the All-knowing** whom they both fear and make their prayers to. The Lukurru are the sworn enemies of the Bekebel.
 
 ## Locations
 
