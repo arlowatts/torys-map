@@ -10,7 +10,7 @@ West of Day's End is a large forest known as the **Elking Wood**. Many think it 
 
 Day's End is built inside the 25-foot stone walls of an ancient elven palace. Most of the buildings inside were destroyed centuries ago, but the outside wall and the central tower, now the **Mayoral Seat**, survived. Most have since forgotten that any parts of the town existed before it was reclaimed by nature 300 years ago.
 
-Underneath the town, the ancient elven council chambers have also survived the centuries and are accessible via an imposing door under the town's prison. See [**Mayoral Seat**](mayoral-seat.md) and the [**Dungeon of Day's End**](dungeon/index.md).
+Underneath the town, the ancient elven council chambers have also survived the centuries and are accessible via an imposing door under the town's prison. See [**Mayoral Seat**](mayoral-seat.md) and the [**Dungeon of Day's End**](dungeon.md).
 
 At the heart of Day's End is an ongoing market where farmers, crafters, and peddlers all sell their wares.
 

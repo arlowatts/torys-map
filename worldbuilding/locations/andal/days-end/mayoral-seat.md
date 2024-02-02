@@ -34,4 +34,4 @@ Down the stairs from the lobby, going underground, is a hallway leading to the k
 
 One level below the kitchen leads into the town's tiny prison. There are two cells, each only large enough for two people. They are almost never occupied, and their locks are old and rusty. Each cell contains a single small bed and a hole in the ground that serves as a toilet.
 
-At the south end of the prison, opposite the entrance, is a massive iron door. This door leads into the ancient underground elven council chambers. See the [**Dungeon of Day's End**](dungeon/index.md).
+At the south end of the prison, opposite the entrance, is a massive iron door. This door leads into the ancient underground elven council chambers. See the [**Dungeon of Day's End**](dungeon.md).
