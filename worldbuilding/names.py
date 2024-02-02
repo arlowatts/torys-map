@@ -7,13 +7,15 @@ letters["consonant"] = list("bcdfghjklmnprstvwxyz") + ["qu", "ch", "ph", "sh", "
 letters["any"] = letters["vowel"] + letters["consonant"]
 letters["middle"] = letters["any"] + ["-", "'"]
 
-frequency = {"a":81, "b":15, "c":23, "d":43, "e":120, "f":23, "g":20, "h":43, "i":73, "j":1,
-             "k":7, "l":40, "m":26, "n":70, "o":77, "p":12, "r":60, "s":57, "t":84, "u":24,
-             "v":11, "w":21, "x":2, "y":21, "z":1, "qu":6, "ch":8, "ph":6, "sh":10, "th":11,
-             "-":21, "'":24}
+frequency = {
+    "a":81, "b":15, "c":23, "d":43, "e":120, "f":23, "g":20, "h":43, "i":73, "j":1,
+    "k":7, "l":40, "m":26, "n":70, "o":77, "p":12, "r":60, "s":57, "t":84, "u":24,
+    "v":11, "w":21, "x":2, "y":21, "z":1, "qu":6, "ch":8, "ph":6, "sh":10, "th":11,
+    "-":21, "'":24
+}
 
 # Generates a new word of approximately the given length
-def getWord(length):
+def getWord(length: int):
     word = [getLetter(letters["any"])]
 
     if word[0] in letters["vowel"]:
@@ -38,7 +40,7 @@ def getWord(length):
     return "".join(word)
 
 # Returns a randomly chosen letter from the list based on each letter's frequency
-def getLetter(array : []):
+def getLetter(array: []):
     sum = 0
 
     for char in array:
