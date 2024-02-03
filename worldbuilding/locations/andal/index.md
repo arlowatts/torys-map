@@ -10,7 +10,7 @@ Andal is inhabited primarily by humans and dwarves, scattered across the Morku P
 
 ## Government
 
-Andal is run by a powerful oligarchic government that specializes in weaponized beaurocracy. The three top-level rulers, who are rarely seen in public, issue decrees via their large network of envoys to the mayors of every town and city in the province. The mayors are required to enforce the oligarchy's laws, and are themselves punished if they do so poorly.
+Andal is run by a powerful oligarchic government that specializes in weaponized beaurocracy. The five top-level rulers, who are rarely seen in public, issue decrees via their large network of envoys to the mayors of every town and city in the province. The mayors are required to enforce the oligarchy's laws, and are themselves punished if they do so poorly.
 
 ## History
 
