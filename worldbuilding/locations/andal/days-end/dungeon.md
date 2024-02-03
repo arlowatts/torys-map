@@ -4,7 +4,7 @@ title: The Dungeon of Day's End
 
 The small town of **Day's End** is hiding an ancient secret; under the **Mayoral Seat** is a set of large chambers, magically sealed since the time of the last elven king, **Oeged Naaftet Oecheisev**. However, the passing of centuries has weakened the magic around the door. Another entrance, hidden under a pond in the **Graveyard**, and has not been touched in centuries.
 
-The dungeon contains more than simple chambers, though. Oeged caused the entire kingdom to collapse by dabbling in dark magic - magic powered by the Eclipse. These practices led to increasingly corrupt decisions within the council, and the magic itself distorted many of the creatures in the forest, creating giant spiders and basilisks. In the end, the king transformed himself into a Shadow Dragon and claimed the main council chamber as his lair. The other members of the council became Wraiths, and haunted the halls of the dungeon for centuries, seeking a way through the seals laid by their own people.
+The dungeon contains more than simple chambers, though. Oeged caused the entire kingdom to collapse by dabbling in dark magic - magic powered by the Eclipse. These practices led to increasingly corrupt decisions within the council, and the magic itself distorted many of the creatures in the forest, creating giant spiders and basilisks. In the end, the king transformed himself into a shadow dragon and claimed the main council chamber as his lair. The other members of the council became wraiths, and haunted the halls of the dungeon for centuries, seeking a way through the seals laid by their own people.
 
 As time passed, the king and his wraiths became weaker and struggled less fiercely against their magical bonds. Now dormant, they await the time that the ground shatters around them and they can escape.
 
@@ -51,7 +51,7 @@ The passageway is 10 feet wide and 100 feet long, extending 40 feet east and wes
 
 A character with magical sensibilities can sense a stronger undead presence from the room with the Stream door. One of the king's councillors made her lair here as a wraith before retreating to the lower chamber, leaving behind a shadowy reflection of herself. See area 1.3.
 
-The room with the Spider door contains a Black Pudding. See area 1.3.
+The room with the spider door contains a Black Pudding. See area 1.3.
 
 At each end of the passage is a stairwell leading down. See area 1.4.
 
@@ -71,13 +71,13 @@ A character who can read Elvish can read the content of the scrolls. They are wr
 
 #### Remnant of Ey-La
 
-The room with the Stream door was once the lair of **Ey-La**, one of the king's councillors. After she was transformed into a Wraith and trapped underground, she made this room her domain for more than 200 years before finally retreating to the main council chamber. Despite her absence, the room still remembers her shadow and her presence, a mixture of fey and undead, may still be felt by a character with magical senses.
+The room with the Stream door was once the lair of **Ey-La**, one of the king's councillors. After she was transformed into a wraith and trapped underground, she made this room her domain for more than 200 years before finally retreating to the main council chamber. Despite her absence, the room still remembers her shadow and her presence, a mixture of fey and undead, may still be felt by a character with magical senses.
 
 Inside the room, the floor is covered with thin wisps of shadow. This shadow is only visible in total darkness; in dim or bright light it becomes invisible. When a character moves more than ten feet into the room, the wisps of shadow coalesce into 2d4 Shadows. The Shadows, like the wisps, are only visible in total darkness.
 
 #### Pudding Breach
 
-The room with the Spider door has been breached by a Black Pudding. The pudding has lived in this room for nearly a century, consuming the scrolls within and slowly clearing the shelves. This room is nearly emptied of scrolls. When the characters enter the room, the ooze will try to hide if they have a light source with them. If they don't or they get within the reach of the ooze, it attacks. It will attack the smallest character, ignoring anyone else, and it will try to flee under the shelves if reduced to less than a quarter of its maximum hit points.
+The room with the spider door has been breached by a Black Pudding. The pudding has lived in this room for nearly a century, consuming the scrolls within and slowly clearing the shelves. This room is nearly emptied of scrolls. When the characters enter the room, the ooze will try to hide if they have a light source with them. If they don't or they get within the reach of the ooze, it attacks. It will attack the smallest character, ignoring anyone else, and it will try to flee under the shelves if reduced to less than a quarter of its maximum hit points.
 
 ### 1.4 Stairwells
 
@@ -89,7 +89,7 @@ Hidden in the reliefs are some gemstones. They are subtly used to accentuate cer
 
 #### Diamonds
 
-The diamonds are closely bound to the spirits of Oeged and his councillors, and prying them from the wall will stir them. If any of the diamonds are removed from the wall, two of Oeged's councillors reawaken as Wraiths. They begin moving toward the diamond that was removed, and travel silently in the dark.
+The diamonds are closely bound to the spirits of Oeged and his councillors, and prying them from the wall will stir them. If any of the diamonds are removed from the wall, two of Oeged's councillors reawaken as wraiths. They begin moving toward the diamond that was removed, and travel silently in the dark.
 
 It will take ten minutes for the wraiths to rise. When they do, and assuming the characters haven't moved from the stairwell, they will try to trap the characters in the stairwell. One of them will approach the stairwell from the bottom while the other takes the opposite stairwell to come around behind them. Both wraiths are originating from the council chamber, so the wraith approaching from behind will reach the top of stairwell about 20 seconds after the other reaches the bottom.
 
@@ -109,7 +109,7 @@ The walls of the rooms on this level are engraved with root-like shapes, as thou
 
 This 20 foot square room was once a point of passage between the council chamber, the archive rooms, and the documents room. The floor is tiled with a star-shaped pattern of blue, green, and gold tiles.
 
-The north wall is unadorned, but closer inspection reveals that there are pins in the wall making the corners of a large rectangle. Around one of the pins is a small piece of torn fabric, perhaps indicating that this wall once bore a tapestry of some sort. Indeed it did; it bore an image of King **Oeged Naaftet Oecheisev** in his most noble days. When he transformed himself into a Shadow Dragon and became trapped in his own council chamber, he ordered it destroyed.
+The north wall is unadorned, but closer inspection reveals that there are pins in the wall making the corners of a large rectangle. Around one of the pins is a small piece of torn fabric, perhaps indicating that this wall once bore a tapestry of some sort. Indeed it did; it bore an image of King **Oeged Naaftet Oecheisev** in his most noble days. When he transformed himself into a shadow dragon and became trapped in his own council chamber, he ordered it destroyed.
 
 In the east wall is an open doorway to a spiral stairwell going up (see area 1.4). A stone door in the west wall leads to the Writing Room (area 2.3). In the south wall is an open doorway to a corridor, gently curving westward, lined with alcoves filled with statues of elven monarchs (see area 2.6).
 
@@ -193,13 +193,13 @@ Unlike the shadowy influence of **Ey-La**, these shadows do not shy away from li
 
 If the characters have no light with them, Oeged does not awaken immediately when they reach the conference table. Instead, first only one of the councillors will rise. It will not speak or approach, only staring at the characters from a distance of about 15 feet. It fights only in self-defense, and Oeged awakens quickly (see below) if a fight begins. Otherwise, after a few moments another councillor will rise from the darkness. Then a third, and a fourth. This goes on until all 19 councillors have reformed from the shadows, or as many as remain if any were destroyed in a stairwell earlier.
 
-Finally, once all the councillors have manifested, Oeged silently takes the shape of a Shadow Dragon and descends from the ceiling to land in front of the characters. Skip to *Interacting with Oeged*.
+Finally, once all the councillors have manifested, Oeged silently takes the shape of a shadow dragon and descends from the ceiling to land in front of the characters. Skip to *Interacting with Oeged*.
 
 #### Oeged's Awakening
 
-If a disturbance is wrought upon the underground chambers, including damaging or taking a magic item from a statue in area 2.6, activating the light tiles, or committing any significant destructive action, Oeged manifests into his Shadow Dragon form.
+If a disturbance is wrought upon the underground chambers, including damaging or taking a magic item from a statue in area 2.6, activating the light tiles, or committing any significant destructive action, Oeged manifests into his shadow dragon form.
 
-When Oeged awakens, a wind begins to howl through the halls of the catacombs, gathering shadows as it blows towards the conference chamber. Across the floor, walls, and ceiling, shadows twist and curl along with the winds to gather from all areas of the dungeon at the central council table. As the shadows reach the conference chamber, they begin to coalesce into the form of a Shadow Dragon with huge wings, a long neck, and sharp claws. When he moves, he is difficult to see properly; the edges of his form become blurry and his features disappear. When he stops moving again, however, he becomes clear and sharp.
+When Oeged awakens, a wind begins to howl through the halls of the catacombs, gathering shadows as it blows towards the conference chamber. Across the floor, walls, and ceiling, shadows twist and curl along with the winds to gather from all areas of the dungeon at the central council table. As the shadows reach the conference chamber, they begin to coalesce into the form of a shadow dragon with huge wings, a long neck, and sharp claws. When he moves, he is difficult to see properly; the edges of his form become blurry and his features disappear. When he stops moving again, however, he becomes clear and sharp.
 
 Unless the process is somehow interrupted, after 30 seconds the winds slowly fade until the air is once again still. Then Oeged, fully materialized, calls out in a deep Elvish voice that can be heard from every corner of the catacombs.
 
@@ -217,7 +217,7 @@ Initially Oeged will assume that the characters are envoys from the elven kingdo
 
 If the characters correct Oeged on anything, they will find him doubtful and stubborn but not impossible to convince. He will become greatly distressed if he learns that most of his people are no longer living, and annoyed if he is told that there was no usurper and that his own kin, united, condemned him to his fate.
 
-Oeged does not recognize or understand that transforming himself into a Shadow Dragon and his councillors into Wraiths could possibly be the cause of his imprisonment. If the characters try to point this out to him, or otherwise mention **Eclipse** magic, he becomes angry. He will talk about the great benefits of using Eclipse magic and the power that can be gained from it, as well as pre-emptively refute arguments against it, as though the characters were his councillors in disagreement. This is an argument he held many times in his life towards the end of his reign, and he knows the script by heart.
+Oeged does not recognize or understand that transforming himself into a shadow dragon and his councillors into wraiths could possibly be the cause of his imprisonment. If the characters try to point this out to him, or otherwise mention **Eclipse** magic, he becomes angry. He will talk about the great benefits of using Eclipse magic and the power that can be gained from it, as well as pre-emptively refute arguments against it, as though the characters were his councillors in disagreement. This is an argument he held many times in his life towards the end of his reign, and he knows the script by heart.
 
 > Listen to me! You have witnessed the power of my magic, and yet you still do not believe? The Eclipse is a gift, granting great power to those who are willing to take it. The druids know this! They harness this true raw power for their own purposes. Why should we not, when our own purposes are far nobler than theirs? My people suffer! They scrape by with very little, living day to day, and you withhold yourselves from the tools you need to save them. You are weak-minded if you cannot see your own stupidity, and weaker still if you would allow this magic to corrupt you like you say would happen. Power is power! We have seen it and used it before, with no ill effects. You must open yourselves to the magic of the Eclipse, or suffer the pain of your own regret! Do you understand?
 
