@@ -6,7 +6,7 @@ Don't have time for all this reading? That's okay! The most important part is th
 
 ## Introduction
 
-**Tuvdak's Gift** is a lighthearted fantasy roleplaying adventure for players of any experience level. It is set on the tropical volcanic island of **Oro-oro-ponoro-poron**, home to the world's largest dragons - and kobold clans! As players, you will all play as kobolds from the **Bekebel** clan, the largest clan of kobolds on the island. The Bekebel clan is ruled by **Babanak the Great**, a powerful sorcerer, and worships **Tuvdak the Magnificent**, an ancient red dragon known across the realm for his supremacy.
+Tuvdak's Gift is a lighthearted fantasy roleplaying adventure for players of any experience level. It is set on the tropical volcanic island of **Oro-oro-ponoro-poron**, home to the world's largest dragons - and kobold clans! As players, you will all play as kobolds from the **Bekebel** clan, the largest clan of kobolds on the island. The Bekebel clan is ruled by **Babanak the Great**, a powerful sorcerer, and worships **Tuvdak the Magnificent**, an ancient red dragon known across the realm for his supremacy.
 
 ## Premise
 
