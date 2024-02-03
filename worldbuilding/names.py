@@ -14,7 +14,7 @@ frequency = {
     "-":21, "'":24
 }
 
-# Generates a new word of approximately the given length
+# generates a new word of approximately the given length
 def getWord(length: int):
     word = [getLetter(letters["any"])]
 
@@ -39,7 +39,7 @@ def getWord(length: int):
 
     return "".join(word)
 
-# Returns a randomly chosen letter from the list based on each letter's frequency
+# returns a randomly chosen letter from the list based on each letter's frequency
 def getLetter(array: []):
     sum = 0
 
@@ -54,7 +54,7 @@ def getLetter(array: []):
         if val <= 0:
             return char
 
-# Fetches new words when prompted by the user
+# fetches new words when prompted by the user
 def main():
     print("Press Enter to get a new word or q to quit. Enter a number to get a word of roughly that length.")
 
