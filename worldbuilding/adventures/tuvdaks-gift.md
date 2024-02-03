@@ -18,7 +18,7 @@ The plan was executed well, and Satasha managed to grab the crown and escape. Ta
 
 The first chapter concludes in the throne room of **Babanak the Great**, where he instructs the characters to seek and retrieve the crown. He also mentions that Paparnad is nowhere to be found - a hint of his guilt.
 
-The second chapter sends the characters on their way to find the crown. They will likely wish to search the **Great Hall** first, where the crown was sent tumbling into a crowd of thousands. There they may find a scrap of fabric - a torn piece of Satasha's Cloak of Invisibility. Knowing that Cloaks of Invisibility are virtually unheard of on Oro-oro-ponoro-poron, the characters should begin to suspect that whoever orchestrated this plot must have significant resources at their disposal and strong connections in high places.
+The second chapter sends the characters on their way to find the crown. They will likely wish to search **Bekebel Great Hall** first, where the crown was sent tumbling into a crowd of thousands. There they may find a scrap of fabric - a torn piece of Satasha's Cloak of Invisibility. Knowing that Cloaks of Invisibility are virtually unheard of on Oro-oro-ponoro-poron, the characters should begin to suspect that whoever orchestrated this plot must have significant resources at their disposal and strong connections in high places.
 
 In their explorations of the citadel's underground, the characters may encounter **Satasha the Runed** on her way to see Babanak. Magically disguised as Paparnad, her goal is to provide him with an alibi. Satasha's lies and misdirection may lead the characters on a wild goose chase before they discover her deception. Alternatively, with the right incentives, she could become a useful ally.
 
@@ -42,7 +42,7 @@ Babanak spits these last words with a startling fury, but he quickly settles.
 
 ### How it happened
 
-Half an hour earlier in **Bekebel Citadel**'s **Great Hall**, thousands of kobolds are gathered to witness **Babanak the Great** reveal the latest gift he made for Tuvdak. Babanak stands at the front of the stage at the head of the hall, with **Lomon the Warrior** and two other soldiers at his side. At the back of the stage stands **Paparnad the Mystic**, and sitting next to him is **Elned the Wise**.
+Half an hour earlier in **Bekebel Great Hall**, thousands of kobolds are gathered to witness **Babanak the Great** reveal the latest gift he made for Tuvdak. Babanak stands at the front of the stage at the head of the hall, with **Lomon the Warrior** and two other soldiers at his side. At the back of the stage stands **Paparnad the Mystic**, and sitting next to him is **Elned the Wise**.
 
 Babanak steps forward. Then, his voice magically amplified, he addresses the massive crowd.
 
@@ -120,7 +120,7 @@ With the help of the **Gorgor Counter**, the characters might find that there is
 
 ### The Great Hall
 
-Since the **Great Hall** stands at a crossroads of many important tunnels beneath the **Bekebel Citadel**, it is normally filled with kobolds running to and fro. However, since the lockdown was imposed on the entire citadel, the Great Hall stands eerily empty, the characters' footsteps echoing beneath the lofty ceiling. To add to the lonely feeling, the rope Taccar swung from still hangs above the stage.
+Since **Bekebel Great Hall** stands at a crossroads of many important tunnels beneath the **Bekebel Citadel**, it is normally filled with kobolds running to and fro. However, since the lockdown was imposed on the entire citadel, the Great Hall stands eerily empty, the characters' footsteps echoing beneath the lofty ceiling. To add to the lonely feeling, the rope Taccar swung from still hangs above the stage.
 
 The characters might start by finding the place where the **Crown of Noruchtohl** landed in the crowd. In fact, just where they would expect the crown to have fallen, the stone is blackened and cracked, as though lightning had struck that spot. The Gorgor Counter clicks when brought close.
 
@@ -128,4 +128,4 @@ From that spot, the nearest exit is directly north. If the characters choose to 
 
 ## Chapter 3 - Pursuit
 
-Either from the notepad in Paparnad's chambers or the scrap of paper in the Great Hall, the characters hopefully now know where Paparnad and Satasha met to hand off the **Crown of Noruchtohl**.
+Either from the notepad in Paparnad's chambers or the scrap of paper in Bekebel Great Hall, the characters hopefully now know where Paparnad and Satasha met to hand off the **Crown of Noruchtohl**.

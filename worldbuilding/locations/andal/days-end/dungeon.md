@@ -2,7 +2,7 @@
 title: The Dungeon of Day's End
 ---
 
-The small town of **Day's End** is hiding an ancient secret; under the **Mayoral Seat** is a set of large chambers, magically sealed since the time of the last elven king, **Oeged Naaftet Oecheisev**. However, the passing of centuries has weakened the magic around the door. Another entrance, hidden under a pond in the **Graveyard**, and has not been touched in centuries.
+The small town of **Day's End** is hiding an ancient secret; under the **Mayoral Seat** is a set of large chambers, magically sealed since the time of the last elven king, **Oeged Naaftet Oecheisev**. However, the passing of centuries has weakened the magic around the door. Another entrance, hidden under a pond in the **Day's End Graveyard**, and has not been touched in centuries.
 
 The dungeon contains more than simple chambers, though. Oeged caused the entire kingdom to collapse by dabbling in dark magic - magic powered by the Eclipse. These practices led to increasingly corrupt decisions within the council, and the magic itself distorted many of the creatures in the forest, creating giant spiders and basilisks. In the end, the king transformed himself into a shadow dragon and claimed the main council chamber as his lair. The other members of the council became wraiths, and haunted the halls of the dungeon for centuries, seeking a way through the seals laid by their own people.
 
@@ -237,4 +237,4 @@ This door, like the door at the other entrance, has been magically sealed to pre
 
 If the door is opened, water surges into the tunnel. Any untethered characters or objects are immediately pushed backwards, and any characters who are attempting to hold on to something must succeed on a check or be pushed back by the water. Additionally, any characters and objects that aren't being worn or carried take damage as though they had fallen 30 feet. The water carries all characters and objects down the tunnel until they hit the balcony railing, tearing it out of the stone and falling 20 feet to the floor of the chamber. The water empties from the pond in 12 seconds. If Oeged has not yet awoken, the water pouring into the council hall will immediately awaken him. See *Oeged's Awakening*. He will also notice the opening and will quickly escape into the wider world.
 
-The pond beyond the door lies at the center of **Day's End**'s **Graveyard**.
+The pond beyond the door lies at the center of the **Day's End Graveyard**.
