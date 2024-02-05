@@ -26,7 +26,7 @@ During this time, the characters may wish to search the private chambers of **Pa
 
 The third chapter details the characters' pursuit of Paparnad through the tunnels and caverns below **Bekebel Citadel**. Along the way they might find hints of Paparnad's passing, and magical tools like the **Gorgor Counter** will help them find their way. As they descend ever deeper, leaving the smooth tunnels behind and entering the natural caves, the characters will have to fight dark monsters and might encounter an unfriendly dragon.
 
-The fourth and final chapter sees the characters finally catch up with Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to **Tuvdak the Magnificent**. Finally, now with a preferable replacement, Tuvdak drops his older crown on the ground in front of the characters as a reward for their tremendous efforts.
+The fourth and final chapter sees the characters finally catch up to Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to **Tuvdak the Magnificent**. Finally, now with a preferable replacement, Tuvdak drops his older crown on the ground in front of the characters as a reward for their tremendous efforts.
 
 ## Chapter 1 - The Gift
 
@@ -97,7 +97,7 @@ Soldier patrols encountering Satasha will think she is Paparnad and will let her
 If the characters find a way to draw the truth from her, they find that Satasha knows much about Paparnad's scheme. If sufficiently pressed, she'll tell the characters:
 
 - She is **Satasha the Runed**, a student of Paparnad's. Paparnad's other student, **Taccar the Arcane**, was the masked kobold who swung from the ceiling in the Great Hall (and who was incinerated by Babanak).
-- She gave the crown to Paparnad at 229 Soot Rd.
+- She gave the crown to Paparnad at 229 Soot road.
 - Paparnad intends to leave **Bekebel Citadel** via a little-known exit from a natural cave deep underground.
 - Paparnad wants to take the crown into the jungle and magically destroy it in the name of the black dragon **Ice**, proving his devotion and his worth.
 - Satasha wore a Cloak of Invisibility as she fled **Bekebel Great Hall**. She gave the cloak to Paparnad along with the crown.
@@ -139,4 +139,29 @@ If the characters visit Paparnad's workshop, they can use the Gorgor Counter to 
 
 ## Chapter 3 - Pursuit
 
-Either from the notepad in Paparnad's chambers or from their encounter with Satasha, the characters hopefully now know where Paparnad and Satasha met to hand off the **Crown of Noruchtohl**.
+Either from the notepad in Paparnad's chambers or from their encounter with Satasha, the characters hopefully now know where Paparnad and Satasha met to hand off the **Crown of Noruchtohl**. They might also have an idea of Paparnad's motives and should be confident that he is the culprit.
+
+### 229 Soot road
+
+The first stage of the pursuit is to find 229 Soot road in the labyrinth of tunnels beneath **Bekebel Citadel**. Soot road is part of the citadel's network of heavily industrial alleys, far beneath the surface. Characters that have some experience either in patrolling, metalworking, or tunneling will likely know where Soot road is and will know how to get there. Other characters might not have heard of it before, since most inhabitants of Bekebel Citadel rarely visit its deeper sections. However, it is not difficult to ask for directions from a patrol, and any soldiers will be able to tell the characters where Soot road is.
+
+The building located at 229 Soot road is an abandoned forge. Everything except the anvil, the forge itself, and the heavy workbench has been taken away. The building hasn't been used for any real work in years, but it has a secret that few know: behind the workbench is a rough tunnel leading down into the rock. The tunnel is the reason Paparnad chose this location to hand off the crown, as he could quickly slip away without any risk of being seen. Paparnad did not tell anyone about the secret tunnel, including Satasha - she thinks he must have left by the building's only door.
+
+When the party arrives, the single room is empty save for the anvil, forge, and workbench. Among all the dust and soot on the floor, it is easy to identify the recent footprints of Paparnad and Satasha. Additionally, the characters might be able to discern that while two sets of footprints can be seen entering the building, only one leaves - however, this may be obscured if the characters walked back and forth through the doorway before investigating the tracks. It also is not difficult to find the tunnel if the characters think to look behind the workbench, but it cannot be seen from a quick visual scan - some investigation is required.
+
+The tunnel itself was roughly hewn from the rock by the former owner of the forge, in order to satisfy her paranoia. As she aged, her forge fell into decrepitude and eventually was shut down. Now, the building remains abandoned. The tunnel descends steeply from its beginning in the forge wall as it winds haphazardly to a lower level of the citadel. The walls are rough and any loose fabric constantly snags on splinters and ridges. In fact, with the help of the **Gorgor Counter**, the characters might find another scrap of Paparnad's Cloak of Invisibility caught on a spike of rock. This should prove to them that they are on the right trail.
+
+The tunnel eventually flattens and emerges from the wall of a narrow alley in the lowest part of the citadel. Only grizzled rockbreakers and the most streetwise of urchins are at all familiar with these roads, and they are almost entirely uninhabited. At this point the characters must somehow decide which of two ways to go. To the left, the alley slopes up gently and eventually intersects with a slightly larger street. To the right, the alley slopes down and curves out of sight. Paparnad went right, towards the deep natural caves. A creative solution to choose the direction is encouraged, but here are some options:
+
+- The players might reason that Paparnad would wish to avoid being seen, and would therefore go right to avoid crossing inhabited or patrolled streets
+- If the Satasha told the characters about Paparnad's hidden exit tunnel in "a natural cave deep underground", they might reason that he would have to go further down and would therefore go right
+- With a careful use of their **Gorgor Counter**, the characters might be able to detect slightly stronger magic to the right, indicating that the **Crown of Noruchtohl** is in that direction
+- The characters might be able to use divination magic to determine where Paparnad and the crown can be found
+
+Ultimately, it should be well within the characters means to reach the correct conclusion without splitting the party.
+
+### The caves of the rockbreaker
+
+#### Imbur the Crowned
+
+## Chapter 4 - Grizgith's Gap
