@@ -131,7 +131,7 @@ The book is a detailed historical account about every dragon that has lived on *
 
 The study includes a writing desk and two bookshelves. On the writing desk is an open book and a set of common writing utensils, as well as some special inks needed by wizards to properly record spells. The shelves contain a small variety of books, mostly about different practices of magic and methods of enchanting magical items.
 
-The open book on the desk is a partial record of all magical artifacts created over the centuries, whether by kobolds or dragons. When the characters find it, it is open to a page summarizing the properties of various magical crowns. It explains that crowns typically bestow mental powers to their users. As an example, the book describes the **Crown of Dominion** as an ancient artifact that would grant the wearer the ability to control the minds of others. Alternatively, a crown called **Citherei** granted its wearer full clarity and independence of mind, blocking any attempts to magical influence the wearer's thoughts.
+The open book on the desk is a partial record of all magical artifacts created over the centuries, whether by kobolds or dragons. When the characters find it, it is open to a page summarizing the properties of various magical crowns. It explains that crowns typically bestow mental powers to their users. As an example, the book describes the **Crown of Dominion**, an ancient artifact that would grant the wearer the ability to control the minds of others. Alternatively, a crown called **Citherei** granted its wearer full clarity and independence of mind, blocking any attempts to magical influence the wearer's thoughts.
 
 If the characters examine the contents of the bookshelves, they find that an entire section is devoted to Paparnad's research notes. Here he writes detailed descriptions of all of his work, including studies of ancient texts, experiments, and recent successes. The latest notes, dated over the past month, describe his recent progress in the creation of a Cloak of Invisibility. The final and most recent page states that the cloak is almost ready for use - it makes the wearer fully transparent, but a faint shimmer in the air around them would give away their presence to a careful observer.
 
@@ -151,7 +151,7 @@ When the party arrives, the single room is empty save for the anvil, forge, and 
 
 The tunnel itself was roughly hewn from the rock by the former owner of the forge, in order to satisfy her paranoia. As she aged, her forge fell into decrepitude and eventually was shut down. Now, the building remains abandoned. The tunnel descends steeply from its beginning in the forge wall as it winds haphazardly to a lower level of the citadel. The walls are rough and any loose fabric constantly snags on splinters and ridges. In fact, with the help of the **Gorgor Counter**, the characters might find another scrap of Paparnad's Cloak of Invisibility caught on a spike of rock. This should prove to them that they are on the right trail.
 
-The tunnel eventually flattens and emerges from the wall of a narrow alley in the lowest part of the citadel. Only grizzled rockbreakers and the most streetwise of urchins are at all familiar with these roads, and they are almost entirely uninhabited. At this point the characters must somehow decide which of two ways to go. To the left, the alley slopes up gently and eventually intersects with a slightly larger street. To the right, the alley slopes down and curves out of sight. Paparnad went right, towards the deep natural caves. A creative solution to choose the direction is encouraged, but here are some options:
+The tunnel eventually flattens and emerges from the wall of a narrow alley in the lowest part of the citadel. Only grizzled rockbreakers and the most streetwise of urchins are at all familiar with these roads, and they are almost entirely uninhabited. At this point the characters must somehow decide which of two ways to go. To the left, the alley slopes up gently and eventually intersects with a slightly larger street. To the right, the alley slopes down and curves out of sight. Paparnad went right, toward **Rockbreaker Grotto**. A creative solution to choose the direction is encouraged, but here are some options:
 
 - The players might reason that Paparnad would wish to avoid being seen, and would therefore go right to avoid crossing inhabited or patrolled streets
 - If the Satasha told the characters about Paparnad's hidden exit tunnel in "a natural cave deep underground", they might reason that he would have to go further down and would therefore go right
@@ -160,8 +160,28 @@ The tunnel eventually flattens and emerges from the wall of a narrow alley in th
 
 Ultimately, it should be well within the characters means to reach the correct conclusion without splitting the party.
 
-### The caves of the rockbreaker
+### Rockbreaker Grotto
+
+**Rockbreaker Grotto** is a natural cave in the bowels of **Oro-oro-ponoro-poron**, where magma flows unhindered and dark monsters play predator and prey. Rockbreaker Grotto was not always connected to **Bekebel Citadel** - only recent tunneling developments have opened these passages. Throughout the caverns, magma flows cast an uneven light on massive stalagmites and dark openings. At first glance, the convoluted network of chambers seems to be altogether labyrinthine - however, the passages quickly converge and it is well within any adventurer's capabilities to keep their heading.
+
+As **Paparnad the Mystic** passed through here not long before the characters arrived, he raised a bit of a stir among the wildlife in the caverns. As the characters move among the stalagmites and navigate around steep ledges, they may encounter hungry dark-dwelling creatures. Further traces of Paparnad's passing include more torn scraps of his Cloak of Invisibility - the delicate fabric tore in many places as he attempted to move through the stalagmites, leaving behind a trail that is best followed with the aid of a Gorgor Counter.
 
 #### Imbur the Crowned
+
+**Rockbreaker Grotto** is also home to a young red dragon known as **Imbur the Crowned**. Having made his lair in a small recess near a magma flow, Imbur never leaves his home except to hunt stonebeaks in the jungle. Like any properly avaricious dragon, Imbur keeps a small hoard of gold and other minor treasures - including his most prized possession, the **Crown of Ingenuity**. The Crown of Ingenuity is a minor artifact originally created by **Babanak the Great** as a gift to **Tuvdak the Magnificent**. Through a series of unusual misadventures, the crown found its way into Imbur's grasp, deep in Rockbreaker Grotto. The crown lends Imbur improved creativity and originality, both bolstering his magic and empowering his wild fantasies.
+
+Now, Imbur collects whatever small treasures he can scavenge in the jungle to add to his hoard. He gleefully intimidates **Lukurru** kobolds but avoids the **Bekebel**, knowing that his proximity to their citadel would put him at great risk if they took too much notice of his activities.
+
+When the characters arrive, Imbur is just waking from a deep slumber. Paparnad's careless passage woke him, but he did not immediately rise. As the characters pass near his lair, he emerges and addresses them in a loud rumbling voice.
+
+> I bid you bear your cacophonous footsteps more lightly, little Bekebels. You have awoken Imbur the Crowned from his slumber - and on the first day of winter, no less! I will hear your defense, little Bekebels, for you are hereby charged with trespass.
+
+The first glimpse the characters catch of Imbur is of the front of his nose as he extends his long neck over a magma flow. As he brings the rest of his body out of his hollow, his large wings spread out behind him, reflecting the soft orange glow onto the ground around his chest. His long snout extends outwards from his scaled face, and his yellow eyes lurk beneath the beautiful golden bands of the **Crown of Ingenuity**.
+
+> You passed by here not two hundred heartbeats hence - don't think I didn't hear your ruckus! And now you return, seemingly to taunt me. Why are you here? Why are *you* in Rockbreaker Grotto?
+
+The characters should recognize that fighting any dragon, even one as young as Imbur, is far beyond their abilities. Instead, they should try to convice Imbur to let them pass. Despite his initial intimidation tactics, Imbur has no intention of killing the characters and will only fight them if they make the first move. He is, however, interested in their treasures and will try to persuade them to give him something. He is easily distracted by promises of great treasures and loves to imagine himself in possession of epic wealth. His greatest fear is that the **Bekebel** clan will someday decide to expand **Bekebel Citadel** into **Rockbreaker Grotto**, forcing him to find a new lair.
+
+Imbur assumes it was the characters he heard pass through the cavern earlier, but is was actually Paparnad. If the characters make this clear to Imbur and ask him pointed questions, he can point them in Paparnad's direction.
 
 ## Chapter 4 - Grizgith's Gap
