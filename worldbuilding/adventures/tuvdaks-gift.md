@@ -26,7 +26,7 @@ During this time, the characters may wish to search the private chambers of **Pa
 
 The third chapter details the characters' pursuit of Paparnad through the tunnels and caverns below **Bekebel Citadel**. Along the way they might find hints of Paparnad's passing, and magical tools like the **Gorgor Counter** will help them find their way. As they descend ever deeper, leaving the smooth tunnels behind and entering the natural caves, the characters will have to fight dark monsters and might encounter an unfriendly dragon.
 
-The fourth and final chapter sees the characters finally catch up to Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to **Tuvdak the Magnificent**. Finally, now with a preferable replacement, Tuvdak drops his older crown on the ground in front of the characters as a reward for their tremendous efforts.
+The fourth and final chapter sees the characters finally catch up to Paparnad above a deep chasm flooded with magma. The climactic battle hopefully ends with the characters defeating Paparnad and retrieving the crown. The chapter ends as the characters return with the crown and personally present it to **Tuvdak the Magnificent**. Now, having received a preferable replacement, Tuvdak drops his older crown on the ground in front of the characters as a reward for their tremendous efforts.
 
 ## Chapter 1 - The Gift
 
@@ -182,6 +182,38 @@ The first glimpse the characters catch of Imbur is of the front of his nose as h
 
 The characters should recognize that fighting any dragon, even one as young as Imbur, is far beyond their abilities. Instead, they should try to convice Imbur to let them pass. Despite his initial intimidation tactics, Imbur has no intention of killing the characters and will only fight them if they make the first move. He is, however, interested in their treasures and will try to persuade them to give him something. He is easily distracted by promises of great treasures and loves to imagine himself in possession of epic wealth. His greatest fear is that the **Bekebel** clan will someday decide to expand **Bekebel Citadel** into **Rockbreaker Grotto**, forcing him to find a new lair.
 
-Imbur assumes it was the characters he heard pass through the cavern earlier, but is was actually Paparnad. If the characters make this clear to Imbur and ask him pointed questions, he can point them in Paparnad's direction.
+Imbur assumes it was the characters he heard pass through the cavern earlier, but it was actually Paparnad. If the characters make this clear to Imbur and ask him pointed questions, he can point them in Paparnad's direction.
 
 ## Chapter 4 - Grizgith's Gap
+
+Not far beyond Imbur's lair lies **Grizgith's Gap**, a large cavern named for the legendary hero **Grizgith the Rockbreaker**. The only entrance into **Grizgith's Gap** from **Rockbreaker Grotto** is a small natural tunnel. When the characters pass through the tunnel, they find themselves on a narrow ledge four feet wide overhanging a gaping chasm 50 feet across. 30 feet below, magma flows between the stone walls of the cavern, emitting tremendous heat and a bright orange light as it bubbles out of an opening in the wall. To the right, the cavern continues for 200 feet as it slopes downward, eventually closing around the magma flow. To the left, the cavern ends at a vertical wall 50 feet from the entrance. The ledge which the characters are standing on continues around the left wall of the chasm, wrapping around to the other side where a similar tunnel directly across from the entrance leads into the jungle beyond. As the characters arrive, the sun shines directly through the opening as it descends towards the horizon.
+
+### Meeting Paparnad
+
+Also seen upon the character's arrival is Paparnad, wearing what remains of his Cloak of Invisibility and carrying a large sack containing the **Crown of Noruchtohl**. He is carefully making his way towards the exit, stepping slowly and hugging the wall. Though he is making slow progress, he is already two thirds of the way around the ledge. He does not immediately notice the characters entering the cavern, but if they make noise or follow him around the ledge, he'll spot them. The characters can safely walk around the ledge twice as fast as Paparnad can.
+
+During the encounter, roleplay Paparnad with the following information. Note that he will not necessarily tell the characters everything right away - however, until the fight starts going badly for him, he believes his scheme cannot fail.
+
+- Paparnad sought **Ice**'s blessing independently of his arcane studies. For many years, he has been reading every text about Ice he could find. He has read many tales of individuals gaining remarkable powers from Ice, and many more accounts of failed attempts. Paparnad thinks himself worthy, however, due to his notable magical abilities. Knowing that he would need an artifact of unusual power to impress Ice, he chose to steal the **Crown of Noruchtohl**, which he helped create. The crown is one of the most highly magical artifacts ever created in **Bekebel Citadel**, and Paparnad is planning to destroy the crown in Ice's name. Performing the act at midnight during the longest night of the year will make his scheme more likely to succeed.
+- His plan to steal the crown involved his two students, **Taccar the Arcane** and **Satasha the Runed**. Taccar swung from a rope in **Bekebel Great Hall** and knocked the crown into the crowd, where Satasha grabbed it and fled under the cover of the Cloak of Invisibility. He has been planning the theft with their help for several months, but he has been teaching them about Ice for much longer to ensure their loyalty. He promised them a share of Ice's power - however, recognizing that it may be impossible to divide Ice's blessing among them, he further guaranteed that they would be considered his equals in the reformed Bekebel clan. He means to uphold his promises.
+- Paparnad is aware that Tuvdak will likely destroy much of Bekebel Citadel when he receives no gift. With the power he expects to gain from Ice, Paparnad plans to rescue the clan from Tuvdak and drive him away. Then Paparnad hopes to make Ice the target of the clan's worship and take over from **Babanak the Great** as the clans's leader.
+
+Paparnad will not attack the characters unless they provoke or threaten him. If they do, he will try to continue towards the exit while he fends off the characters with his magic spells. He is a very adept wizard, so he has considerably more powerful magical abilities than any of the characters. In a fight, he should be almost evenly matched with them.
+
+### Meeting Tuvdak
+
+Hopefully, the characters will somehow reclaim the crown from Paparnad. When they do, they face the final challenge of delivering it to **Tuvdak the Magnificent** at the surface of the citadel. By this time, the sun no longer shines through the exit tunnel and has nearly set completely. The quickest path the characters can take to the surface is to go up the same way they came down, as long as they can remember the full route. Fortunately, they will pass many familiar landmarks on the return journey - **Imbur the Crowned**, who may still be near his lair; the stalagmite caverns in **Rockbreaker Grotto**; the rough tunnels at the bottom of **Bekebel Citadel**; the narrow passage leading back up to 229 Soot road; and finally the winding streets and alleys all the way up to the Great Hall.
+
+Finding the Great Hall still vacant, the characters must hurry up to the large open square above it where Tuvdak is just now descending from the sky. Surrounded by a large crowd, **Babanak the Great** is kneeling on the ground in front of Tuvdak, a solemn expression on his face. As the characters emerge with the **Crown of Noruchtohl** in hand, Babanak visibly sighs in relief but quickly regains his composure. As Tuvdak lands, Babanak greets him.
+
+> Oh Tuvdak the Magnificent, king of the caldera! We have many reasons to worship your greatness on any day. But today is a special day! Exactly 333 years ago you defeated **Sarvol the Peerless** in an epic battle for her lair. To mark this special anniversary we will give to you a gift *greater than any that has ever been given*! Behold the **Crown of Noruchtohl**!
+
+Babanak then indicates the crown. The gathered kobolds cheer wildly, thrilled to witness such a momentous occasion. Without a word, Tuvdak delicately takes the crown in his talons. He inspects it for a moment, then reaches up to his head with his other claw and knocks his current crown to the ground, where it tumbles to rest at the characters' feet. He places the **Crown of Noruchtohl** on his head and looks thoughtful for a moment. Then the edges of his mouth widen to a large grin. Then he speaks for the first time, with a deep and ponderous voice.
+
+> Babanak! You never fail to impress.
+
+Tuvdak looks around at the crowd. As his piercing gaze passes over the characters, he continues, pausing between every word:
+
+> **Bekebel** never fails to impress.
+
+With that, **Tuvdak the Magnificent** extends his massive wings. He pushes off from the ground and soars into the air, ascending towards the caldera of **Oro-oro-ponoro-poron**.
