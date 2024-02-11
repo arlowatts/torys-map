@@ -34,7 +34,7 @@ Whatever their loyalties, all the kobold clans are united in reverence (and fear
 
 The **Bekebel** clan is the largest kobold clan on Oro-oro-ponoro-poron. They inhabit **Bekebel Citadel** and are led by **Babanak the Great**. The clan worships **Tuvdak the Magnificent**, regularly offering him gifts befitting his title to add to his hoard. The Bekebel are the sworn enemies of the Lukurru.
 
-See [Bekebel](bekebel/index.md).
+See [Bekebel](bekebel.md).
 
 #### Lukurru
 

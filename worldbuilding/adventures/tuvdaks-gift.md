@@ -6,7 +6,7 @@ Tuvdak's Gift is a lighthearted standalone adventure designed to be completed in
 
 For additional information about the setting of this adventure, see also:
 - [Oro-oro-ponoro-poron](../locations/oro-oro-ponoro-poron/index.md)
-- [Bekebel](../locations/oro-oro-ponoro-poron/bekebel/index.md)
+- [Bekebel](../locations/oro-oro-ponoro-poron/bekebel.md)
 
 ## Overview
 
