@@ -24,8 +24,17 @@ def main():
 
         content += "- " + key + "\n"
 
-        for entry in sorted(index[key]):
-            content += "  - " + entry + "\n"
+        for path in sorted(index[key]):
+            title = getFileTitle(path)
+
+            if title in index[key][path]:
+                content += "  - " + index[key][path][title] + "\n"
+                del index[key][path][title]
+            else:
+                content += "  - " + title + "\n"
+
+            for title in index[key][path]:
+                content += "    - " + index[key][path][title] + "\n"
 
     with open("index.md", "w") as file:
         file.write(content)
@@ -45,25 +54,40 @@ def read(dirname: str, index: dict):
 def getFileEntries(path: str, index: dict):
     with open(path) as file:
         # split the file along bold indicators (two or more *)
-        content = re.split("(\*\*+)", file.read())
+        content = re.split("\*\*+", file.read())
 
-    # index the phrases inside the bold indicators
-    # every fourth element in the split file is in bold
-    for i in range(2, len(content), 4):
-        key = content[i].strip()
-        urlKey = "index-" + re.sub("[^0-9a-zA-Z]", "-", key.lower())
+    headerTitle = getFileTitle(path)
+    urlKey = ""
 
-        if not key in index:
-            index[key] = []
+    # index the phrases inside the bold indicators, which are all odd-indexed
+    # also track the last seen header in urlKey for jumplinking
+    for i in range(len(content)):
+        # if the current phrase is bolded, index it
+        if (i % 2 != 0):
+            key = content[i].strip()
 
-        link = "[" + getFileTitle(path) + "](" + path + "#" + urlKey + ")"
+            # add the phrase to the index if it isn't there already
+            if not key in index:
+                index[key] = {}
 
-        if not link in index[key]:
-            index[key].append(link)
-            content[i] = "<span id=\"" + urlKey + "\">" + content[i] + "</span>"
+            # add the current path to the phrase if it isn't there already
+            if not path in index[key]:
+                index[key][path] = {}
 
-    with open(path, "w") as file:
-        file.write("".join(content))
+            # assemble the jumplink to the current location
+            link = "[" + headerTitle + "](" + path + urlKey + ")"
+
+            if not link in index[key][path]:
+                index[key][path][headerTitle] = link
+
+        # otherwise, check the phrase for the latest title
+        else:
+            titleIndex = content[i].rfind("# ")
+
+            # if a title is found, get the name of the title and format it
+            if (titleIndex > 0):
+                headerTitle = content[i][titleIndex + 1 : content[i].find("\n", titleIndex)].strip()
+                urlKey = "#" + re.sub("[^0-9a-zA-Z\-]", "", re.sub(" ", "-", headerTitle.lower()))
 
 # get the title from the contents of the file
 # if no title is defined in the file, return the filename
