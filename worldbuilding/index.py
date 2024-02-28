@@ -24,17 +24,8 @@ def main():
 
         content += "- " + key + "\n"
 
-        for path in sorted(index[key]):
-            title = getFileTitle(path)
-
-            if title in index[key][path]:
-                content += "  - " + index[key][path][title] + "\n"
-                del index[key][path][title]
-            else:
-                content += "  - " + title + "\n"
-
-            for title in index[key][path]:
-                content += "    - " + index[key][path][title] + "\n"
+        for entry in index[key]:
+            content += "  - " + entry + "\n"
 
     with open("index.md", "w") as file:
         file.write(content)
@@ -52,33 +43,31 @@ def read(dirname: str, index: dict):
 
 # get the index entries for this path and add them to the given dict
 def getFileEntries(path: str, index: dict):
+    # split the file along bold indicators (two or more *)
     with open(path) as file:
-        # split the file along bold indicators (two or more *)
         content = re.split("\*\*+", file.read())
 
-    headerTitle = getFileTitle(path)
+    pageTitle = getFileTitle(path)
+    headerTitle = ""
     urlKey = ""
 
     # index the phrases inside the bold indicators, which are all odd-indexed
     # also track the last seen header in urlKey for jumplinking
     for i in range(len(content)):
-        # if the current phrase is bolded, index it
+        # if the current phrase is a bolded phrase, index it
         if (i % 2 != 0):
             key = content[i].strip()
 
             # add the phrase to the index if it isn't there already
             if not key in index:
-                index[key] = {}
-
-            # add the current path to the phrase if it isn't there already
-            if not path in index[key]:
-                index[key][path] = {}
+                index[key] = []
 
             # assemble the jumplink to the current location
-            link = "[" + headerTitle + "](" + path + urlKey + ")"
+            link = "[" + pageTitle + headerTitle + "](" + path + urlKey + ")"
 
-            if not link in index[key][path]:
-                index[key][path][headerTitle] = link
+            # add the current path to the phrase if it isn't there already
+            if not link in index[key]:
+                index[key].append(link)
 
         # otherwise, check the phrase for the latest title
         else:
@@ -86,8 +75,14 @@ def getFileEntries(path: str, index: dict):
 
             # if a title is found, get the name of the title and format it
             if (titleIndex > 0):
+                # get the header title
                 headerTitle = content[i][titleIndex + 1 : content[i].find("\n", titleIndex)].strip()
+
+                # convert the header title to a url format with a separator
                 urlKey = "#" + re.sub("[^0-9a-zA-Z\-]", "", re.sub(" ", "-", headerTitle.lower()))
+
+                # add a separator to the title
+                headerTitle = ": " + headerTitle
 
 # get the title from the contents of the file
 # if no title is defined in the file, return the filename
