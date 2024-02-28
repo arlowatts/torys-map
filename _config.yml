@@ -1,5 +1,7 @@
 theme: minima
 
+permalink: pretty
+
 header_pages:
   - worldbuilding/contents.md
   - worldbuilding/index.md
