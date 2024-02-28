@@ -1,6 +1,6 @@
 theme: minima
 
-permalink: /:path/:title/
+permalink: /:path/:basename/
 
 header_pages:
   - worldbuilding/contents.md
