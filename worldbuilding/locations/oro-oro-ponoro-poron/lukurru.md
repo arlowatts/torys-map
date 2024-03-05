@@ -8,17 +8,17 @@ The **Lukurru** clan dwells in the thick jungle on **Oro-oro-ponoro-poron**, occ
 
 **Woodrock** is a village at the heart of the Lukurru lands. Though it is the largest of the Lukurru villages, it is small compared to **Bekebel Citadel** and is barely fortified. Nonetheless, it has never been taken by invaders thanks to the unrivaled fighting prowess of the clan's soldiers.
 
-## Highward
+## Highvine Watch
 
-**Highward** is a tall standing stone tucked away deep in the jungle. It is the seat of **Irvini the Seer**, leader of the Lukurru, who oversees the clan's activities from afar with powerful divination magic. Highward is entirely undefended except by a small staff of seasoned warriors, but it is hidden from sight by an illusion spell cast on the site once every hundred years.
+**Highvine Watch** is a tall standing stone tucked away deep in the jungle. It is the seat of **Irvini the Seer**, leader of the Lukurru, who oversees the clan's activities from afar with powerful divination magic. Highvine Watch is entirely undefended except by a small staff of seasoned warriors, but it is hidden from sight by an illusion spell cast on the site once every hundred years.
 
 ## Members of the Clan
 
 ### Irvini the Seer
 
-**Irvini the Seer** is the leader of the **Lukurru** clan. She watches over the clan from her seat at **Highward** and regularly communes with **Mosha the All-knowing**. Like Mosha, Irvini forcefully drives the clan to success. Using divination magic, Mosha and Irvini can identify threats to the clan, whether external or internal, before they become a danger.
+**Irvini the Seer** is the leader of the **Lukurru** clan. She watches over the clan from her seat at **Highvine Watch** and regularly communes with **Mosha the All-knowing**. Like Mosha, Irvini forcefully drives the clan to success. Using divination magic, Mosha and Irvini can identify threats to the clan, whether external or internal, before they become a danger.
 
-Irvini is miserly with her words and expressions. Accustomed to solitary rumination at Highward, she has a tendency to slip out of conversations by simply not responding. She is, however, extremely attentive and rarely misses a single detail.
+Irvini is miserly with her words and expressions. Accustomed to solitary rumination at Highvine Watch, she has a tendency to slip out of conversations by simply not responding. She is, however, extremely attentive and rarely misses a single detail.
 
 ### Other notable individuals
 
