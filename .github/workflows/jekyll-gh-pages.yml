@@ -28,10 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build Index
-        run: python worldbuilding/index.py
-      - name: Build Table of Contents
-        run: python worldbuilding/contents.py
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Build with Jekyll

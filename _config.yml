@@ -1,8 +1,3 @@
 theme: minima
 
 permalink: /:path/:basename/
-
-header_pages:
-  - worldbuilding/contents.md
-  - worldbuilding/index.md
-  - mapping/index.html
