@@ -51,6 +51,7 @@ function main() {
 
     programInfo.stars.uniformLocations = {
         cameraPosition: gl.getUniformLocation(starsProgram, "uCameraPosition"),
+        lightDirection: gl.getUniformLocation(starsProgram, "uLightDirection"),
         viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
         lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
     };

@@ -7,6 +7,7 @@ float sdf(vec4);
 float hash(uint);
 
 uniform vec4 uCameraPosition;
+uniform vec4 uLightDirection;
 uniform mat4 uViewDirectionMatrix;
 uniform mat4 uLightDirectionMatrix;
 
@@ -66,7 +67,6 @@ void main() {
     ray = normalize(ray);
 
     vec4 pos = uCameraPosition;
-    // vec4 pos = vec4(0.0, 10.0, 0.0, 0.0);
     float distance = sdf(pos);
 
     // march the ray
@@ -75,8 +75,17 @@ void main() {
         distance = sdf(pos);
     }
 
+    // if it hit the surface, compute color and shadow
     if (distance <= minDistance) {
-        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        // the point on the unit circle nearest the surface point
+        vec4 pointXZ = normalize(vec4(pos.x, 0.0, pos.z, 0.0));
+
+        // the basic (unaltered) surface normal
+        vec4 normal = normalize(pos - pointXZ);
+
+        float val = dot(normal, uLightDirection);
+
+        fragColor = vec4(val, val, val, 1.0);
     }
 }
 

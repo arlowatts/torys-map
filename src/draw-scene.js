@@ -13,6 +13,7 @@ export function drawStars() {
 
     // set the shader uniforms
     gl.uniform4fv(uniforms.cameraPosition, getCameraPosition());
+    gl.uniform4fv(uniforms.lightDirection, light.direction);
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, light.directionMatrix);
 
