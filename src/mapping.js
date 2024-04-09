@@ -54,6 +54,10 @@ function main() {
         lightDirection: gl.getUniformLocation(starsProgram, "uLightDirection"),
         viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
         lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
+        terrainResolution: gl.getUniformLocation(starsProgram, "uTerrainResolution"),
+        terrainHeightScale: gl.getUniformLocation(starsProgram, "uTerrainHeightScale"),
+        terrainNormalResolution: gl.getUniformLocation(starsProgram, "uTerrainNormalResolution"),
+        time: gl.getUniformLocation(starsProgram, "uTime"),
     };
 
     // initialize the data buffers for the scene

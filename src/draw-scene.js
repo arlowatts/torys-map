@@ -16,6 +16,10 @@ export function drawStars() {
     gl.uniform4fv(uniforms.lightDirection, light.direction);
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, light.directionMatrix);
+    gl.uniform1f(uniforms.terrainResolution, view.zoom * torus.terrainResolution);
+    gl.uniform1f(uniforms.terrainHeightScale, getTerrainHeightScale());
+    gl.uniform1f(uniforms.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
+    gl.uniform1f(uniforms.time, view.time);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.stars.vertexCount);
