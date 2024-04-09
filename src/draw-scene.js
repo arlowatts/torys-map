@@ -12,6 +12,7 @@ export function drawStars() {
     let uniforms = programInfo.stars.uniformLocations;
 
     // set the shader uniforms
+    gl.uniform4fv(uniforms.cameraPosition, getCameraPosition());
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, light.directionMatrix);
 
@@ -105,6 +106,23 @@ function getProjectionMatrix() {
     mat4.perspective(projectionMatrix, fov, view.aspect, zNear, zFar);
 
     return projectionMatrix;
+}
+
+function getCameraPosition() {
+    const smallRotation = mat4.create();
+    mat4.rotate(smallRotation, smallRotation, -view.theta, [1.0, 0.0, 0.0]);
+
+    const largeRotation = mat4.create();
+    mat4.rotate(largeRotation, largeRotation, -view.phi, [0.0, 1.0, 0.0]);
+
+    const cameraPosition = vec4.create();
+
+    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -1.25, 0.0]);
+    vec4.transformMat4(cameraPosition, cameraPosition, smallRotation);
+    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -1.0, 0.0]);
+    vec4.transformMat4(cameraPosition, cameraPosition, largeRotation);
+
+    return cameraPosition;
 }
 
 // create a view matrix to define the camera's position and angle

@@ -50,6 +50,7 @@ function main() {
     };
 
     programInfo.stars.uniformLocations = {
+        cameraPosition: gl.getUniformLocation(starsProgram, "uCameraPosition"),
         viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
         lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
     };
@@ -111,7 +112,7 @@ function render(now) {
 
     // render the scene
     drawStars();
-    drawTorus();
+    // drawTorus();
 
     requestAnimationFrame(render);
 }

@@ -3,8 +3,10 @@ import { stars, light, view } from "../properties.js";
 export const source = `#version 300 es
 precision mediump float;
 
+float sdf(vec4);
 float hash(uint);
 
+uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
 uniform mat4 uLightDirectionMatrix;
 
@@ -22,6 +24,9 @@ vec3 sunColor = vec3(${light.sunColor});
 
 float aspect = float(${view.aspect});
 float cameraDistance = float(${view.cameraDistance});
+
+float minDistance = 0.001;
+float maxDistance = 100.0;
 
 void main() {
     vec4 point = pointPosition;
@@ -51,6 +56,35 @@ void main() {
     else {
         fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
+
+    // create the raymarching ray
+    vec4 ray = pointPosition;
+    ray.x *= aspect;
+    ray.z = cameraDistance;
+    ray = inverse(uViewDirectionMatrix) * ray;
+    ray.w = 0.0;
+    ray = normalize(ray);
+
+    vec4 pos = uCameraPosition;
+    // vec4 pos = vec4(0.0, 10.0, 0.0, 0.0);
+    float distance = sdf(pos);
+
+    // march the ray
+    while (distance > minDistance && distance < maxDistance) {
+        pos += distance * ray;
+        distance = sdf(pos);
+    }
+
+    if (distance <= minDistance) {
+        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+}
+
+// returns the shortest distance from the point x to the scene
+float sdf(vec4 r) {
+    float d = sqrt(r.x * r.x + r.z * r.z) - 1.0;
+
+    return sqrt(d * d + r.y * r.y) - 0.25;
 }
 
 // returns a value between 0 and 1
