@@ -83,7 +83,7 @@ void main() {
         // the basic (unaltered) surface normal
         vec4 normal = normalize(pos - pointXZ);
 
-        float val = dot(normal, uLightDirection);
+        float val = -dot(normal, uLightDirection);
 
         fragColor = vec4(val, val, val, 1.0);
     }

@@ -111,10 +111,10 @@ function getProjectionMatrix() {
 
 function getCameraPosition() {
     const smallRotation = mat4.create();
-    mat4.rotate(smallRotation, smallRotation, -view.theta, [1.0, 0.0, 0.0]);
+    mat4.rotate(smallRotation, smallRotation, view.theta, [1.0, 0.0, 0.0]);
 
     const largeRotation = mat4.create();
-    mat4.rotate(largeRotation, largeRotation, -view.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(largeRotation, largeRotation, view.phi, [0.0, 1.0, 0.0]);
 
     const cameraPosition = vec4.create();
 
@@ -140,8 +140,8 @@ function getViewMatrix() {
 // create a view matrix to define only the camera's angle for the stars
 function getViewDirectionMatrix() {
     const viewDirectionMatrix = mat4.create();
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.theta, [1.0, 0.0, 0.0]);
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.theta, [1.0, 0.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.phi, [0.0, 1.0, 0.0]);
 
     return viewDirectionMatrix;
 }
