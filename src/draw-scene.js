@@ -1,5 +1,4 @@
 import { gl, programInfo, buffer, torus, view, light } from "./properties.js";
-import * as properties from "./properties.js";
 
 // draw the scene
 export function drawScene() {
@@ -56,22 +55,11 @@ function getCameraPosition() {
     return cameraPosition;
 }
 
-// create a view matrix to define the camera's position and angle
-function getViewMatrix() {
-    const viewMatrix = mat4.create();
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torus.smallRadius - Math.max(view.zoom, properties.MIN_CAMERA_DISTANCE)]);
-    mat4.rotate(viewMatrix, viewMatrix, view.theta, [1.0, 0.0, 0.0]);
-    mat4.translate(viewMatrix, viewMatrix, [0.0, 0.0, -torus.largeRadius]);
-    mat4.rotate(viewMatrix, viewMatrix, view.phi, [0.0, 1.0, 0.0]);
-
-    return viewMatrix;
-}
-
 // create a view matrix to define only the camera's angle for the stars
 function getViewDirectionMatrix() {
     const viewDirectionMatrix = mat4.create();
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.theta, [1.0, 0.0, 0.0]);
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, -view.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.theta, [1.0, 0.0, 0.0]);
 
     return viewDirectionMatrix;
 }

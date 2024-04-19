@@ -53,64 +53,66 @@ float minDistance = 0.001;
 float maxDistance = 100.0;
 
 void main() {
-    vec4 point = pointPosition;
-
-    point.x *= aspect;
-    point.z -= cameraDistance;
-    point = uLightDirectionMatrix * inverse(uViewDirectionMatrix) * point;
-
-    point.w = 0.0;
-    point = normalize(point);
-
-    ivec4 pointHash = ivec4(floor(point * starResolution));
-    float color = hash(uint(
-        starfieldSize * (
-            pointHash.x + starfieldSize * (
-                pointHash.y + starfieldSize * pointHash.z
-            )
-        )
-    ));
-
-    if (length(point - sunPosition) < sunSize) {
-        fragColor = vec4(sunColor, 1.0);
-    }
-    else if (color < starFrequency) {
-        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-    else {
-        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-    }
-
-    // create the raymarching ray
+    // create the ray for raymarching
     vec4 ray = pointPosition;
+
+    // adjust and normalize the ray according to scene properties
     ray.x *= aspect;
     ray.z = cameraDistance;
-    ray = inverse(uViewDirectionMatrix) * ray;
+    ray = uViewDirectionMatrix * ray;
     ray.w = 0.0;
     ray = normalize(ray);
 
+    // initialize the starting point for the ray
     vec4 pos = uCameraPosition;
-    float distance = sdf(pos);
-
-    int steps = 0;
 
     // march the ray
+    float distance = sdf(pos);
+    int steps = 0;
+
     while (abs(distance) > minDistance && abs(distance) < maxDistance && steps < 100) {
-        steps += 1;
+        steps++;
         pos += distance / float(max(1, steps - 90)) * ray;
         distance = sdf(pos);
     }
 
-    // if it hit the surface, compute color and shadow
-    if (distance <= minDistance) {
+    // if the ray hit the surface, compute color and shadow
+    if (abs(distance) <= minDistance) {
+        // compute the surface normal
         vec4 normal = vec4(sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)), sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0)), sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)), 0.0);
         normal -= sdf(pos);
         normal.w = 0.0;
         normal = normalize(normal);
 
-        float shade = -dot(normal, uLightDirectionMatrix * vec4(1.0, 0.0, 0.0, 0.0));
+        // compute the shading based on the surface normal and the light
+        // direction
+        float shade = dot(uLightDirectionMatrix * normal, sunPosition);
 
+        // compute the final pixel color
         fragColor = getColor(getAltitude(pos * 10.0), 0.62, shade);
+    }
+    // if the ray missed the surface, check for stars using the ray direction
+    else {
+        ray = uLightDirectionMatrix * ray;
+
+        ivec4 pointHash = ivec4(floor(ray * starResolution));
+        float color = hash(uint(
+            starfieldSize * (
+                pointHash.x + starfieldSize * (
+                    pointHash.y + starfieldSize * pointHash.z
+                )
+            )
+        ));
+
+        if (length(ray - sunPosition) < sunSize) {
+            fragColor = vec4(sunColor, 1.0);
+        }
+        else if (color < starFrequency) {
+            fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+        else {
+            fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        }
     }
 }
 
