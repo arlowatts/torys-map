@@ -22,9 +22,6 @@ export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 // the minimum distance from the camera to the surface before narrowing the fov
 export const MIN_CAMERA_DISTANCE = 1.0;
 
-// the length of the vertical scale/measuring bar in screen units
-export const SCALE_LENGTH = 2.0 * document.getElementById("scalebar").clientHeight / window.innerHeight;
-
 // the delay between each refresh of the query params in milliseconds
 export const QUERY_PARAM_REFRESH_RATE = 1000;
 
@@ -63,7 +60,7 @@ export const light = {
     direction: vec4.create(),       // the light direction as a vector
 
     // the axes of rotation for days and years
-    dayAxis: [3/5, 0.0, 4/5], // this rotation represents the planet's local axis
+    dayAxis: [3 / 5, 0.0, 4 / 5], // this rotation represents the planet's local axis
     yearAxis: [0.0, 0.0, 1.0],  // this rotation represents the planet's orbit
 
     dayLength: 86400,   // number of seconds in one day
@@ -91,64 +88,37 @@ export const view = {
     // time since the page was loaded in milliseconds
     pageTime: 0,
 
-    // the sliders controlling the world time
-    daySlider: document.getElementById("dayslider"),
-    yearSlider: document.getElementById("yearslider"),
-
     // precise angles are tracked as integers to avoid loss of precision
     phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
     thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 500,
+
     // the actual values in radians are computed from the precise values
     phi: 0.0,
     theta: 0.0,
 
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 6.0,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 6.5,
     zoom: 0.0,
 
     panSensitivity: 0.0,
     allowPanning: true
 };
 
-// update the slider parameters
-view.daySlider.max = light.dayLength - 1;
-view.yearSlider.max = light.yearLength - 1;
-view.daySlider.value = view.time % light.dayLength;
-view.yearSlider.value = (view.time - view.time % light.dayLength) / light.dayLength;
-
 // store information about the shader programs, such as uniform locations
-// initialized before the first frame is rendered
+// (initialized before the first frame is rendered)
 export const programInfo = {
-    torus: {
-        program: null,
-        attribLocations: {},
-        uniformLocations: {}
-    },
-    stars: {
-        program: null,
-        attribLocations: {},
-        uniformLocations: {}
-    }
+    program: null,
+    attribLocations: {},
+    uniformLocations: {}
 };
 
-// the framework for the data buffers
-// initialized before the first frame is rendered
-export const buffers = {
-    torus: {
-        data: [],
-        vertexCount: 0,
-        numComponents: 0,
-        type: null,
-        normalize: false,
-        stride: 0,
-        offset: 0
-    },
-    stars: {
-        data: [],
-        vertexCount: 0,
-        numComponents: 0,
-        type: null,
-        normalize: false,
-        stride: 0,
-        offset: 0
-    }
+// the framework for the data buffer (initialized before the first frame is
+// rendered)
+export const buffer = {
+    data: [],
+    vertexCount: 0,
+    numComponents: 0,
+    type: null,
+    normalize: false,
+    stride: 0,
+    offset: 0
 };

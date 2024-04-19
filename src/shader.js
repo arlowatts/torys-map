@@ -1,13 +1,22 @@
-import { stars, torus, light, view } from "../properties.js";
+import { stars, torus, light, view } from "./properties.js";
 
-export const source = `#version 300 es
+export const vertexSrc = `#version 300 es
+in vec4 aVertexPosition;
+
+out vec4 pointPosition;
+
+void main() {
+    gl_Position = aVertexPosition;
+    pointPosition = aVertexPosition;
+}
+`;
+
+export const fragmentSrc = `#version 300 es
 precision mediump float;
 
 float sdf(vec4);
 float getAltitude(vec4);
-float getTemperature(vec4);
-float getCloud(vec4);
-vec4 getColor(float, float, bool, float);
+vec4 getColor(float, float, float);
 float noise4(vec4, vec4, uvec4, uint);
 float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
@@ -16,12 +25,10 @@ float hash(uint);
 float lerp(float, float, float);
 
 uniform vec4 uCameraPosition;
-uniform vec4 uLightDirection;
 uniform mat4 uViewDirectionMatrix;
 uniform mat4 uLightDirectionMatrix;
 
 uniform float uTerrainResolution;
-uniform float uTerrainHeightScale;
 uniform float uTerrainNormalResolution;
 
 uniform float uTime;
@@ -107,9 +114,9 @@ void main() {
         normal.w = 0.0;
         normal = normalize(normal);
 
-        float shade = -dot(normal, uLightDirection);
+        float shade = -dot(normal, uLightDirectionMatrix * vec4(1.0, 0.0, 0.0, 0.0));
 
-        fragColor = getColor(getAltitude(pos * 10.0), 0.62, false, shade);
+        fragColor = getColor(getAltitude(pos * 10.0), 0.62, shade);
     }
 }
 
@@ -126,13 +133,15 @@ float getAltitude(vec4 point) {
     vec4 noisePoint = point;
     vec4 pointFloor;
 
-    float scaleFactor = 0.5;
+    float scaleFactor = 0.333;
     uint channel = 0u;
 
     do {
         pointFloor = floor(noisePoint);
 
-        height += scaleFactor * noise3(
+        height *= scaleFactor;
+
+        height += (1.0 - scaleFactor) * noise3(
             noisePoint,
             noisePoint - pointFloor,
             uvec4(ivec4(pointFloor)),
@@ -146,76 +155,13 @@ float getAltitude(vec4 point) {
     }
     while (scaleFactor >= uTerrainResolution);
 
-    return height * uTerrainHeightScale;
+    return height;
 }
 
-float getTemperature(vec4 point) {
-    float temp = 0.0;
-
-    vec4 noisePoint = point * 0.5;
-    vec4 pointFloor;
-
-    float scaleFactor = 0.5;
-    uint channel = 0xffffu;
-
-    do {
-        pointFloor = floor(noisePoint);
-
-        temp += scaleFactor * noise3(
-            noisePoint,
-            noisePoint - pointFloor,
-            uvec4(ivec4(pointFloor)),
-            channel
-        );
-
-        noisePoint *= 2.0;
-        noisePoint += 0.5;
-        scaleFactor *= 0.5;
-        channel += 1u;
-    }
-    while (scaleFactor >= uTerrainResolution);
-
-    return temp * uTerrainHeightScale;
-}
-
-float getCloud(vec4 point) {
-    float value = 0.0;
-
-    vec4 noisePoint = point;
-    vec4 pointFloor;
-
-    float scaleFactor = 0.5;
-    uint channel = 0x5555u;
-
-    do {
-        pointFloor = floor(noisePoint);
-
-        value += scaleFactor * noise4(
-            noisePoint,
-            noisePoint - pointFloor,
-            uvec4(ivec4(pointFloor)),
-            channel
-        );
-
-        noisePoint *= 2.0;
-        noisePoint += 0.5;
-        scaleFactor *= 0.5;
-        channel += 1u;
-    }
-    while (scaleFactor >= uTerrainResolution);
-
-    return value * uTerrainHeightScale;
-}
-
-vec4 getColor(float altitude, float temperature, bool isCloud, float shade) {
+vec4 getColor(float altitude, float temperature, float shade) {
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
-    if (isCloud) {
-        color.r = 0.8;
-        color.g = 0.8;
-        color.b = 0.8;
-    }
-    else if (altitude < seaLevel) {
+    if (altitude < seaLevel) {
         if (temperature > iceTemperature) {
             color.b = temperature;
         }

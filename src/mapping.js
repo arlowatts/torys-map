@@ -1,11 +1,7 @@
-import { drawStars, drawTorus } from "./draw-scene.js";
-import { initTorusBuffer, initBackgroundBuffer } from "./init-buffers.js";
-import { gl, programInfo, torus, view, light } from "./properties.js";
+import { drawScene } from "./draw-scene.js";
+import { gl, programInfo, torus, view, light, buffer } from "./properties.js";
 import * as properties from "./properties.js";
-import * as torusFragment from "./shaders/torus-fragment.js";
-import * as torusVertex from "./shaders/torus-vertex.js";
-import * as starsFragment from "./shaders/stars-fragment.js";
-import * as starsVertex from "./shaders/stars-vertex.js";
+import { vertexSrc, fragmentSrc } from "./shader.js";
 
 // arrays of touch event data for touchscreen support
 const touches = [];
@@ -13,60 +9,29 @@ const touches = [];
 main();
 
 function main() {
-    // initialize the shader programs
-    const torusProgram = initShaderProgram(torusVertex.source, torusFragment.source);
-    const starsProgram = initShaderProgram(starsVertex.source, starsFragment.source);
+    // initialize the shader program
+    programInfo.program = initShaderProgram(vertexSrc, fragmentSrc);
 
-    // collect information about the shader programs
-    // the torus (planet) program
-    programInfo.torus.program = torusProgram;
-
-    programInfo.torus.attribLocations = {
-        vertexPosition: gl.getAttribLocation(torusProgram, "aVertexPosition")
+    // collect attribute locations
+    programInfo.attribLocations = {
+        vertexPosition: gl.getAttribLocation(programInfo.program, "aVertexPosition")
     };
 
-    programInfo.torus.uniformLocations = {
-        // matrices
-        projectionMatrix: gl.getUniformLocation(torusProgram, "uProjectionMatrix"),
-        viewMatrix: gl.getUniformLocation(torusProgram, "uViewMatrix"),
-        // vectors
-        lightDirection: gl.getUniformLocation(torusProgram, "uLightDirection"),
-        lightAmbience: gl.getUniformLocation(torusProgram, "uLightAmbience"),
-        // scalars
-        zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel"),
-        terrainResolution: gl.getUniformLocation(torusProgram, "uTerrainResolution"),
-        terrainHeightScale: gl.getUniformLocation(torusProgram, "uTerrainHeightScale"),
-        terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution"),
-        time: gl.getUniformLocation(torusProgram, "uTime"),
-        // booleans
-        showClouds: gl.getUniformLocation(torusProgram, "uShowClouds")
+    // collect uniform locations
+    programInfo.uniformLocations = {
+        cameraPosition: gl.getUniformLocation(programInfo.program, "uCameraPosition"),
+        lightDirection: gl.getUniformLocation(programInfo.program, "uLightDirection"),
+        viewDirectionMatrix: gl.getUniformLocation(programInfo.program, "uViewDirectionMatrix"),
+        lightDirectionMatrix: gl.getUniformLocation(programInfo.program, "uLightDirectionMatrix"),
+        terrainResolution: gl.getUniformLocation(programInfo.program, "uTerrainResolution"),
+        terrainHeightScale: gl.getUniformLocation(programInfo.program, "uTerrainHeightScale"),
+        terrainNormalResolution: gl.getUniformLocation(programInfo.program, "uTerrainNormalResolution"),
+        time: gl.getUniformLocation(programInfo.program, "uTime"),
     };
 
-    // the stars (background) program
-    programInfo.stars.program = starsProgram;
-
-    programInfo.stars.attribLocations= {
-        vertexPosition: gl.getAttribLocation(starsProgram, "aVertexPosition")
-    };
-
-    programInfo.stars.uniformLocations = {
-        cameraPosition: gl.getUniformLocation(starsProgram, "uCameraPosition"),
-        lightDirection: gl.getUniformLocation(starsProgram, "uLightDirection"),
-        viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
-        lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
-        terrainResolution: gl.getUniformLocation(starsProgram, "uTerrainResolution"),
-        terrainHeightScale: gl.getUniformLocation(starsProgram, "uTerrainHeightScale"),
-        terrainNormalResolution: gl.getUniformLocation(starsProgram, "uTerrainNormalResolution"),
-        time: gl.getUniformLocation(starsProgram, "uTime"),
-    };
-
-    // initialize the data buffers for the scene
-    initTorusBuffer();
-    initBackgroundBuffer();
-
-    // ensure that the zoom and pan values are correct
-    onMouseMove({buttons: 1, movementX: 0.0, movementY: 0.0});
-    onWheel({wheelDelta: 0.0});
+    // reset the zoom and pan values
+    onMouseMove({ buttons: 1, movementX: 0.0, movementY: 0.0 });
+    onWheel({ wheelDelta: 0.0 });
 
     // create the event listeners for pan and zoom
     addEventListener("mousemove", onMouseMove);
@@ -81,29 +46,17 @@ function main() {
     // create the event listener to reload on resize
     addEventListener("resize", onResize);
 
-    // create listeners to track whether the user is interacting with input
-    view.daySlider.addEventListener("mousedown", blockPanning);
-    view.daySlider.addEventListener("touchstart", blockPanning);
-    view.daySlider.addEventListener("mouseup", unblockPanning);
-    view.daySlider.addEventListener("touchend", unblockPanning);
-    view.daySlider.addEventListener("touchcancel", unblockPanning);
-
-    view.yearSlider.addEventListener("mousedown", blockPanning);
-    view.yearSlider.addEventListener("touchstart", blockPanning);
-    view.yearSlider.addEventListener("mouseup", unblockPanning);
-    view.yearSlider.addEventListener("touchend", unblockPanning);
-    view.yearSlider.addEventListener("touchcancel", unblockPanning);
-
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
+
+    // initialize the data buffer for the scene
+    initBuffer();
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
 }
 
 function render(now) {
-    updateTime(now);
-
     // create the light direction matrix and vector
     mat4.identity(light.directionMatrix);
     vec4.copy(light.direction, light.baseDirection);
@@ -116,16 +69,9 @@ function render(now) {
     vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
 
     // render the scene
-    drawStars();
-    // drawTorus();
+    drawScene();
 
     requestAnimationFrame(render);
-}
-
-function updateTime(now) {
-    view.pageTime = now;
-
-    view.time = Number(view.daySlider.value) + light.dayLength * Number(view.yearSlider.value);
 }
 
 // adjust the view location when the mouse is dragged
@@ -156,11 +102,6 @@ function onWheel(event) {
     view.panSensitivity =
         2 ** (Math.min(view.zoomPrecise, properties.MAX_PAN_SENSITIVITY) - properties.MIN_ZOOM)
         * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
-
-    // update the scale value on the bar
-    document.getElementById("scalevalue").innerText =
-        (torus.unitToKm * view.zoom / view.cameraDistance * properties.SCALE_LENGTH).toFixed(2)
-        + "km";
 }
 
 // when a touch gesture begins, record all finger contacts
@@ -249,6 +190,32 @@ function blockPanning() {
 // track when the user is interacting with input elements to block panning
 function unblockPanning() {
     view.allowPanning = true;
+}
+
+// create a vertex buffer for the mesh covering the screen
+export function initBuffer() {
+    // create the buffer
+    const positionBuffer = gl.createBuffer();
+
+    // select the position buffer for subsequent operations
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // define the data as an array
+    const positions = [
+        -1.0, 1.0,
+        -1.0, -1.0,
+        1.0, 1.0,
+        1.0, -1.0
+    ];
+
+    // convert the array to a Float32Array, then populate the buffer with the
+    // position data
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+    buffer.data = positionBuffer;
+    buffer.vertexCount = positions.length / 2;
+    buffer.numComponents = 2;
+    buffer.type = gl.FLOAT;
 }
 
 // initialize the shader program with a vertex shader and a fragment shader

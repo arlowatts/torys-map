@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Map of Torys</title>
-    <script src="src/gl-matrix-min.js"></script>
-    <script src="src/mapping.js" type="module"></script>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
 
-    <canvas id="mapcanvas">Your browser does not support the canvas element.</canvas>
+<head>
+  <title>Map of Torys</title>
+  <script src="src/gl-matrix-min.js"></script>
+  <script src="src/mapping.js" type="module"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-    <div hidden id="scalebar">
-      <p id="scalevalue"></p>
-    </div>
+<body>
+  <canvas id="mapcanvas">Your browser does not support the canvas element.</canvas>
+</body>
 
-    <div hidden id="dayslidercontainer" class="slidercontainer">
-      <p hidden>Time of day</p>
-      <input hidden id="dayslider" class="timeslider" type="range" min="0"/>
-    </div>
-
-    <div hidden id="yearslidercontainer" class="slidercontainer">
-      <p hidden>Time of year</p>
-      <input hidden id="yearslider" class="timeslider" type="range" step="1" min="0"/>
-    </div>
-
-  </body>
 </html>
