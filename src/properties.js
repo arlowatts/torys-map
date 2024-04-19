@@ -102,7 +102,7 @@ export const view = {
     phi: 0.0,
     theta: 0.0,
 
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 4.0,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 6.0,
     zoom: 0.0,
 
     panSensitivity: 0.0,

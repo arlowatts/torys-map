@@ -56,7 +56,7 @@ void main() {
 
     point.x *= aspect;
     point.z -= cameraDistance;
-    point = inverse(uLightDirectionMatrix) * inverse(uViewDirectionMatrix) * point;
+    point = uLightDirectionMatrix * inverse(uViewDirectionMatrix) * point;
 
     point.w = 0.0;
     point = normalize(point);
@@ -95,20 +95,21 @@ void main() {
 
     // march the ray
     while (abs(distance) > minDistance && abs(distance) < maxDistance && steps < 100) {
-        pos += distance * ray;
-        distance = sdf(pos);
         steps += 1;
+        pos += distance / float(max(1, steps - 90)) * ray;
+        distance = sdf(pos);
     }
 
     // if it hit the surface, compute color and shadow
     if (distance <= minDistance) {
-        vec4 normal = vec4(sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)), sdf(vec4(pos.x, pos.y + minDistance, pos.x, 0.0)), sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)), 0.0);
+        vec4 normal = vec4(sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)), sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0)), sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)), 0.0);
         normal -= sdf(pos);
+        normal.w = 0.0;
         normal = normalize(normal);
 
         float shade = -dot(normal, uLightDirection);
 
-        fragColor = getColor(getAltitude(pos * 10.0), 0.62, false, 1.0);
+        fragColor = getColor(getAltitude(pos * 10.0), 0.62, false, shade);
     }
 }
 
@@ -116,7 +117,7 @@ void main() {
 float sdf(vec4 r) {
     float d = sqrt(r.x * r.x + r.z * r.z) - 1.0;
 
-    return sqrt(d * d + r.y * r.y) - 0.25 - getAltitude(r * 10.0) / 8.0;
+    return sqrt(d * d + r.y * r.y) - 0.25 - (max(getAltitude(r * 10.0), seaLevel) - 0.5) / 8.0;
 }
 
 float getAltitude(vec4 point) {
