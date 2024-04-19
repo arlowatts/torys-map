@@ -91,25 +91,24 @@ void main() {
     vec4 pos = uCameraPosition;
     float distance = sdf(pos);
 
+    int steps = 0;
+
     // march the ray
-    while (distance > minDistance && distance < maxDistance) {
+    while (abs(distance) > minDistance && abs(distance) < maxDistance && steps < 100) {
         pos += distance * ray;
         distance = sdf(pos);
+        steps += 1;
     }
 
     // if it hit the surface, compute color and shadow
     if (distance <= minDistance) {
-        // the point on the unit circle nearest the surface point
-        vec4 pointXZ = normalize(vec4(pos.x, 0.0, pos.z, 0.0));
-
-        // the basic (unaltered) surface normal
-        vec4 normal = normalize(pos - pointXZ);
+        vec4 normal = vec4(sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)), sdf(vec4(pos.x, pos.y + minDistance, pos.x, 0.0)), sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)), 0.0);
+        normal -= sdf(pos);
+        normal = normalize(normal);
 
         float shade = -dot(normal, uLightDirection);
 
-        vec4 cloudPoint = vec4(pos.xyz * 10.0, uTime * cloudSpeed);
-
-        fragColor = getColor(getAltitude(pos * 10.0), getTemperature(pos * 10.0), getCloud(cloudPoint) > cloudThreshold, shade);
+        fragColor = getColor(getAltitude(pos * 10.0), 0.62, false, 1.0);
     }
 }
 
@@ -117,7 +116,7 @@ void main() {
 float sdf(vec4 r) {
     float d = sqrt(r.x * r.x + r.z * r.z) - 1.0;
 
-    return sqrt(d * d + r.y * r.y) - 0.25;
+    return sqrt(d * d + r.y * r.y) - 0.25 - getAltitude(r * 10.0) / 8.0;
 }
 
 float getAltitude(vec4 point) {
