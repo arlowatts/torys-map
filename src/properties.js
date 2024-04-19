@@ -19,56 +19,40 @@ export const MAX_PAN_SENSITIVITY = 4.0;
 export const PRECISE_PAN_TO_RADIANS = 2 ** MIN_ZOOM;
 export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 
-// the minimum distance from the camera to the surface before narrowing the fov
-export const MIN_CAMERA_DISTANCE = 1.0;
-
-// the delay between each refresh of the query params in milliseconds
+// delay between each refresh of the query parameters in milliseconds
 export const QUERY_PARAM_REFRESH_RATE = 1000;
 
-// the planet dimensions and vertex properties
-// phi is associated with the large radius
-// theta is associated with the small radius
+// planet dimensions and properties
 export const torus = {
-    largeRadius: 8.0,       // commonly denoted as R
-    smallRadius: 2.0,       // commonly denoted as r
-    unitToKm: 637.1,        // the ratio of internal units to kilometers
+    largeRadius: 5096.8,
+    smallRadius: 1274.2,
 
-    phiDegreeStep: 5,       // the degree precision of the surface mesh around the large radius
-    thetaDegreeStep: 10,    // the degree precision of the surface mesh around the small radius
+    terrainDetail: 1.0 / 1024.0, // base level of detail of the terrain
 
-    terrainResolution: 1.0 / 1024.0,        // the base resolution of the terrain
-    terrainNormalResolution: 1.0 / 128.0,   // the level of precision in the terrain shading
-    terrainNormalIntensity: 0.2,            // the intensity of the terrain shading
-
-    seaLevel: 0.575,        // terrain below the sea level is water
-    desertTemperature: 0.6, // temperatures above the desert temperature are hot and dry
-    iceTemperature: 0.2,    // temperatures below the ice temperature are freezing
-
-    cloudSpeed: 0.00005,
-    cloudThreshold: 0.6
+    seaLevel: 0.0
 };
 
+// star size and density
 export const stars = {
-    resolution: 500.0,      // higher resolution gives smaller stars
-    frequency: 0.001        // approximate percentage of the screen that is white
+    resolution: 500.0, // higher resolution gives smaller stars
+    frequency: 0.001 // approximate fraction of the screen that is white
 }
 
-// the light direction and ambience
+// light direction and ambience
 export const light = {
-    baseDirection: vec4.fromValues(1.0, 0.0, 0.0, 0.0), // the light direction at time 0
-    directionMatrix: mat4.create(), // the rotation matrix to get the light direction
-    direction: vec4.create(),       // the light direction as a vector
+    baseDirection: [1.0, 0.0, 0.0, 0.0],
+    directionMatrix: mat4.create(), // rotation matrix for the light direction
 
     // the axes of rotation for days and years
-    dayAxis: [3 / 5, 0.0, 4 / 5], // this rotation represents the planet's local axis
-    yearAxis: [0.0, 0.0, 1.0],  // this rotation represents the planet's orbit
+    dayAxis: [3 / 5, 0.0, 4 / 5], // local axis
+    yearAxis: [0.0, 0.0, 1.0], // orbit axis
 
-    dayLength: 86400,   // number of seconds in one day
-    yearLength: 365,    // number of days in one year
+    dayLength: 86400, // number of seconds in one day (local axis)
+    yearLength: 365, // number of days in one year (orbit axis)
 
-    ambience: 0.2,              // the base uniform light level
-    sunSize: 0.05,              // the approximate radius of the sun in the sky
-    sunColor: [1.0, 0.9, 0.7]   // the color of the sun in rgb format
+    ambience: 0.2, // minimum light level
+    sunSize: 0.05, // approximate radius of the sun in the sky
+    sunColor: [1.0, 0.9, 0.7] // color of the sun in rgb format
 };
 
 // compute viewport properties
@@ -83,19 +67,21 @@ export const view = {
     fov: fov,
     cameraDistance: 1 / Math.tan(0.5 * fov),
 
-    // the world time in seconds
+    // world time (seconds)
     time: params.has("time") && !isNaN(params.get("time")) ? Number(params.get("time")) : 0,
-    // time since the page was loaded in milliseconds
+
+    // time since the page was loaded (milliseconds)
     pageTime: 0,
 
-    // precise angles are tracked as integers to avoid loss of precision
+    // precise angles tracked as integers to avoid loss of precision
     phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
     thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 500,
 
-    // the actual values in radians are computed from the precise values
+    // actual values in radians (computed from the precise values in real-time)
     phi: 0.0,
     theta: 0.0,
 
+    // zoom values
     zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 7.0,
     zoom: 0.0,
 
@@ -114,9 +100,9 @@ export const programInfo = {
 // rendered)
 export const buffer = {
     data: [],
-    vertexCount: 0,
-    numComponents: 0,
-    type: null,
+    vertexCount: 4,
+    numComponents: 2,
+    type: gl.FLOAT,
     normalize: false,
     stride: 0,
     offset: 0

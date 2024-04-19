@@ -4,7 +4,7 @@ import * as properties from "./properties.js";
 // draw the scene
 export function drawScene() {
     gl.useProgram(programInfo.program);
-    setPositionAttribute(buffer, programInfo);
+    setPositionAttribute();
 
     // disable depth testing
     gl.disable(gl.DEPTH_TEST);
@@ -24,11 +24,11 @@ export function drawScene() {
 }
 
 // define the mapping from the buffers to the attributes
-function setPositionAttribute(buffer, program) {
+function setPositionAttribute() {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
 
     gl.vertexAttribPointer(
-        program.attribLocations.vertexPosition,
+        programInfo.attribLocations.vertexPosition,
         buffer.numComponents,
         buffer.type,
         buffer.normalize,
@@ -36,7 +36,7 @@ function setPositionAttribute(buffer, program) {
         buffer.offset
     );
 
-    gl.enableVertexAttribArray(program.attribLocations.vertexPosition);
+    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }
 
 function getCameraPosition() {

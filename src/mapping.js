@@ -47,14 +47,10 @@ function main() {
 function render(now) {
     // create the light direction matrix and vector
     mat4.identity(light.directionMatrix);
-    vec4.copy(light.direction, light.baseDirection);
 
     // apply the rotations to the matrix
     mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
     mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
-
-    // apply the matrix to get the current light direction vector
-    vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
 
     // render the scene
     drawScene();

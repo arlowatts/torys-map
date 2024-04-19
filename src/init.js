@@ -64,9 +64,6 @@ export function initBuffer(buffer) {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     buffer.data = positionBuffer;
-    buffer.vertexCount = positions.length / 2;
-    buffer.numComponents = 2;
-    buffer.type = gl.FLOAT;
 }
 
 // type: the type of shader

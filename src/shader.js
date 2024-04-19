@@ -29,7 +29,6 @@ uniform mat4 uViewDirectionMatrix;
 uniform mat4 uLightDirectionMatrix;
 
 uniform float uTerrainResolution;
-uniform float uTerrainNormalResolution;
 
 uniform float uTime;
 
@@ -49,11 +48,6 @@ float aspect = float(${view.aspect});
 float cameraDistance = float(${view.cameraDistance});
 
 float seaLevel = float(${torus.seaLevel});
-float desertTemperature = float(${torus.desertTemperature});
-float iceTemperature = float(${torus.iceTemperature});
-
-float cloudSpeed = float(${torus.cloudSpeed});
-float cloudThreshold = float(${torus.cloudThreshold});
 
 float minDistance = 0.001;
 float maxDistance = 100.0;
@@ -124,7 +118,7 @@ void main() {
 float sdf(vec4 r) {
     float d = sqrt(r.x * r.x + r.z * r.z) - 1.0;
 
-    return sqrt(d * d + r.y * r.y) - 0.25 - (max(getAltitude(r * 10.0), seaLevel) - 0.5) / 8.0;
+    return sqrt(d * d + r.y * r.y) - 0.25 - max(getAltitude(r * 10.0), seaLevel) / 10.0;
 }
 
 float getAltitude(vec4 point) {
@@ -155,14 +149,14 @@ float getAltitude(vec4 point) {
     }
     while (scaleFactor >= uTerrainResolution);
 
-    return height;
+    return height * 2.0 - 1.0;
 }
 
 vec4 getColor(float altitude, float temperature, float shade) {
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
     if (altitude < seaLevel) {
-        if (temperature > iceTemperature) {
+        if (temperature > 0.2) {
             color.b = temperature;
         }
         else {
@@ -174,12 +168,12 @@ vec4 getColor(float altitude, float temperature, float shade) {
     else {
         temperature = temperature * 1.0 - 0.75 * (altitude - seaLevel) / (1.0 - seaLevel);
 
-        if (temperature > desertTemperature) {
+        if (temperature > 0.6) {
             color.r = temperature;
             color.g = temperature;
             color.b = temperature / 1.5;
         }
-        else if (temperature > iceTemperature) {
+        else if (temperature > 0.2) {
             color.g = 1.0 - temperature;
             color.b = 1.0 - temperature;
         }
