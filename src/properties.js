@@ -96,11 +96,10 @@ export const view = {
     phi: 0.0,
     theta: 0.0,
 
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 6.5,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 7.0,
     zoom: 0.0,
 
-    panSensitivity: 0.0,
-    allowPanning: true
+    panSensitivity: 0.0
 };
 
 // store information about the shader programs, such as uniform locations

@@ -1,7 +1,8 @@
 import { drawScene } from "./draw-scene.js";
-import { gl, programInfo, torus, view, light, buffer } from "./properties.js";
-import * as properties from "./properties.js";
 import { vertexSrc, fragmentSrc } from "./shader.js";
+import { initShaderProgram, initAttribLocations, initUniformLocations, initBuffer } from "./init.js";
+import { programInfo, buffer, torus, view, light } from "./properties.js";
+import * as properties from "./properties.js";
 
 // arrays of touch event data for touchscreen support
 const touches = [];
@@ -12,24 +13,14 @@ function main() {
     // initialize the shader program
     programInfo.program = initShaderProgram(vertexSrc, fragmentSrc);
 
-    // collect attribute locations
-    programInfo.attribLocations = {
-        vertexPosition: gl.getAttribLocation(programInfo.program, "aVertexPosition")
-    };
+    // collect attribute and uniform locations
+    initAttribLocations(programInfo);
+    initUniformLocations(programInfo);
 
-    // collect uniform locations
-    programInfo.uniformLocations = {
-        cameraPosition: gl.getUniformLocation(programInfo.program, "uCameraPosition"),
-        lightDirection: gl.getUniformLocation(programInfo.program, "uLightDirection"),
-        viewDirectionMatrix: gl.getUniformLocation(programInfo.program, "uViewDirectionMatrix"),
-        lightDirectionMatrix: gl.getUniformLocation(programInfo.program, "uLightDirectionMatrix"),
-        terrainResolution: gl.getUniformLocation(programInfo.program, "uTerrainResolution"),
-        terrainHeightScale: gl.getUniformLocation(programInfo.program, "uTerrainHeightScale"),
-        terrainNormalResolution: gl.getUniformLocation(programInfo.program, "uTerrainNormalResolution"),
-        time: gl.getUniformLocation(programInfo.program, "uTime"),
-    };
+    // initialize the data buffer for the scene
+    initBuffer(buffer);
 
-    // reset the zoom and pan values
+    // update the pan and zoom values
     onMouseMove({ buttons: 1, movementX: 0.0, movementY: 0.0 });
     onWheel({ wheelDelta: 0.0 });
 
@@ -37,7 +28,7 @@ function main() {
     addEventListener("mousemove", onMouseMove);
     addEventListener("wheel", onWheel);
 
-    // create event listeners for touchscreen support
+    // create event listeners for touchscreen controls
     addEventListener("touchstart", onTouchStart);
     addEventListener("touchend", onTouchEnd);
     addEventListener("touchcancel", onTouchEnd);
@@ -48,9 +39,6 @@ function main() {
 
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
-
-    // initialize the data buffer for the scene
-    initBuffer();
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
@@ -76,7 +64,7 @@ function render(now) {
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
-    if (event.buttons == 1 && view.allowPanning) {
+    if (event.buttons == 1) {
         // track the precise angle values as integers to avoid loss of precision
         view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
         view.thetaPrecise += event.movementY * view.panSensitivity;
@@ -180,82 +168,4 @@ function updateQueryParameters() {
 function onResize() {
     updateQueryParameters();
     location.reload();
-}
-
-// track when the user is interacting with input elements to block panning
-function blockPanning() {
-    view.allowPanning = false;
-}
-
-// track when the user is interacting with input elements to block panning
-function unblockPanning() {
-    view.allowPanning = true;
-}
-
-// create a vertex buffer for the mesh covering the screen
-export function initBuffer() {
-    // create the buffer
-    const positionBuffer = gl.createBuffer();
-
-    // select the position buffer for subsequent operations
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    // define the data as an array
-    const positions = [
-        -1.0, 1.0,
-        -1.0, -1.0,
-        1.0, 1.0,
-        1.0, -1.0
-    ];
-
-    // convert the array to a Float32Array, then populate the buffer with the
-    // position data
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-    buffer.data = positionBuffer;
-    buffer.vertexCount = positions.length / 2;
-    buffer.numComponents = 2;
-    buffer.type = gl.FLOAT;
-}
-
-// initialize the shader program with a vertex shader and a fragment shader
-// vsSource defines the source code for the vertex shader
-// fsSource defines the source code for the fragment shader
-// returns a shader program object
-function initShaderProgram(vsSource, fsSource) {
-    // compile the shaders
-    const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
-    const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource);
-
-    // create the shader program and link the shaders
-    const shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
-    gl.linkProgram(shaderProgram);
-
-    // check that the shader program compiled correctly
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram,)}`);
-        return null;
-    }
-
-    return shaderProgram;
-}
-
-// type defines the type of shader
-// source defines the source code of the shader
-// returns a compiled shader object
-function loadShader(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-
-    // check that the shader compiled properly
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`);
-        gl.deleteShader(shader);
-        return null;
-    }
-
-    return shader;
 }
