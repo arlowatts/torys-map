@@ -45,7 +45,7 @@ function main() {
 }
 
 function render(now) {
-    // create the light direction matrix and vector
+    // update the light direction matrix
     mat4.identity(light.directionMatrix);
 
     // apply the rotations to the matrix
