@@ -28,9 +28,11 @@ uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
 uniform mat4 uLightDirectionMatrix;
 
-uniform float uTerrainResolution;
-
-uniform float uTime;
+uniform float uLargeRadius;
+uniform float uSmallRadius;
+uniform int uTerrainDetail;
+uniform float uTerrainSize;
+uniform float uTerrainHeight;
 
 in vec4 pointPosition;
 
@@ -49,7 +51,7 @@ float cameraDistance = float(${view.cameraDistance});
 
 float seaLevel = float(${torus.seaLevel});
 
-float minDistance = 0.001;
+float minDistance = 0.0001;
 float maxDistance = 100.0;
 
 void main() {
@@ -68,35 +70,40 @@ void main() {
 
     // march the ray
     float distance = sdf(pos);
-    int steps = 0;
 
-    while (abs(distance) > minDistance && abs(distance) < maxDistance && steps < 100) {
-        steps++;
-        pos += distance / float(max(1, steps - 90)) * ray;
+    for (int i = 0; i < 100 && abs(distance) > minDistance && distance < maxDistance; i++) {
+        pos += distance / float(max(1, i - 70)) * ray;
         distance = sdf(pos);
     }
 
     // if the ray hit the surface, compute color and shadow
     if (abs(distance) <= minDistance) {
         // compute the surface normal
-        vec4 normal = vec4(sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)), sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0)), sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)), 0.0);
+        vec4 normal = vec4(
+            sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)),
+            sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0)),
+            sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)),
+            0.0
+        );
+
         normal -= sdf(pos);
         normal.w = 0.0;
         normal = normalize(normal);
 
-        // compute the shading based on the surface normal and the light
-        // direction
+        // compute shading based on the surface normal and the light direction
         float shade = dot(uLightDirectionMatrix * normal, sunPosition);
 
-        // compute the final pixel color
-        fragColor = getColor(getAltitude(pos * 10.0), 0.62, shade);
+        // compute final pixel color
+        fragColor = getColor(getAltitude(pos), 0.62, shade);
     }
+
     // if the ray missed the surface, check for stars using the ray direction
     else {
         ray = uLightDirectionMatrix * ray;
 
         ivec4 pointHash = ivec4(floor(ray * starResolution));
-        float color = hash(uint(
+
+        float val = hash(uint(
             starfieldSize * (
                 pointHash.x + starfieldSize * (
                     pointHash.y + starfieldSize * pointHash.z
@@ -107,7 +114,7 @@ void main() {
         if (length(ray - sunPosition) < sunSize) {
             fragColor = vec4(sunColor, 1.0);
         }
-        else if (color < starFrequency) {
+        else if (val < starFrequency) {
             fragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
         else {
@@ -117,58 +124,48 @@ void main() {
 }
 
 // returns the shortest distance from the point x to the scene
-float sdf(vec4 r) {
-    float d = sqrt(r.x * r.x + r.z * r.z) - 1.0;
+float sdf(vec4 pos) {
+    float a = length(pos.xz) - 1.0;
 
-    return sqrt(d * d + r.y * r.y) - 0.25 - max(getAltitude(r * 10.0), seaLevel) / 10.0;
+    return sqrt(a * a + pos.y * pos.y) - (0.25 + max(getAltitude(pos), seaLevel));
 }
 
 float getAltitude(vec4 point) {
-    float height = 0.0;
+    point *= uTerrainSize;
 
-    vec4 noisePoint = point;
+    float height = 0.0;
+    int scale = 0;
+
     vec4 pointFloor;
 
-    float scaleFactor = 0.333;
     uint channel = 0u;
 
-    do {
-        pointFloor = floor(noisePoint);
+    for (int i = 0; i < uTerrainDetail; i++) {
+        pointFloor = floor(point);
 
-        height *= scaleFactor;
+        height *= 2.0;
+        height += noise3(point, point - pointFloor, uvec4(ivec4(pointFloor)), channel) * 2.0 - 1.0;
 
-        height += (1.0 - scaleFactor) * noise3(
-            noisePoint,
-            noisePoint - pointFloor,
-            uvec4(ivec4(pointFloor)),
-            channel
-        );
+        scale *= 2;
+        scale += 1;
 
-        noisePoint *= 2.0;
-        noisePoint += 0.5;
-        scaleFactor *= 0.5;
+        point *= 2.0;
+        point += 0.5;
+
         channel += 1u;
     }
-    while (scaleFactor >= uTerrainResolution);
 
-    return height * 2.0 - 1.0;
+    return uTerrainHeight * height / float(scale);
 }
 
 vec4 getColor(float altitude, float temperature, float shade) {
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
     if (altitude < seaLevel) {
-        if (temperature > 0.2) {
-            color.b = temperature;
-        }
-        else {
-            color.r = 0.8;
-            color.g = 0.8;
-            color.b = 1.0;
-        }
+        color.b = temperature;
     }
     else {
-        temperature = temperature * 1.0 - 0.75 * (altitude - seaLevel) / (1.0 - seaLevel);
+        temperature -= 16.0 * (altitude - seaLevel) / (1.0 - seaLevel);
 
         if (temperature > 0.6) {
             color.r = temperature;
@@ -188,6 +185,7 @@ vec4 getColor(float altitude, float temperature, float shade) {
 
     color *= shade;
     color.w = 1.0;
+
     return color;
 }
 

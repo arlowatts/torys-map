@@ -1,7 +1,6 @@
 import { drawScene } from "./draw-scene.js";
-import { vertexSrc, fragmentSrc } from "./shader.js";
-import { initShaderProgram, initAttribLocations, initUniformLocations, initBuffer } from "./init.js";
-import { programInfo, buffer, torus, view, light } from "./properties.js";
+import { initShaders } from "./init.js";
+import { torus, view } from "./properties.js";
 import * as properties from "./properties.js";
 
 // arrays of touch event data for touchscreen support
@@ -11,14 +10,7 @@ main();
 
 function main() {
     // initialize the shader program
-    programInfo.program = initShaderProgram(vertexSrc, fragmentSrc);
-
-    // collect attribute and uniform locations
-    initAttribLocations(programInfo);
-    initUniformLocations(programInfo);
-
-    // initialize the data buffer for the scene
-    initBuffer(buffer);
+    initShaders();
 
     // update the pan and zoom values
     onMouseMove({ buttons: 1, movementX: 0.0, movementY: 0.0 });
@@ -44,17 +36,11 @@ function main() {
     requestAnimationFrame(render);
 }
 
-function render(now) {
-    // update the light direction matrix
-    mat4.identity(light.directionMatrix);
-
-    // apply the rotations to the matrix
-    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
-    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
-
+function render() {
     // render the scene
     drawScene();
 
+    // schedule the next frame
     requestAnimationFrame(render);
 }
 
@@ -81,8 +67,10 @@ function onWheel(event) {
     view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
     view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
 
-    // compute the exponential zoom value and the updated pan sensitivity
+    // compute the exponential zoom value
     view.zoom = 2 ** view.zoomPrecise;
+
+    // compute the updated pan sensitivity
     view.panSensitivity =
         2 ** (Math.min(view.zoomPrecise, properties.MAX_PAN_SENSITIVITY) - properties.MIN_ZOOM)
         * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
@@ -148,6 +136,12 @@ function onTouchMove(event) {
     }
 }
 
+// reload the page on window resize
+function onResize() {
+    updateQueryParameters();
+    location.reload();
+}
+
 // update the url search params
 function updateQueryParameters() {
     let urlSearchParams = new URLSearchParams(window.location.search);
@@ -158,10 +152,4 @@ function updateQueryParameters() {
     urlSearchParams.set("time", view.time);
 
     history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
-}
-
-// reload the page on window resize
-function onResize() {
-    updateQueryParameters();
-    location.reload();
 }

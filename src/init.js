@@ -1,69 +1,49 @@
-import { gl } from "./properties.js";
+import { gl, buffer, programInfo } from "./properties.js";
+import { vertexSrc, fragmentSrc } from "./shader.js";
 
 // initialize the shader program with a vertex shader and a fragment shader
-// vsSource: the source code for the vertex shader
-// fsSource: the source code for the fragment shader
-// return: shader program object
-export function initShaderProgram(vsSource, fsSource) {
+export function initShaders() {
     // compile the shaders
-    const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
-    const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource);
+    const vertexShader = loadShader(gl.VERTEX_SHADER, vertexSrc);
+    const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fragmentSrc);
 
     // create the shader program and link the shaders
-    const shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
-    gl.linkProgram(shaderProgram);
+    programInfo.program = gl.createProgram();
+    gl.attachShader(programInfo.program, vertexShader);
+    gl.attachShader(programInfo.program, fragmentShader);
+    gl.linkProgram(programInfo.program);
 
     // check that the shader program compiled correctly
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram,)}`);
+    if (!gl.getProgramParameter(programInfo.program, gl.LINK_STATUS)) {
+        alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(programInfo.program)}`);
         return null;
     }
 
-    return shaderProgram;
-}
-
-// initialize attribute locations for the shader program
-export function initAttribLocations(programInfo) {
+    // collect attribute locations
     programInfo.attribLocations = {
         vertexPosition: gl.getAttribLocation(programInfo.program, "aVertexPosition")
     };
-}
 
-// initialize uniform locations for the shader program
-export function initUniformLocations(programInfo) {
+    // collect uniform locations
     programInfo.uniformLocations = {
         cameraPosition: gl.getUniformLocation(programInfo.program, "uCameraPosition"),
         viewDirectionMatrix: gl.getUniformLocation(programInfo.program, "uViewDirectionMatrix"),
         lightDirectionMatrix: gl.getUniformLocation(programInfo.program, "uLightDirectionMatrix"),
-        terrainResolution: gl.getUniformLocation(programInfo.program, "uTerrainResolution"),
-        terrainNormalResolution: gl.getUniformLocation(programInfo.program, "uTerrainNormalResolution"),
-        time: gl.getUniformLocation(programInfo.program, "uTime")
+        largeRadius: gl.getUniformLocation(programInfo.program, "uLargeRadius"),
+        smallRadius: gl.getUniformLocation(programInfo.program, "uSmallRadius"),
+        terrainDetail: gl.getUniformLocation(programInfo.program, "uTerrainDetail"),
+        terrainSize: gl.getUniformLocation(programInfo.program, "uTerrainSize"),
+        terrainHeight: gl.getUniformLocation(programInfo.program, "uTerrainHeight")
     };
-}
 
-// create a vertex buffer for the mesh covering the screen
-export function initBuffer(buffer) {
-    // create the buffer
-    const positionBuffer = gl.createBuffer();
+    // initialize the data buffer for the scene
+    buffer.data = gl.createBuffer();
 
     // select the position buffer for subsequent operations
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
 
-    // define the data as an array
-    const positions = [
-        -1.0, 1.0,
-        -1.0, -1.0,
-        1.0, 1.0,
-        1.0, -1.0
-    ];
-
-    // convert the array to a Float32Array, then populate the buffer with the
-    // position data
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-    buffer.data = positionBuffer;
+    // convert the array to a Float32Array, then populate the buffer
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0]), gl.STATIC_DRAW);
 }
 
 // type: the type of shader

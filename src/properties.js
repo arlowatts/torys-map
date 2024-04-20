@@ -27,7 +27,9 @@ export const torus = {
     largeRadius: 5096.8,
     smallRadius: 1274.2,
 
-    terrainDetail: 1.0 / 1024.0, // base level of detail of the terrain
+    terrainDetail: 1, // base level of detail of the terrain
+    terrainSize: 8.0, // scale factor controlling the size of the terrain
+    terrainHeight: 0.0625, // scale factor controlling the height of the terrain
 
     seaLevel: 0.0
 };
@@ -82,7 +84,7 @@ export const view = {
     theta: 0.0,
 
     // zoom values
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 7.0,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 1.0,
     zoom: 0.0,
 
     panSensitivity: 0.0

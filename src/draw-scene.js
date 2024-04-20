@@ -12,11 +12,16 @@ export function drawScene() {
 
     // set the shader uniforms
     gl.uniform4fv(uniforms.cameraPosition, getCameraPosition());
+
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
-    gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, light.directionMatrix);
-    gl.uniform1f(uniforms.terrainResolution, view.zoom * torus.terrainResolution);
-    gl.uniform1f(uniforms.terrainNormalResolution, view.zoom * torus.terrainNormalResolution);
-    gl.uniform1f(uniforms.time, view.time);
+    gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, getLightDirectionMatrix());
+
+    gl.uniform1f(uniforms.largeRadius, torus.largeRadius);
+    gl.uniform1f(uniforms.smallRadius, torus.smallRadius);
+
+    gl.uniform1i(uniforms.terrainDetail, torus.terrainDetail * view.zoomPrecise);
+    gl.uniform1f(uniforms.terrainSize, torus.terrainSize);
+    gl.uniform1f(uniforms.terrainHeight, torus.terrainHeight);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.vertexCount);
@@ -38,6 +43,7 @@ function setPositionAttribute() {
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }
 
+// create a vector to define the camera's position
 function getCameraPosition() {
     const smallRotation = mat4.create();
     mat4.rotate(smallRotation, smallRotation, view.theta, [1.0, 0.0, 0.0]);
@@ -55,11 +61,22 @@ function getCameraPosition() {
     return cameraPosition;
 }
 
-// create a view matrix to define only the camera's angle for the stars
+// create a view direction matrix to define the camera's angle
 function getViewDirectionMatrix() {
-    const viewDirectionMatrix = mat4.create();
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.phi, [0.0, 1.0, 0.0]);
-    mat4.rotate(viewDirectionMatrix, viewDirectionMatrix, view.theta, [1.0, 0.0, 0.0]);
+    const matrix = mat4.create();
 
-    return viewDirectionMatrix;
+    mat4.rotate(matrix, matrix, view.phi, [0.0, 1.0, 0.0]);
+    mat4.rotate(matrix, matrix, view.theta, [1.0, 0.0, 0.0]);
+
+    return matrix;
+}
+
+// create a light direction matrix to define the position of the sun
+function getLightDirectionMatrix() {
+    const matrix = mat4.create();
+
+    mat4.rotate(matrix, matrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
+    mat4.rotate(matrix, matrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
+
+    return matrix;
 }
