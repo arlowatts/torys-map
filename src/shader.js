@@ -53,6 +53,10 @@ float seaLevel = float(${torus.seaLevel});
 
 float minDistance = 0.0001;
 float maxDistance = 100.0;
+int maxSteps = 100;
+int stepsUntilShuffle = 70;
+
+float temperature = 0.62;
 
 void main() {
     // create the ray for raymarching
@@ -71,8 +75,8 @@ void main() {
     // march the ray
     float distance = sdf(pos);
 
-    for (int i = 0; i < 100 && abs(distance) > minDistance && distance < maxDistance; i++) {
-        pos += distance / float(max(1, i - 70)) * ray;
+    for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
+        pos += distance / float(max(1, i - stepsUntilShuffle)) * ray;
         distance = sdf(pos);
     }
 
@@ -94,7 +98,7 @@ void main() {
         float shade = dot(uLightDirectionMatrix * normal, sunPosition);
 
         // compute final pixel color
-        fragColor = getColor(getAltitude(pos), 0.62, shade);
+        fragColor = getColor(getAltitude(pos), temperature, shade);
     }
 
     // if the ray missed the surface, check for stars using the ray direction
@@ -123,11 +127,11 @@ void main() {
     }
 }
 
-// returns the shortest distance from the point x to the scene
+// returns the shortest distance from the pos to the scene
 float sdf(vec4 pos) {
-    float a = length(pos.xz) - 1.0;
+    float a = length(pos.xz) - uLargeRadius;
 
-    return sqrt(a * a + pos.y * pos.y) - (0.25 + max(getAltitude(pos), seaLevel));
+    return sqrt(a * a + pos.y * pos.y) - (uSmallRadius + max(getAltitude(pos), seaLevel));
 }
 
 float getAltitude(vec4 point) {
@@ -165,7 +169,7 @@ vec4 getColor(float altitude, float temperature, float shade) {
         color.b = temperature;
     }
     else {
-        temperature -= 16.0 * (altitude - seaLevel) / (1.0 - seaLevel);
+        temperature -= (altitude - seaLevel) / ((1.0 - seaLevel) * uTerrainHeight);
 
         if (temperature > 0.6) {
             color.r = temperature;

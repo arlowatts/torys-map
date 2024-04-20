@@ -16,31 +16,15 @@ export function drawScene() {
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, getLightDirectionMatrix());
 
-    gl.uniform1f(uniforms.largeRadius, torus.largeRadius);
-    gl.uniform1f(uniforms.smallRadius, torus.smallRadius);
+    gl.uniform1f(uniforms.largeRadius, torus.largeRadius / view.zoom);
+    gl.uniform1f(uniforms.smallRadius, torus.smallRadius / view.zoom);
 
-    gl.uniform1i(uniforms.terrainDetail, torus.terrainDetail * view.zoomPrecise);
-    gl.uniform1f(uniforms.terrainSize, torus.terrainSize);
-    gl.uniform1f(uniforms.terrainHeight, torus.terrainHeight);
+    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrainDetail - view.zoomPrecise, torus.minTerrainDetail), torus.maxTerrainDetail));
+    gl.uniform1f(uniforms.terrainSize, torus.terrainSize * view.zoom);
+    gl.uniform1f(uniforms.terrainHeight, torus.terrainHeight / view.zoom);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.vertexCount);
-}
-
-// define the mapping from the buffers to the attributes
-function setPositionAttribute() {
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
-
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        buffer.numComponents,
-        buffer.type,
-        buffer.normalize,
-        buffer.stride,
-        buffer.offset
-    );
-
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }
 
 // create a vector to define the camera's position
@@ -53,9 +37,9 @@ function getCameraPosition() {
 
     const cameraPosition = vec4.create();
 
-    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -1.25, 0.0]);
+    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -(1 + torus.smallRadius / view.zoom), 0.0]);
     vec4.transformMat4(cameraPosition, cameraPosition, smallRotation);
-    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -1.0, 0.0]);
+    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -torus.largeRadius / view.zoom, 0.0]);
     vec4.transformMat4(cameraPosition, cameraPosition, largeRotation);
 
     return cameraPosition;
@@ -79,4 +63,20 @@ function getLightDirectionMatrix() {
     mat4.rotate(matrix, matrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
 
     return matrix;
+}
+
+// define the mapping from the buffers to the attributes
+function setPositionAttribute() {
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
+
+    gl.vertexAttribPointer(
+        programInfo.attribLocations.vertexPosition,
+        buffer.numComponents,
+        buffer.type,
+        buffer.normalize,
+        buffer.stride,
+        buffer.offset
+    );
+
+    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }

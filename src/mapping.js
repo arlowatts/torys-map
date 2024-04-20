@@ -71,9 +71,7 @@ function onWheel(event) {
     view.zoom = 2 ** view.zoomPrecise;
 
     // compute the updated pan sensitivity
-    view.panSensitivity =
-        2 ** (Math.min(view.zoomPrecise, properties.MAX_PAN_SENSITIVITY) - properties.MIN_ZOOM)
-        * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
+    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
 }
 
 // when a touch gesture begins, record all finger contacts

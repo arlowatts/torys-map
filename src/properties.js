@@ -10,12 +10,15 @@ if (gl === null) {
 }
 
 // constants for panning and zooming
+export const MIN_ZOOM = 0;
+export const MAX_ZOOM = 20;
+
 export const SCROLL_SENSITIVITY = 0.0015;
 export const PINCH_SENSITIVITY_MODIFIER = 2.0;
-export const MIN_ZOOM = -10;
-export const MAX_ZOOM = 10;
-export const BASE_PAN_SENSITIVITY = 1.0 / window.innerHeight;
-export const MAX_PAN_SENSITIVITY = 4.0;
+
+export const BASE_PAN_SENSITIVITY = 0.0025 / window.innerHeight;
+export const MAX_PAN_SENSITIVITY = BASE_PAN_SENSITIVITY * 2 ** 12.0;
+
 export const PRECISE_PAN_TO_RADIANS = 2 ** MIN_ZOOM;
 export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
 
@@ -24,12 +27,16 @@ export const QUERY_PARAM_REFRESH_RATE = 1000;
 
 // planet dimensions and properties
 export const torus = {
+    // dimensions are given in kilometers
     largeRadius: 5096.8,
     smallRadius: 1274.2,
 
-    terrainDetail: 1, // base level of detail of the terrain
-    terrainSize: 8.0, // scale factor controlling the size of the terrain
-    terrainHeight: 0.0625, // scale factor controlling the height of the terrain
+    terrainDetail: 15, // base level of detail of the terrain
+    minTerrainDetail: 1, // minimum number of terrain detail levels to render
+    maxTerrainDetail: 8, // maximum number of terrain detail levels to render
+
+    terrainSize: 0.001, // inverse factor controlling the size of the terrain
+    terrainHeight: 500.0, // scale factor controlling the height of the terrain
 
     seaLevel: 0.0
 };
@@ -84,7 +91,7 @@ export const view = {
     theta: 0.0,
 
     // zoom values
-    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 1.0,
+    zoomPrecise: params.has("zoom") && !isNaN(params.get("zoom")) ? Number(params.get("zoom")) : 12.0,
     zoom: 0.0,
 
     panSensitivity: 0.0
