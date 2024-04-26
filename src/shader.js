@@ -233,8 +233,9 @@ float noise(float point, float pointFrac, uint pointFloor, uint evalAt) {
     );
 }
 
-// returns a value between 0 and 1
-// by Mark Jarzynski and Marc Olano
+// Mark Jarzynski and Marc Olano, Hash Functions for GPU Rendering, Journal of
+// Computer Graphics Techniques (JCGT), vol. 9, no. 3, 21-38, 2020
+// Available online http://jcgt.org/published/0009/03/02/
 float hash(uint x) {
     uint state = x * 747796405u + 2891336453u;
     uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
