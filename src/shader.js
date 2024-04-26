@@ -22,7 +22,6 @@ float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
 float noise(float, float, uint, uint);
 float hash(uint);
-float lerp(float, float, float);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -197,59 +196,50 @@ vec4 getColor(float altitude, float temperature, float shade) {
 float noise4(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.w;
 
-    return lerp(
+    return mix(
         noise3(point, pointFrac, pointFloor, evalAt),
         noise3(point, pointFrac, pointFloor, evalAt + 1u),
-        pointFrac.w
+        smoothstep(0.0, 1.0, pointFrac.w)
     );
 }
 
 float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.z;
 
-    return lerp(
+    return mix(
         noise2(point, pointFrac, pointFloor, evalAt),
         noise2(point, pointFrac, pointFloor, evalAt + 1u),
-        pointFrac.z
+        smoothstep(0.0, 1.0, pointFrac.z)
     );
 }
 
 float noise2(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.y;
 
-    return lerp(
+    return mix(
         noise(point.x, pointFrac.x, pointFloor.x, evalAt),
         noise(point.x, pointFrac.x, pointFloor.x, evalAt + 1u),
-        pointFrac.y
+        smoothstep(0.0, 1.0, pointFrac.y)
     );
 }
 
 float noise(float point, float pointFrac, uint pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor;
 
-    return lerp(
+    return mix(
         hash(evalAt),
         hash(evalAt + 1u),
-        pointFrac
+        smoothstep(0.0, 1.0, pointFrac)
     );
 }
 
 // returns a value between 0 and 1
+// by Mark Jarzynski and Marc Olano
 float hash(uint x) {
-    x ^= 2747636419u;
-    x *= 2654435769u;
-    x ^= x >> 16u;
-    x *= 2654435769u;
-    x ^= x >> 16u;
-    x *= 2654435769u;
+    uint state = x * 747796405u + 2891336453u;
+    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
 
     // equal to float(x) / (2**32 - 1);
-    return float(x) * 2.3283064370807974e-10;
-}
-
-float lerp(float a, float b, float t) {
-    t = t * t * (3.0 - 2.0 * t);
-
-    return a + t * (b - a);
+    return float((word >> 22u) ^ word) * 2.3283064370807974e-10;
 }
 `;
