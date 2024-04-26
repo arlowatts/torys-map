@@ -52,6 +52,11 @@ function getViewDirectionMatrix() {
     mat4.rotate(matrix, matrix, view.phi, [0.0, 1.0, 0.0]);
     mat4.rotate(matrix, matrix, view.theta, [1.0, 0.0, 0.0]);
 
+    if (view.firstPerson) {
+        mat4.rotate(matrix, matrix, view.fphi, [0.0, 0.0, 1.0]);
+        mat4.rotate(matrix, matrix, view.ftheta, [1.0, 0.0, 0.0]);
+    }
+
     return matrix;
 }
 

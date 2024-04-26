@@ -57,6 +57,7 @@ int maxSteps = 100;
 int stepsUntilShuffle = 70;
 
 float temperature = 0.62;
+float ambience = float(${light.ambience});
 
 void main() {
     // create the ray for raymarching
@@ -187,7 +188,7 @@ vec4 getColor(float altitude, float temperature, float shade) {
         }
     }
 
-    color *= shade;
+    color *= shade + ambience;
     color.w = 1.0;
 
     return color;

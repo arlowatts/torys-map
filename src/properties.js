@@ -50,7 +50,6 @@ export const stars = {
 // light direction and ambience
 export const light = {
     baseDirection: [1.0, 0.0, 0.0, 0.0],
-    directionMatrix: mat4.create(), // rotation matrix for the light direction
 
     // the axes of rotation for days and years
     dayAxis: [3 / 5, 0.0, 4 / 5], // local axis
@@ -59,13 +58,10 @@ export const light = {
     dayLength: 86400, // number of seconds in one day (local axis)
     yearLength: 365, // number of days in one year (orbit axis)
 
-    ambience: 0.2, // minimum light level
+    ambience: 0.7, // ambient light brightness
     sunSize: 0.05, // approximate radius of the sun in the sky
     sunColor: [1.0, 0.9, 0.7] // color of the sun in rgb format
 };
-
-// compute viewport properties
-const fov = 0.25 * Math.PI;
 
 // load query parameters
 const params = new URLSearchParams(window.location.search);
@@ -73,18 +69,21 @@ const params = new URLSearchParams(window.location.search);
 // the initial camera view
 export const view = {
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
-    fov: fov,
-    cameraDistance: 1 / Math.tan(0.5 * fov),
+    cameraDistance: 1 / Math.tan(Math.PI * 0.125),
+
+    // perspective type
+    firstPerson: params.get("firstperson") == "true",
+
+    // first-person view angles
+    fphi: params.has("fphi") && !isNaN(params.get("fphi")) ? Number(params.get("fphi")) : 0,
+    ftheta: params.has("ftheta") && !isNaN(params.get("ftheta")) ? Number(params.get("ftheta")) : -Math.PI / 4,
 
     // world time (seconds)
     time: params.has("time") && !isNaN(params.get("time")) ? Number(params.get("time")) : 0,
 
-    // time since the page was loaded (milliseconds)
-    pageTime: 0,
-
     // precise angles tracked as integers to avoid loss of precision
     phiPrecise: params.has("phi") && !isNaN(params.get("phi")) ? Number(params.get("phi")) : 0,
-    thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 500,
+    thetaPrecise: params.has("theta") && !isNaN(params.get("theta")) ? Number(params.get("theta")) : 0,
 
     // actual values in radians (computed from the precise values in real-time)
     phi: 0.0,

@@ -3,7 +3,15 @@ import { initShaders } from "./init.js";
 import { torus, view } from "./properties.js";
 import * as properties from "./properties.js";
 
-// arrays of touch event data for touchscreen support
+// dictionary of key press data for first-person controls
+const wasd = {
+    "w": false,
+    "a": false,
+    "s": false,
+    "d": false
+};
+
+// array of touch event data for touchscreen support
 const touches = [];
 
 main();
@@ -13,12 +21,16 @@ function main() {
     initShaders();
 
     // update the pan and zoom values
-    onMouseMove({ buttons: 1, movementX: 0.0, movementY: 0.0 });
-    onWheel({ wheelDelta: 0.0 });
+    computePan();
+    computeZoom();
 
-    // create the event listeners for pan and zoom
+    // create event listeners for pan and zoom
     addEventListener("mousemove", onMouseMove);
     addEventListener("wheel", onWheel);
+
+    // create event listeners for first-person controls
+    addEventListener("keydown", onKeyDown);
+    addEventListener("keyup", onKeyUp);
 
     // create event listeners for touchscreen controls
     addEventListener("touchstart", onTouchStart);
@@ -37,6 +49,18 @@ function main() {
 }
 
 function render() {
+    // update the position of the camera if first-person mode is toggled
+    if (view.firstPerson) {
+        if (wasd["w"])
+            view.theta += 0.01;
+        if (wasd["s"])
+            view.theta -= 0.01;
+        if (wasd["a"])
+            view.phi += 0.01;
+        if (wasd["d"])
+            view.phi -= 0.01;
+    }
+
     // render the scene
     drawScene();
 
@@ -44,20 +68,43 @@ function render() {
     requestAnimationFrame(render);
 }
 
+// compute the angles for phi and theta from the precise values
+function computePan() {
+    // wrap the values past a full rotation to avoid overflow
+    view.phiPrecise %= properties.PAN_LIMIT;
+    view.thetaPrecise %= properties.PAN_LIMIT;
+
+    // convert from precise values to actual values
+    view.phi = view.phiPrecise * properties.PRECISE_PAN_TO_RADIANS;
+    view.theta = view.thetaPrecise * properties.PRECISE_PAN_TO_RADIANS;
+}
+
+// compute the zoom value from the precise value
+function computeZoom() {
+    // compute the exponential zoom value
+    view.zoom = 2 ** view.zoomPrecise;
+
+    // compute the updated pan sensitivity
+    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
+}
+
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons == 1) {
-        // track the precise angle values as integers to avoid loss of precision
-        view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
-        view.thetaPrecise += event.movementY * view.panSensitivity;
+        if (view.firstPerson) {
+            view.fphi += event.movementX * 0.001;
+            view.ftheta += -event.movementY * 0.001;
 
-        // wrap the values past a full rotation to avoid overflow
-        view.phiPrecise %= properties.PAN_LIMIT;
-        view.thetaPrecise %= properties.PAN_LIMIT;
+            view.fphi %= Math.PI * 2;
+            view.ftheta = Math.min(Math.max(view.ftheta, -Math.PI), 0);
+        }
+        else {
+            // track the precise angle values as integers to avoid loss of precision
+            view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
+            view.thetaPrecise += event.movementY * view.panSensitivity;
 
-        // compute the actual angles as Numbers
-        view.phi = view.phiPrecise * properties.PRECISE_PAN_TO_RADIANS;
-        view.theta = view.thetaPrecise * properties.PRECISE_PAN_TO_RADIANS;
+            computePan();
+        }
     }
 }
 
@@ -67,11 +114,21 @@ function onWheel(event) {
     view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
     view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
 
-    // compute the exponential zoom value
-    view.zoom = 2 ** view.zoomPrecise;
+    computeZoom();
+}
 
-    // compute the updated pan sensitivity
-    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
+// update first-person movement controls when the WASD keys are pressed
+function onKeyDown(event) {
+    wasd[event.key] = true;
+}
+
+// toggle first-person view when the spacebar is pressed
+function onKeyUp(event) {
+    wasd[event.key] = false;
+
+    if (event.key == " ") {
+        view.firstPerson = !view.firstPerson;
+    }
 }
 
 // when a touch gesture begins, record all finger contacts
@@ -144,10 +201,13 @@ function onResize() {
 function updateQueryParameters() {
     let urlSearchParams = new URLSearchParams(window.location.search);
 
+    urlSearchParams.set("time", view.time);
+    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
+    urlSearchParams.set("firstperson", view.firstPerson);
     urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
     urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
-    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
-    urlSearchParams.set("time", view.time);
+    urlSearchParams.set("fphi", view.fphi.toFixed(4));
+    urlSearchParams.set("ftheta", view.ftheta.toFixed(4));
 
     history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
