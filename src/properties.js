@@ -70,6 +70,7 @@ const params = new URLSearchParams(window.location.search);
 export const view = {
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
     cameraDistance: 1 / Math.tan(Math.PI * 0.125),
+    cameraHeight: 1,
 
     // perspective type
     firstPerson: params.get("firstperson") == "true",

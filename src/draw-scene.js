@@ -29,18 +29,15 @@ export function drawScene() {
 
 // create a vector to define the camera's position
 function getCameraPosition() {
-    const smallRotation = mat4.create();
-    mat4.rotate(smallRotation, smallRotation, view.theta, [1.0, 0.0, 0.0]);
+    const r1 = -(torus.largeRadius / view.zoom);
+    const r2 = -(view.cameraHeight + torus.smallRadius / view.zoom);
 
-    const largeRotation = mat4.create();
-    mat4.rotate(largeRotation, largeRotation, view.phi, [0.0, 1.0, 0.0]);
-
-    const cameraPosition = vec4.create();
-
-    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -(1 + torus.smallRadius / view.zoom), 0.0]);
-    vec4.transformMat4(cameraPosition, cameraPosition, smallRotation);
-    vec4.add(cameraPosition, cameraPosition, [0.0, 0.0, -torus.largeRadius / view.zoom, 0.0]);
-    vec4.transformMat4(cameraPosition, cameraPosition, largeRotation);
+    const cameraPosition = vec4.fromValues(
+        (Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi),
+        (Math.sin(view.theta) * -r2),
+        (Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi),
+        0.0
+    );
 
     return cameraPosition;
 }
