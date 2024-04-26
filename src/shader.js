@@ -248,6 +248,8 @@ float hash(uint x) {
 }
 
 float lerp(float a, float b, float t) {
+    t = t * t * (3.0 - 2.0 * t);
+
     return a + t * (b - a);
 }
 `;
