@@ -50,22 +50,57 @@ function main() {
 
 function render() {
     // update the position of the camera if first-person mode is toggled
-    if (view.firstPerson) {
-        if (wasd["w"])
-            view.theta += 0.01;
-        if (wasd["s"])
-            view.theta -= 0.01;
-        if (wasd["a"])
-            view.phi += 0.01;
-        if (wasd["d"])
-            view.phi -= 0.01;
-    }
+    if (view.firstPerson)
+        moveFirstPersonCamera();
 
     // render the scene
     drawScene();
 
     // schedule the next frame
     requestAnimationFrame(render);
+}
+
+function moveFirstPersonCamera() {
+    // compute the speed for first-person movement in each direction
+    const camSlopePhi = getCameraSlopePhi();
+    const camSlopeTheta = torus.smallRadius / view.zoom;
+
+    // move forward when W is pressed
+    if (wasd["w"]) {
+        view.thetaPrecise += 0.05 * Math.cos(view.fphi) / camSlopeTheta;
+        view.phiPrecise += 0.05 * Math.sin(view.fphi) / camSlopePhi;
+    }
+
+    // move backward when S is pressed
+    if (wasd["s"]) {
+        view.thetaPrecise -= 0.05 * Math.cos(view.fphi) / camSlopeTheta;
+        view.phiPrecise -= 0.05 * Math.sin(view.fphi) / camSlopePhi;
+    }
+
+    // move left when A is pressed
+    if (wasd["a"]) {
+        view.thetaPrecise -= 0.05 * Math.sin(view.fphi) / camSlopeTheta;
+        view.phiPrecise += 0.05 * Math.cos(view.fphi) / camSlopePhi;
+    }
+
+    // move right when D is pressed
+    if (wasd["d"]) {
+        view.thetaPrecise += 0.05 * Math.sin(view.fphi) / camSlopeTheta;
+        view.phiPrecise -= 0.05 * Math.cos(view.fphi) / camSlopePhi;
+    }
+
+    computePan();
+}
+
+// compute the derivative of the camera's position with respect to phi
+function getCameraSlopePhi() {
+    const r1 = -(torus.largeRadius / view.zoom);
+    const r2 = -(torus.smallRadius / view.zoom);
+
+    return Math.sqrt(
+        ((Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi)) ** 2 +
+        ((Math.cos(view.theta) * r2 + r1) * -Math.sin(view.phi)) ** 2
+    );
 }
 
 // compute the angles for phi and theta from the precise values

@@ -32,14 +32,12 @@ function getCameraPosition() {
     const r1 = -(torus.largeRadius / view.zoom);
     const r2 = -(view.cameraHeight + torus.smallRadius / view.zoom);
 
-    const cameraPosition = vec4.fromValues(
+    return vec4.fromValues(
         (Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi),
         (Math.sin(view.theta) * -r2),
         (Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi),
         0.0
     );
-
-    return cameraPosition;
 }
 
 // create a view direction matrix to define the camera's angle

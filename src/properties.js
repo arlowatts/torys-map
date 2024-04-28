@@ -20,7 +20,7 @@ export const BASE_PAN_SENSITIVITY = 0.0025 / window.innerHeight;
 export const MAX_PAN_SENSITIVITY = BASE_PAN_SENSITIVITY * 2 ** 12.0;
 
 export const PRECISE_PAN_TO_RADIANS = 2 ** MIN_ZOOM;
-export const PAN_LIMIT = Math.round(2.0 * Math.PI / PRECISE_PAN_TO_RADIANS);
+export const PAN_LIMIT = Math.PI * 2 / PRECISE_PAN_TO_RADIANS;
 
 // delay between each refresh of the query parameters in milliseconds
 export const QUERY_PARAM_REFRESH_RATE = 1000;
@@ -58,7 +58,7 @@ export const light = {
     dayLength: 86400, // number of seconds in one day (local axis)
     yearLength: 365, // number of days in one year (orbit axis)
 
-    ambience: 0.7, // ambient light brightness
+    ambience: 0.5, // ambient light brightness
     sunSize: 0.05, // approximate radius of the sun in the sky
     sunColor: [1.0, 0.9, 0.7] // color of the sun in rgb format
 };
@@ -69,7 +69,7 @@ const params = new URLSearchParams(window.location.search);
 // the initial camera view
 export const view = {
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
-    cameraDistance: 1 / Math.tan(Math.PI * 0.125),
+    cameraDistance: 1 / Math.tan(Math.PI / 8),
     cameraHeight: 1,
 
     // perspective type
@@ -77,7 +77,7 @@ export const view = {
 
     // first-person view angles
     fphi: params.has("fphi") && !isNaN(params.get("fphi")) ? Number(params.get("fphi")) : 0,
-    ftheta: params.has("ftheta") && !isNaN(params.get("ftheta")) ? Number(params.get("ftheta")) : -Math.PI / 4,
+    ftheta: params.has("ftheta") && !isNaN(params.get("ftheta")) ? Number(params.get("ftheta")) : -(Math.PI / 4),
 
     // world time (seconds)
     time: params.has("time") && !isNaN(params.get("time")) ? Number(params.get("time")) : 0,
