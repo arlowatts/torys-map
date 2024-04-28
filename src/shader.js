@@ -43,7 +43,8 @@ float starFrequency = float(${stars.frequency});
 
 vec4 sunPosition = vec4(${light.baseDirection});
 float sunSize = float(${light.sunSize});
-vec3 sunColor = vec3(${light.sunColor});
+vec4 sunColor = vec4(${light.sunColor}, 1.0);
+vec4 skyColor = vec4(${light.skyColor}, 1.0);
 
 float aspect = float(${view.aspect});
 float cameraDistance = float(${view.cameraDistance});
@@ -74,10 +75,15 @@ void main() {
 
     // march the ray
     float distance = sdf(pos);
+    float closestDistance = distance;
 
     for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
         pos += distance / float(max(1, i - stepsUntilShuffle)) * ray;
         distance = sdf(pos);
+
+        if (abs(distance) < closestDistance) {
+            closestDistance = abs(distance);
+        }
     }
 
     // if the ray hit the surface, compute color and shadow
@@ -90,7 +96,7 @@ void main() {
             0.0
         );
 
-        normal -= sdf(pos);
+        normal -= distance;
         normal.w = 0.0;
         normal = normalize(normal);
 
@@ -116,7 +122,8 @@ void main() {
         ));
 
         if (length(ray - sunPosition) < sunSize) {
-            fragColor = vec4(sunColor, 1.0);
+            fragColor = sunColor;
+            return;
         }
         else if (val < starFrequency) {
             fragColor = vec4(1.0, 1.0, 1.0, 1.0);
@@ -124,6 +131,8 @@ void main() {
         else {
             fragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
+
+        fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
     }
 }
 

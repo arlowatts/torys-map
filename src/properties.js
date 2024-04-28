@@ -62,7 +62,8 @@ export const light = {
 
     ambience: 0.5, // ambient light brightness
     sunSize: 0.05, // approximate radius of the sun in the sky
-    sunColor: [1.0, 0.9, 0.7] // color of the sun in rgb format
+    sunColor: [1.0, 0.9, 0.7], // color of the sun in rgb format
+    skyColor: [0.4, 0.65, 1.0] // color of the sky in rgb format
 };
 
 // the initial camera view
