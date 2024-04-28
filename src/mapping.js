@@ -188,20 +188,18 @@ function onTouchMove(event) {
 
         // get the distance between the last two touches
         let touchDistance = Math.sqrt(
-            (touches[0].pageX - touches[1].pageX) * (touches[0].pageX - touches[1].pageX) +
-            (touches[0].pageY - touches[1].pageY) * (touches[0].pageY - touches[1].pageY)
+            (touches[0].pageX - touches[1].pageX) ** 2 +
+            (touches[0].pageY - touches[1].pageY) ** 2
         );
 
         // get the distance between the current two touches
         let newTouchDistance = Math.sqrt(
-            (touch1.pageX - touch2.pageX) * (touch1.pageX - touch2.pageX) +
-            (touch1.pageY - touch2.pageY) * (touch1.pageY - touch2.pageY)
+            (touch1.pageX - touch2.pageX) ** 2 +
+            (touch1.pageY - touch2.pageY) ** 2
         );
 
         // invoke the zoom function
-        onWheel({
-            wheelDelta: (newTouchDistance - touchDistance) * properties.PINCH_SENSITIVITY_MODIFIER
-        });
+        onWheel({ wheelDelta: properties.PINCH_SENSITIVITY_MODIFIER * (newTouchDistance - touchDistance) });
 
         // update to the latest touch points
         touches[0] = touch1;
