@@ -43,7 +43,7 @@ export function initShaders() {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
 
     // convert the array to a Float32Array, then populate the buffer
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, -1.0]), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
 }
 
 // type: the type of shader

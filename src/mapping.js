@@ -20,9 +20,8 @@ function main() {
     // initialize the shader program
     initShaders();
 
-    // update the pan and zoom values
-    computePan();
-    computeZoom();
+    // update the zoom value
+    onWheel({ wheelDelta: 0 });
 
     // create event listeners for pan and zoom
     addEventListener("mousemove", onMouseMove);
@@ -67,29 +66,31 @@ function moveFirstPersonCamera() {
 
     // move forward when W is pressed
     if (wasd["w"]) {
-        view.thetaPrecise += 0.05 * Math.cos(view.fphi) / camSlopeTheta;
-        view.phiPrecise += 0.05 * Math.sin(view.fphi) / camSlopePhi;
+        view.theta += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
+        view.phi += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
     }
 
     // move backward when S is pressed
     if (wasd["s"]) {
-        view.thetaPrecise -= 0.05 * Math.cos(view.fphi) / camSlopeTheta;
-        view.phiPrecise -= 0.05 * Math.sin(view.fphi) / camSlopePhi;
+        view.theta -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
+        view.phi -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
     }
 
     // move left when A is pressed
     if (wasd["a"]) {
-        view.thetaPrecise -= 0.05 * Math.sin(view.fphi) / camSlopeTheta;
-        view.phiPrecise += 0.05 * Math.cos(view.fphi) / camSlopePhi;
+        view.theta -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
+        view.phi += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
     }
 
     // move right when D is pressed
     if (wasd["d"]) {
-        view.thetaPrecise += 0.05 * Math.sin(view.fphi) / camSlopeTheta;
-        view.phiPrecise -= 0.05 * Math.cos(view.fphi) / camSlopePhi;
+        view.theta += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
+        view.phi -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
     }
 
-    computePan();
+    // wrap the values past a full rotation to avoid overflow
+    view.phi %= Math.TAU;
+    view.theta %= Math.TAU;
 }
 
 // compute the derivative of the camera's position with respect to phi
@@ -99,46 +100,28 @@ function getCameraSlopePhi() {
 
     return Math.sqrt(
         ((Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi)) ** 2 +
-        ((Math.cos(view.theta) * r2 + r1) * -Math.sin(view.phi)) ** 2
+        ((Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi)) ** 2
     );
-}
-
-// compute the angles for phi and theta from the precise values
-function computePan() {
-    // wrap the values past a full rotation to avoid overflow
-    view.phiPrecise %= properties.PAN_LIMIT;
-    view.thetaPrecise %= properties.PAN_LIMIT;
-
-    // convert from precise values to actual values
-    view.phi = view.phiPrecise * properties.PRECISE_PAN_TO_RADIANS;
-    view.theta = view.thetaPrecise * properties.PRECISE_PAN_TO_RADIANS;
-}
-
-// compute the zoom value from the precise value
-function computeZoom() {
-    // compute the exponential zoom value
-    view.zoom = 2 ** view.zoomPrecise;
-
-    // compute the updated pan sensitivity
-    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
 }
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons == 1) {
         if (view.firstPerson) {
-            view.fphi += event.movementX * 0.001;
-            view.ftheta += -event.movementY * 0.001;
+            view.fphi += event.movementX * view.lookSensitivity;
+            view.ftheta -= event.movementY * view.lookSensitivity;
 
-            view.fphi %= Math.PI * 2;
+            view.fphi %= Math.TAU;
             view.ftheta = Math.min(Math.max(view.ftheta, -Math.PI), 0);
         }
         else {
             // track the precise angle values as integers to avoid loss of precision
-            view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
-            view.thetaPrecise += event.movementY * view.panSensitivity;
+            view.phi += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
+            view.theta += event.movementY * view.panSensitivity;
 
-            computePan();
+            // wrap the values past a full rotation to avoid overflow
+            view.phi %= Math.TAU;
+            view.theta %= Math.TAU;
         }
     }
 }
@@ -147,9 +130,13 @@ function onMouseMove(event) {
 function onWheel(event) {
     // track the precise zoom value to avoid loss of precision
     view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
-    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
+    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, 0), properties.MAX_ZOOM);
 
-    computeZoom();
+    // compute the exponential zoom value
+    view.zoom = 2 ** view.zoomPrecise;
+
+    // compute the updated pan sensitivity
+    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
 }
 
 // update first-person movement controls when the WASD keys are pressed
@@ -239,8 +226,8 @@ function updateQueryParameters() {
     urlSearchParams.set("time", view.time);
     urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
     urlSearchParams.set("firstperson", view.firstPerson);
-    urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
-    urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
+    urlSearchParams.set("phi", view.phi.toFixed(4));
+    urlSearchParams.set("theta", view.theta.toFixed(4));
     urlSearchParams.set("fphi", view.fphi.toFixed(4));
     urlSearchParams.set("ftheta", view.ftheta.toFixed(4));
 

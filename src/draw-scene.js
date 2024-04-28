@@ -36,7 +36,7 @@ function getCameraPosition() {
         (Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi),
         (Math.sin(view.theta) * -r2),
         (Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi),
-        0.0
+        0
     );
 }
 
@@ -44,12 +44,12 @@ function getCameraPosition() {
 function getViewDirectionMatrix() {
     const matrix = mat4.create();
 
-    mat4.rotate(matrix, matrix, view.phi, [0.0, 1.0, 0.0]);
-    mat4.rotate(matrix, matrix, view.theta, [1.0, 0.0, 0.0]);
+    mat4.rotate(matrix, matrix, view.phi, [0, 1, 0]);
+    mat4.rotate(matrix, matrix, view.theta, [1, 0, 0]);
 
     if (view.firstPerson) {
-        mat4.rotate(matrix, matrix, view.fphi, [0.0, 0.0, 1.0]);
-        mat4.rotate(matrix, matrix, view.ftheta, [1.0, 0.0, 0.0]);
+        mat4.rotate(matrix, matrix, view.fphi, [0, 0, 1]);
+        mat4.rotate(matrix, matrix, view.ftheta, [1, 0, 0]);
     }
 
     return matrix;
@@ -59,8 +59,8 @@ function getViewDirectionMatrix() {
 function getLightDirectionMatrix() {
     const matrix = mat4.create();
 
-    mat4.rotate(matrix, matrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
-    mat4.rotate(matrix, matrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
+    mat4.rotate(matrix, matrix, view.time / light.dayLength * Math.TAU, light.dayAxis);
+    mat4.rotate(matrix, matrix, view.time / (light.dayLength * light.yearLength) * Math.TAU, light.yearAxis);
 
     return matrix;
 }
