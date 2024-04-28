@@ -1,72 +1,37 @@
-import { drawStars, drawTorus } from "./draw-scene.js";
-import { initTorusBuffer, initBackgroundBuffer } from "./init-buffers.js";
-import { gl, programInfo, torus, view, light } from "./properties.js";
+import { drawScene } from "./draw-scene.js";
+import { initShaders } from "./init.js";
+import { torus, view } from "./properties.js";
 import * as properties from "./properties.js";
-import * as torusFragment from "./shaders/torus-fragment.js";
-import * as torusVertex from "./shaders/torus-vertex.js";
-import * as starsFragment from "./shaders/stars-fragment.js";
-import * as starsVertex from "./shaders/stars-vertex.js";
 
-// arrays of touch event data for touchscreen support
+// dictionary of key press data for first-person controls
+const wasd = {
+    "w": false,
+    "a": false,
+    "s": false,
+    "d": false
+};
+
+// array of touch event data for touchscreen support
 const touches = [];
 
 main();
 
 function main() {
-    // initialize the shader programs
-    const torusProgram = initShaderProgram(torusVertex.source, torusFragment.source);
-    const starsProgram = initShaderProgram(starsVertex.source, starsFragment.source);
+    // initialize the shader program
+    initShaders();
 
-    // collect information about the shader programs
-    // the torus (planet) program
-    programInfo.torus.program = torusProgram;
+    // update the zoom value
+    onWheel({ wheelDelta: 0 });
 
-    programInfo.torus.attribLocations = {
-        vertexPosition: gl.getAttribLocation(torusProgram, "aVertexPosition")
-    };
-
-    programInfo.torus.uniformLocations = {
-        // matrices
-        projectionMatrix: gl.getUniformLocation(torusProgram, "uProjectionMatrix"),
-        viewMatrix: gl.getUniformLocation(torusProgram, "uViewMatrix"),
-        // vectors
-        lightDirection: gl.getUniformLocation(torusProgram, "uLightDirection"),
-        lightAmbience: gl.getUniformLocation(torusProgram, "uLightAmbience"),
-        // scalars
-        zoomLevel: gl.getUniformLocation(torusProgram, "uZoomLevel"),
-        terrainResolution: gl.getUniformLocation(torusProgram, "uTerrainResolution"),
-        terrainHeightScale: gl.getUniformLocation(torusProgram, "uTerrainHeightScale"),
-        terrainNormalResolution: gl.getUniformLocation(torusProgram, "uTerrainNormalResolution"),
-        time: gl.getUniformLocation(torusProgram, "uTime"),
-        // booleans
-        showClouds: gl.getUniformLocation(torusProgram, "uShowClouds")
-    };
-
-    // the stars (background) program
-    programInfo.stars.program = starsProgram;
-
-    programInfo.stars.attribLocations= {
-        vertexPosition: gl.getAttribLocation(starsProgram, "aVertexPosition")
-    };
-
-    programInfo.stars.uniformLocations = {
-        viewDirectionMatrix: gl.getUniformLocation(starsProgram, "uViewDirectionMatrix"),
-        lightDirectionMatrix: gl.getUniformLocation(starsProgram, "uLightDirectionMatrix"),
-    };
-
-    // initialize the data buffers for the scene
-    initTorusBuffer();
-    initBackgroundBuffer();
-
-    // ensure that the zoom and pan values are correct
-    onMouseMove({buttons: 1, movementX: 0.0, movementY: 0.0});
-    onWheel({wheelDelta: 0.0});
-
-    // create the event listeners for pan and zoom
+    // create event listeners for pan and zoom
     addEventListener("mousemove", onMouseMove);
     addEventListener("wheel", onWheel);
 
-    // create event listeners for touchscreen support
+    // create event listeners for first-person controls
+    addEventListener("keydown", onKeyDown);
+    addEventListener("keyup", onKeyUp);
+
+    // create event listeners for touchscreen controls
     addEventListener("touchstart", onTouchStart);
     addEventListener("touchend", onTouchEnd);
     addEventListener("touchcancel", onTouchEnd);
@@ -75,19 +40,6 @@ function main() {
     // create the event listener to reload on resize
     addEventListener("resize", onResize);
 
-    // create listeners to track whether the user is interacting with input
-    view.daySlider.addEventListener("mousedown", blockPanning);
-    view.daySlider.addEventListener("touchstart", blockPanning);
-    view.daySlider.addEventListener("mouseup", unblockPanning);
-    view.daySlider.addEventListener("touchend", unblockPanning);
-    view.daySlider.addEventListener("touchcancel", unblockPanning);
-
-    view.yearSlider.addEventListener("mousedown", blockPanning);
-    view.yearSlider.addEventListener("touchstart", blockPanning);
-    view.yearSlider.addEventListener("mouseup", unblockPanning);
-    view.yearSlider.addEventListener("touchend", unblockPanning);
-    view.yearSlider.addEventListener("touchcancel", unblockPanning);
-
     // create an interval timer to update the url query parameters
     setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
 
@@ -95,47 +47,82 @@ function main() {
     requestAnimationFrame(render);
 }
 
-function render(now) {
-    updateTime(now);
-
-    // create the light direction matrix and vector
-    mat4.identity(light.directionMatrix);
-    vec4.copy(light.direction, light.baseDirection);
-
-    // apply the rotations to the matrix
-    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / light.dayLength * Math.PI * 2, light.dayAxis);
-    mat4.rotate(light.directionMatrix, light.directionMatrix, view.time / (light.dayLength * light.yearLength) * Math.PI * 2, light.yearAxis);
-
-    // apply the matrix to get the current light direction vector
-    vec4.transformMat4(light.direction, light.direction, light.directionMatrix);
+function render() {
+    // update the position of the camera if first-person mode is toggled
+    if (view.firstPerson)
+        moveFirstPersonCamera();
 
     // render the scene
-    drawStars();
-    drawTorus();
+    drawScene();
 
+    // schedule the next frame
     requestAnimationFrame(render);
 }
 
-function updateTime(now) {
-    view.pageTime = now;
+function moveFirstPersonCamera() {
+    // compute the speed for first-person movement in each direction
+    const camSlopePhi = getCameraSlopePhi();
+    const camSlopeTheta = torus.smallRadius / view.zoom;
 
-    view.time = Number(view.daySlider.value) + light.dayLength * Number(view.yearSlider.value);
+    // move forward when W is pressed
+    if (wasd["w"]) {
+        view.theta += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
+        view.phi += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
+    }
+
+    // move backward when S is pressed
+    if (wasd["s"]) {
+        view.theta -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
+        view.phi -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
+    }
+
+    // move left when A is pressed
+    if (wasd["a"]) {
+        view.theta -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
+        view.phi += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
+    }
+
+    // move right when D is pressed
+    if (wasd["d"]) {
+        view.theta += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
+        view.phi -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
+    }
+
+    // wrap the values past a full rotation to avoid overflow
+    view.phi %= Math.TAU;
+    view.theta %= Math.TAU;
+}
+
+// compute the derivative of the camera's position with respect to phi
+function getCameraSlopePhi() {
+    const r1 = -(torus.largeRadius / view.zoom);
+    const r2 = -(torus.smallRadius / view.zoom);
+
+    return Math.sqrt(
+        ((Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi)) ** 2 +
+        ((Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi)) ** 2
+    );
 }
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
-    if (event.buttons == 1 && view.allowPanning) {
-        // track the precise angle values as integers to avoid loss of precision
-        view.phiPrecise += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
-        view.thetaPrecise += event.movementY * view.panSensitivity;
+    if (event.buttons == 1) {
+        if (view.firstPerson) {
+            view.fphi += event.movementX * view.lookSensitivity;
+            view.ftheta -= event.movementY * view.lookSensitivity;
 
-        // wrap the values past a full rotation to avoid overflow
-        view.phiPrecise %= properties.PAN_LIMIT;
-        view.thetaPrecise %= properties.PAN_LIMIT;
+            view.fphi %= Math.TAU;
+            view.ftheta = Math.min(Math.max(view.ftheta, -Math.PI), 0);
+        }
+        else {
+            // track the precise angle values as integers to avoid loss of precision
+            view.phi += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
+            view.theta += event.movementY * view.panSensitivity;
 
-        // compute the actual angles as Numbers
-        view.phi = view.phiPrecise * properties.PRECISE_PAN_TO_RADIANS;
-        view.theta = view.thetaPrecise * properties.PRECISE_PAN_TO_RADIANS;
+            // wrap the values past a full rotation to avoid overflow
+            view.phi %= Math.TAU;
+            view.theta %= Math.TAU;
+        }
     }
 }
 
@@ -143,18 +130,27 @@ function onMouseMove(event) {
 function onWheel(event) {
     // track the precise zoom value to avoid loss of precision
     view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
-    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, properties.MIN_ZOOM), properties.MAX_ZOOM);
+    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, 0), properties.MAX_ZOOM);
 
-    // compute the exponential zoom value and the updated pan sensitivity
+    // compute the exponential zoom value
     view.zoom = 2 ** view.zoomPrecise;
-    view.panSensitivity =
-        2 ** (Math.min(view.zoomPrecise, properties.MAX_PAN_SENSITIVITY) - properties.MIN_ZOOM)
-        * properties.BASE_PAN_SENSITIVITY / view.cameraDistance;
 
-    // update the scale value on the bar
-    document.getElementById("scalevalue").innerText =
-        (torus.unitToKm * view.zoom / view.cameraDistance * properties.SCALE_LENGTH).toFixed(2)
-        + "km";
+    // compute the updated pan sensitivity
+    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
+}
+
+// update first-person movement controls when the WASD keys are pressed
+function onKeyDown(event) {
+    wasd[event.key] = true;
+}
+
+// toggle first-person view when the spacebar is pressed
+function onKeyUp(event) {
+    wasd[event.key] = false;
+
+    if (event.key == " ") {
+        view.firstPerson = !view.firstPerson;
+    }
 }
 
 // when a touch gesture begins, record all finger contacts
@@ -217,72 +213,23 @@ function onTouchMove(event) {
     }
 }
 
-// update the url search params
-function updateQueryParameters() {
-    let urlSearchParams = new URLSearchParams(window.location.search);
-
-    urlSearchParams.set("phi", view.phiPrecise.toFixed(4));
-    urlSearchParams.set("theta", view.thetaPrecise.toFixed(4));
-    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
-    urlSearchParams.set("time", view.time);
-
-    history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
-}
-
 // reload the page on window resize
 function onResize() {
     updateQueryParameters();
     location.reload();
 }
 
-// track when the user is interacting with input elements to block panning
-function blockPanning() {
-    view.allowPanning = false;
-}
+// update the url search params
+function updateQueryParameters() {
+    let urlSearchParams = new URLSearchParams(window.location.search);
 
-// track when the user is interacting with input elements to block panning
-function unblockPanning() {
-    view.allowPanning = true;
-}
+    urlSearchParams.set("time", view.time);
+    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
+    urlSearchParams.set("firstperson", view.firstPerson);
+    urlSearchParams.set("phi", view.phi.toFixed(4));
+    urlSearchParams.set("theta", view.theta.toFixed(4));
+    urlSearchParams.set("fphi", view.fphi.toFixed(4));
+    urlSearchParams.set("ftheta", view.ftheta.toFixed(4));
 
-// initialize the shader program with a vertex shader and a fragment shader
-// vsSource defines the source code for the vertex shader
-// fsSource defines the source code for the fragment shader
-// returns a shader program object
-function initShaderProgram(vsSource, fsSource) {
-    // compile the shaders
-    const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
-    const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource);
-
-    // create the shader program and link the shaders
-    const shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
-    gl.linkProgram(shaderProgram);
-
-    // check that the shader program compiled correctly
-    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram,)}`);
-        return null;
-    }
-
-    return shaderProgram;
-}
-
-// type defines the type of shader
-// source defines the source code of the shader
-// returns a compiled shader object
-function loadShader(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-
-    // check that the shader compiled properly
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`);
-        gl.deleteShader(shader);
-        return null;
-    }
-
-    return shader;
+    history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
 }
