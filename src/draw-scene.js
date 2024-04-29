@@ -1,4 +1,4 @@
-import { gl, programInfo, buffer, torus, view, light } from "./properties.js";
+import { gl, programInfo, buffer, torus, view, zoom, pan, look } from "./properties.js";
 
 // draw the scene
 export function drawScene() {
@@ -16,12 +16,12 @@ export function drawScene() {
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, getLightDirectionMatrix());
 
-    gl.uniform1f(uniforms.largeRadius, torus.largeRadius / view.zoom);
-    gl.uniform1f(uniforms.smallRadius, torus.smallRadius / view.zoom);
+    gl.uniform1f(uniforms.largeRadius, torus.radius.large / zoom.val);
+    gl.uniform1f(uniforms.smallRadius, torus.radius.small / zoom.val);
 
-    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrainDetail - view.zoomPrecise, torus.minTerrainDetail), torus.maxTerrainDetail));
-    gl.uniform1f(uniforms.terrainSize, torus.terrainSize * view.zoom);
-    gl.uniform1f(uniforms.terrainHeight, torus.terrainHeight / view.zoom);
+    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrainDetail.base - zoom.precise, torus.terrainDetail.min), torus.terrainDetail.max));
+    gl.uniform1f(uniforms.terrainSize, torus.terrain.size * zoom.val);
+    gl.uniform1f(uniforms.terrainHeight, torus.terrain.height / zoom.val);
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.vertexCount);
@@ -29,13 +29,13 @@ export function drawScene() {
 
 // create a vector to define the camera's position
 function getCameraPosition() {
-    const r1 = -(torus.largeRadius / view.zoom);
-    const r2 = -(view.cameraHeight + torus.smallRadius / view.zoom);
+    const r1 = -(torus.radius.large / zoom.val);
+    const r2 = -(view.camera.height + torus.radius.small / zoom.val);
 
     return vec4.fromValues(
-        (Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi),
-        (Math.sin(view.theta) * -r2),
-        (Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi),
+        (Math.cos(pan.theta) * r2 + r1) * Math.sin(pan.phi),
+        (Math.sin(pan.theta) * -r2),
+        (Math.cos(pan.theta) * r2 + r1) * Math.cos(pan.phi),
         0
     );
 }
@@ -44,12 +44,12 @@ function getCameraPosition() {
 function getViewDirectionMatrix() {
     const matrix = mat4.create();
 
-    mat4.rotate(matrix, matrix, view.phi, [0, 1, 0]);
-    mat4.rotate(matrix, matrix, view.theta, [1, 0, 0]);
+    mat4.rotate(matrix, matrix, pan.phi, [0, 1, 0]);
+    mat4.rotate(matrix, matrix, pan.theta, [1, 0, 0]);
 
-    if (view.firstPerson) {
-        mat4.rotate(matrix, matrix, view.fphi, [0, 0, 1]);
-        mat4.rotate(matrix, matrix, view.ftheta, [1, 0, 0]);
+    if (view.isFirstPerson) {
+        mat4.rotate(matrix, matrix, look.phi, [0, 0, 1]);
+        mat4.rotate(matrix, matrix, look.theta, [1, 0, 0]);
     }
 
     return matrix;
@@ -59,8 +59,8 @@ function getViewDirectionMatrix() {
 function getLightDirectionMatrix() {
     const matrix = mat4.create();
 
-    mat4.rotate(matrix, matrix, view.time / light.dayLength * Math.TAU, light.dayAxis);
-    mat4.rotate(matrix, matrix, view.time / (light.dayLength * light.yearLength) * Math.TAU, light.yearAxis);
+    mat4.rotate(matrix, matrix, torus.time / torus.length.day * Math.TAU, torus.axis.day);
+    mat4.rotate(matrix, matrix, torus.time / (torus.length.day * torus.length.year) * Math.TAU, torus.axis.year);
 
     return matrix;
 }

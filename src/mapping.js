@@ -1,18 +1,6 @@
 import { drawScene } from "./draw-scene.js";
 import { initShaders } from "./init.js";
-import { torus, view } from "./properties.js";
-import * as properties from "./properties.js";
-
-// dictionary of key press data for first-person controls
-const wasd = {
-    "w": false,
-    "a": false,
-    "s": false,
-    "d": false
-};
-
-// array of touch event data for touchscreen support
-const touches = [];
+import { torus, view, pan, zoom, query, look, input } from "./properties.js";
 
 main();
 
@@ -41,7 +29,7 @@ function main() {
     addEventListener("resize", onResize);
 
     // create an interval timer to update the url query parameters
-    setInterval(updateQueryParameters, properties.QUERY_PARAM_REFRESH_RATE);
+    setInterval(updateQueryParameters, query.refreshRate);
 
     // draw the scene and update it each frame
     requestAnimationFrame(render);
@@ -49,8 +37,7 @@ function main() {
 
 function render() {
     // update the position of the camera if first-person mode is toggled
-    if (view.firstPerson)
-        moveFirstPersonCamera();
+    if (view.isFirstPerson) moveFirstPersonCamera();
 
     // render the scene
     drawScene();
@@ -61,67 +48,61 @@ function render() {
 
 function moveFirstPersonCamera() {
     // compute the speed for first-person movement in each direction
-    const camSlopePhi = getCameraSlopePhi();
-    const camSlopeTheta = torus.smallRadius / view.zoom;
+    const R = -(torus.radius.large / zoom.val);
+    const r = -(torus.radius.small / zoom.val);
+
+    const camSlopePhi = Math.hypot(
+        ((Math.cos(pan.theta) * r + R) * Math.cos(pan.phi)),
+        ((Math.cos(pan.theta) * r + R) * Math.sin(pan.phi))
+    );
+
+    const camSlopeTheta = torus.radius.small / zoom.val;
 
     // move forward when W is pressed
-    if (wasd["w"]) {
-        view.theta += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
-        view.phi += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
+    if (input.key["w"]) {
+        pan.theta += look.speed * Math.cos(look.phi) / camSlopeTheta;
+        pan.phi += look.speed * Math.sin(look.phi) / camSlopePhi;
     }
 
     // move backward when S is pressed
-    if (wasd["s"]) {
-        view.theta -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopeTheta;
-        view.phi -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopePhi;
+    if (input.key["s"]) {
+        pan.theta -= look.speed * Math.cos(look.phi) / camSlopeTheta;
+        pan.phi -= look.speed * Math.sin(look.phi) / camSlopePhi;
     }
 
     // move left when A is pressed
-    if (wasd["a"]) {
-        view.theta -= view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
-        view.phi += view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
+    if (input.key["a"]) {
+        pan.theta -= look.speed * Math.sin(look.phi) / camSlopeTheta;
+        pan.phi += look.speed * Math.cos(look.phi) / camSlopePhi;
     }
 
     // move right when D is pressed
-    if (wasd["d"]) {
-        view.theta += view.firstPersonSpeed * Math.sin(view.fphi) / camSlopeTheta;
-        view.phi -= view.firstPersonSpeed * Math.cos(view.fphi) / camSlopePhi;
+    if (input.key["d"]) {
+        pan.theta += look.speed * Math.sin(look.phi) / camSlopeTheta;
+        pan.phi -= look.speed * Math.cos(look.phi) / camSlopePhi;
     }
 
     // wrap the values past a full rotation to avoid overflow
-    view.phi %= Math.TAU;
-    view.theta %= Math.TAU;
-}
-
-// compute the derivative of the camera's position with respect to phi
-function getCameraSlopePhi() {
-    const r1 = -(torus.largeRadius / view.zoom);
-    const r2 = -(torus.smallRadius / view.zoom);
-
-    return Math.sqrt(
-        ((Math.cos(view.theta) * r2 + r1) * Math.cos(view.phi)) ** 2 +
-        ((Math.cos(view.theta) * r2 + r1) * Math.sin(view.phi)) ** 2
-    );
+    pan.phi %= Math.TAU;
+    pan.theta %= Math.TAU;
 }
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons == 1) {
-        if (view.firstPerson) {
-            view.fphi += event.movementX * view.lookSensitivity;
-            view.ftheta -= event.movementY * view.lookSensitivity;
+        if (view.isFirstPerson) {
+            look.phi += event.movementX * look.sensitivity;
+            look.theta -= event.movementY * look.sensitivity;
 
-            view.fphi %= Math.TAU;
-            view.ftheta = Math.min(Math.max(view.ftheta, -Math.PI), 0);
+            look.phi %= Math.TAU;
+            look.theta = Math.min(Math.max(look.theta, -Math.PI), 0);
         }
         else {
-            // track the precise angle values as integers to avoid loss of precision
-            view.phi += event.movementX * view.panSensitivity * torus.smallRadius / torus.largeRadius;
-            view.theta += event.movementY * view.panSensitivity;
+            pan.phi += event.movementX * pan.sensitivity.val * torus.radius.small / torus.radius.large;
+            pan.theta += event.movementY * pan.sensitivity.val;
 
-            // wrap the values past a full rotation to avoid overflow
-            view.phi %= Math.TAU;
-            view.theta %= Math.TAU;
+            pan.phi %= Math.TAU;
+            pan.theta %= Math.TAU;
         }
     }
 }
@@ -129,81 +110,81 @@ function onMouseMove(event) {
 // zoom when the scroll wheel is used
 function onWheel(event) {
     // track the precise zoom value to avoid loss of precision
-    view.zoomPrecise -= event.wheelDelta * properties.SCROLL_SENSITIVITY;
-    view.zoomPrecise = Math.min(Math.max(view.zoomPrecise, 0), properties.MAX_ZOOM);
+    zoom.precise -= event.wheelDelta * input.sensitivity.scroll;
+    zoom.precise = Math.min(Math.max(zoom.precise, 0), zoom.max);
 
     // compute the exponential zoom value
-    view.zoom = 2 ** view.zoomPrecise;
+    zoom.val = Math.exp(zoom.precise);
 
     // compute the updated pan sensitivity
-    view.panSensitivity = Math.min(properties.BASE_PAN_SENSITIVITY * view.zoom, properties.MAX_PAN_SENSITIVITY);
+    pan.sensitivity.val = pan.sensitivity.base * Math.min(zoom.val, pan.sensitivity.max);
 }
 
 // update first-person movement controls when the WASD keys are pressed
 function onKeyDown(event) {
-    wasd[event.key] = true;
+    input.key[event.key] = true;
 }
 
 // toggle first-person view when the spacebar is pressed
 function onKeyUp(event) {
-    wasd[event.key] = false;
+    input.key[event.key] = false;
 
     if (event.key == " ") {
-        view.firstPerson = !view.firstPerson;
+        view.isFirstPerson = !view.isFirstPerson;
     }
 }
 
 // when a touch gesture begins, record all finger contacts
 function onTouchStart(event) {
     for (let i = 0; i < event.changedTouches.length; i++) {
-        touches.push(event.changedTouches.item(i));
+        input.touch.push(event.changedTouches.item(i));
     }
 }
 
 // when touch gestures end, clear the list
 function onTouchEnd() {
-    touches.splice(0, touches.length);
+    input.touch.splice(0, input.touch.length);
 }
 
 // when a touch gesture moves, trigger a pan or zoom accordingly
 function onTouchMove(event) {
     // if only a single finger is on the screen, perform a pan
-    if (touches.length == 1 && event.touches.length == 1) {
-        let touch = event.touches.item(0);
+    if (input.touch.length == 1 && event.touches.length == 1) {
+        let touch0 = event.touches.item(0);
 
         // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: (touch.pageX - touches[0].pageX),
-            movementY: (touch.pageY - touches[0].pageY)
+            movementX: (touch0.pageX - input.touch[0].pageX),
+            movementY: (touch0.pageY - input.touch[0].pageY)
         });
 
         // update to the latest touch point
-        touches[0] = touch;
+        input.touch[0] = touch0;
     }
     // if exactly two fingers are on the screen, perform a zoom
-    else if (touches.length == 2 && event.touches.length == 2) {
-        let touch1 = event.touches.item(0);
-        let touch2 = event.touches.item(1);
+    else if (input.touch.length == 2 && event.touches.length == 2) {
+        let touch0 = event.touches.item(0);
+        let touch1 = event.touches.item(1);
 
         // get the distance between the last two touches
-        let touchDistance = Math.sqrt(
-            (touches[0].pageX - touches[1].pageX) ** 2 +
-            (touches[0].pageY - touches[1].pageY) ** 2
+        let touchDistance = Math.hypot(
+            input.touch[0].pageX - input.touch[1].pageX,
+            input.touch[0].pageY - input.touch[1].pageY
         );
 
         // get the distance between the current two touches
-        let newTouchDistance = Math.sqrt(
-            (touch1.pageX - touch2.pageX) ** 2 +
-            (touch1.pageY - touch2.pageY) ** 2
+        let newTouchDistance = Math.hypot(
+            touch0.pageX - touch1.pageX,
+            touch0.pageY - touch1.pageY
         );
 
         // invoke the zoom function
-        onWheel({ wheelDelta: properties.PINCH_SENSITIVITY_MODIFIER * (newTouchDistance - touchDistance) });
+        onWheel({ wheelDelta: input.sensitivity.pinch * (newTouchDistance - touchDistance) });
 
         // update to the latest touch points
-        touches[0] = touch1;
-        touches[1] = touch2;
+        input.touch[0] = touch0;
+        input.touch[1] = touch1;
     }
     // otherwise something has gone wrong with the tracking, clear all touches
     else {
@@ -219,15 +200,13 @@ function onResize() {
 
 // update the url search params
 function updateQueryParameters() {
-    let urlSearchParams = new URLSearchParams(window.location.search);
+    query.params.set("time", torus.time);
+    query.params.set("zoom", zoom.precise.toFixed(4));
+    query.params.set("isfp", view.isFirstPerson);
+    query.params.set("phi", pan.phi.toFixed(4));
+    query.params.set("theta", pan.theta.toFixed(4));
+    query.params.set("fphi", look.phi.toFixed(4));
+    query.params.set("ftheta", look.theta.toFixed(4));
 
-    urlSearchParams.set("time", view.time);
-    urlSearchParams.set("zoom", view.zoomPrecise.toFixed(4));
-    urlSearchParams.set("firstperson", view.firstPerson);
-    urlSearchParams.set("phi", view.phi.toFixed(4));
-    urlSearchParams.set("theta", view.theta.toFixed(4));
-    urlSearchParams.set("fphi", view.fphi.toFixed(4));
-    urlSearchParams.set("ftheta", view.ftheta.toFixed(4));
-
-    history.replaceState(null, "", window.location.pathname + "?" + urlSearchParams);
+    history.replaceState(null, "", window.location.pathname + "?" + query.params);
 }

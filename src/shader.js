@@ -1,4 +1,4 @@
-import { stars, torus, light, view } from "./properties.js";
+import { light, view } from "./properties.js";
 
 export const vertexSrc = `#version 300 es
 in vec4 aVertexPosition;
@@ -37,19 +37,19 @@ in vec4 pointPosition;
 
 out vec4 fragColor;
 
-float starResolution = float(${stars.resolution});
-int starfieldSize = 2 * ${Math.round(stars.resolution)};
-float starFrequency = float(${stars.frequency});
+float starResolution = float(${light.star.resolution});
+int starfieldSize = 2 * ${Math.round(light.star.resolution)};
+float starFrequency = float(${light.star.frequency});
 
-vec4 sunPosition = vec4(${light.baseDirection});
-float sunSize = float(${light.sunSize});
-vec4 sunColor = vec4(${light.sunColor}, 1.0);
-vec4 skyColor = vec4(${light.skyColor}, 1.0);
+vec4 sunPosition = vec4(${light.direction.base}, 0.0);
+float sunSize = float(${light.sun.size});
+vec4 sunColor = vec4(${light.sun.color}, 1.0);
+vec4 skyColor = vec4(${light.sky.color}, 1.0);
 
 float aspect = float(${view.aspect});
-float cameraDistance = float(${view.cameraDistance});
+float cameraDistance = float(${view.camera.distance});
 
-float seaLevel = float(${torus.seaLevel});
+float seaLevel = 0.0;
 
 float minDistance = 0.0001;
 float maxDistance = 100.0;

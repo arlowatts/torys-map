@@ -16,7 +16,7 @@ export function initShaders() {
     // check that the shader program compiled correctly
     if (!gl.getProgramParameter(programInfo.program, gl.LINK_STATUS)) {
         alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(programInfo.program)}`);
-        return null;
+        return;
     }
 
     // collect attribute locations
@@ -46,9 +46,7 @@ export function initShaders() {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
 }
 
-// type: the type of shader
-// source: the source code of the shader
-// return: compiled shader object
+// compiles and loads a shader
 function loadShader(type, source) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
