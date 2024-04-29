@@ -4,3 +4,10 @@ body {
     touch-action: none;
     overflow: hidden;
 }
+
+p {
+    position: absolute;
+    margin: 0;
+    color: lightblue;
+    font-family: sans-serif;
+}

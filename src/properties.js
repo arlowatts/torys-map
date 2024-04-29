@@ -108,6 +108,11 @@ export const view = {
 
     pageTime: 0,
 
+    fps: {
+        val: 0,
+        averaging: 0.9,
+    },
+
     // perspective type
     isFirstPerson: query.params.get("isfp") == "true",
 

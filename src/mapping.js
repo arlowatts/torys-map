@@ -41,6 +41,13 @@ function render(now) {
     // update the position of the camera if first-person mode is toggled
     if (view.isFirstPerson) moveFirstPersonCamera(now - view.pageTime);
 
+    // update fps with exponential averaging
+    let rate = 1000 / (now - view.pageTime);
+    view.fps.val = rate + view.fps.averaging * (view.fps.val - rate);
+
+    // update fps indicator
+    document.getElementById("fps").innerText = view.fps.val.toFixed(1) + " FPS";
+
     view.pageTime = now;
 
     // render the scene
