@@ -35,9 +35,11 @@ function main() {
     requestAnimationFrame(render);
 }
 
-function render() {
+function render(now) {
     // update the position of the camera if first-person mode is toggled
-    if (view.isFirstPerson) moveFirstPersonCamera();
+    if (view.isFirstPerson) moveFirstPersonCamera(now - view.pageTime);
+
+    view.pageTime = now;
 
     // render the scene
     drawScene();
@@ -46,41 +48,48 @@ function render() {
     requestAnimationFrame(render);
 }
 
-function moveFirstPersonCamera() {
-    // compute the speed for first-person movement in each direction
-    const R = -(torus.radius.large / zoom.val);
-    const r = -(torus.radius.small / zoom.val);
+function computeCameraSlope() {
+    const R = torus.radius.large / zoom.val;
+    const r = torus.radius.small / zoom.val;
 
-    const camSlopePhi = Math.hypot(
-        ((Math.cos(pan.theta) * r + R) * Math.cos(pan.phi)),
-        ((Math.cos(pan.theta) * r + R) * Math.sin(pan.phi))
+    view.camera.slope.phi = Math.hypot(
+        (Math.cos(pan.theta) * r + R) * Math.cos(pan.phi),
+        (Math.cos(pan.theta) * r + R) * Math.sin(pan.phi)
     );
 
-    const camSlopeTheta = torus.radius.small / zoom.val;
+    view.camera.slope.theta = r;
+}
+
+function moveFirstPersonCamera(time) {
+    let deltaPhi = 0;
+    let deltaTheta = 0;
 
     // move forward when W is pressed
-    if (input.key["w"]) {
-        pan.theta += look.speed * Math.cos(look.phi) / camSlopeTheta;
-        pan.phi += look.speed * Math.sin(look.phi) / camSlopePhi;
+    if (input.keys["w"]) {
+        deltaPhi += Math.sin(look.phi);
+        deltaTheta += Math.cos(look.phi);
     }
 
     // move backward when S is pressed
-    if (input.key["s"]) {
-        pan.theta -= look.speed * Math.cos(look.phi) / camSlopeTheta;
-        pan.phi -= look.speed * Math.sin(look.phi) / camSlopePhi;
+    if (input.keys["s"]) {
+        deltaPhi -= Math.sin(look.phi);
+        deltaTheta -= Math.cos(look.phi);
     }
 
     // move left when A is pressed
-    if (input.key["a"]) {
-        pan.theta -= look.speed * Math.sin(look.phi) / camSlopeTheta;
-        pan.phi += look.speed * Math.cos(look.phi) / camSlopePhi;
+    if (input.keys["a"]) {
+        deltaPhi += Math.cos(look.phi);
+        deltaTheta -= Math.sin(look.phi);
     }
 
     // move right when D is pressed
-    if (input.key["d"]) {
-        pan.theta += look.speed * Math.sin(look.phi) / camSlopeTheta;
-        pan.phi -= look.speed * Math.cos(look.phi) / camSlopePhi;
+    if (input.keys["d"]) {
+        deltaPhi -= Math.cos(look.phi);
+        deltaTheta += Math.sin(look.phi);
     }
+
+    pan.phi += deltaPhi * time * look.speed / view.camera.slope.phi;
+    pan.theta += deltaTheta * time * look.speed / view.camera.slope.theta;
 
     // wrap the values past a full rotation to avoid overflow
     pan.phi %= Math.TAU;
@@ -91,18 +100,20 @@ function moveFirstPersonCamera() {
 function onMouseMove(event) {
     if (event.buttons == 1) {
         if (view.isFirstPerson) {
-            look.phi += event.movementX * look.sensitivity;
-            look.theta -= event.movementY * look.sensitivity;
+            look.phi += event.movementX * input.sensitivity.mouse;
+            look.theta -= event.movementY * input.sensitivity.mouse;
 
             look.phi %= Math.TAU;
             look.theta = Math.min(Math.max(look.theta, -Math.PI), 0);
         }
         else {
-            pan.phi += event.movementX * pan.sensitivity.val * torus.radius.small / torus.radius.large;
-            pan.theta += event.movementY * pan.sensitivity.val;
+            pan.phi += event.movementX * input.sensitivity.mouse / view.camera.slope.phi;
+            pan.theta += event.movementY * input.sensitivity.mouse / view.camera.slope.theta;
 
             pan.phi %= Math.TAU;
             pan.theta %= Math.TAU;
+
+            computeCameraSlope();
         }
     }
 }
@@ -114,63 +125,61 @@ function onWheel(event) {
     zoom.precise = Math.min(Math.max(zoom.precise, 0), zoom.max);
 
     // compute the exponential zoom value
-    zoom.val = Math.exp(zoom.precise);
+    zoom.val = Math.pow(2, zoom.precise);
 
-    // compute the updated pan sensitivity
-    pan.sensitivity.val = pan.sensitivity.base * Math.min(zoom.val, pan.sensitivity.max);
+    computeCameraSlope();
 }
 
 // update first-person movement controls when the WASD keys are pressed
 function onKeyDown(event) {
-    input.key[event.key] = true;
+    input.keys[event.key] = true;
 }
 
 // toggle first-person view when the spacebar is pressed
 function onKeyUp(event) {
-    input.key[event.key] = false;
+    input.keys[event.key] = false;
 
-    if (event.key == " ") {
-        view.isFirstPerson = !view.isFirstPerson;
-    }
+    if (event.key == " ") view.isFirstPerson = !view.isFirstPerson;
 }
 
 // when a touch gesture begins, record all finger contacts
 function onTouchStart(event) {
     for (let i = 0; i < event.changedTouches.length; i++) {
-        input.touch.push(event.changedTouches.item(i));
+        input.touches.push(event.changedTouches.item(i));
     }
 }
 
 // when touch gestures end, clear the list
 function onTouchEnd() {
-    input.touch.splice(0, input.touch.length);
+    input.touches.splice(0, input.touches.length);
 }
 
 // when a touch gesture moves, trigger a pan or zoom accordingly
 function onTouchMove(event) {
     // if only a single finger is on the screen, perform a pan
-    if (input.touch.length == 1 && event.touches.length == 1) {
+    if (input.touches.length == 1 && event.touches.length == 1) {
         let touch0 = event.touches.item(0);
 
         // invoke the pan function
         onMouseMove({
             buttons: 1,
-            movementX: (touch0.pageX - input.touch[0].pageX),
-            movementY: (touch0.pageY - input.touch[0].pageY)
+            movementX: (touch0.pageX - input.touches[0].pageX),
+            movementY: (touch0.pageY - input.touches[0].pageY)
         });
 
         // update to the latest touch point
-        input.touch[0] = touch0;
+        input.touches[0] = touch0;
     }
+
     // if exactly two fingers are on the screen, perform a zoom
-    else if (input.touch.length == 2 && event.touches.length == 2) {
+    else if (input.touches.length == 2 && event.touches.length == 2) {
         let touch0 = event.touches.item(0);
         let touch1 = event.touches.item(1);
 
         // get the distance between the last two touches
-        let touchDistance = Math.hypot(
-            input.touch[0].pageX - input.touch[1].pageX,
-            input.touch[0].pageY - input.touch[1].pageY
+        let oldTouchDistance = Math.hypot(
+            input.touches[0].pageX - input.touches[1].pageX,
+            input.touches[0].pageY - input.touches[1].pageY
         );
 
         // get the distance between the current two touches
@@ -180,12 +189,13 @@ function onTouchMove(event) {
         );
 
         // invoke the zoom function
-        onWheel({ wheelDelta: input.sensitivity.pinch * (newTouchDistance - touchDistance) });
+        onWheel({ wheelDelta: (newTouchDistance - oldTouchDistance) * input.sensitivity.pinch / input.sensitivity.scroll });
 
         // update to the latest touch points
-        input.touch[0] = touch0;
-        input.touch[1] = touch1;
+        input.touches[0] = touch0;
+        input.touches[1] = touch1;
     }
+
     // otherwise something has gone wrong with the tracking, clear all touches
     else {
         onTouchEnd();

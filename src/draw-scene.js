@@ -19,7 +19,7 @@ export function drawScene() {
     gl.uniform1f(uniforms.largeRadius, torus.radius.large / zoom.val);
     gl.uniform1f(uniforms.smallRadius, torus.radius.small / zoom.val);
 
-    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrainDetail.base - zoom.precise, torus.terrainDetail.min), torus.terrainDetail.max));
+    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrain.detail.base - zoom.precise, torus.terrain.detail.min), torus.terrain.detail.max));
     gl.uniform1f(uniforms.terrainSize, torus.terrain.size * zoom.val);
     gl.uniform1f(uniforms.terrainHeight, torus.terrain.height / zoom.val);
 
@@ -29,13 +29,13 @@ export function drawScene() {
 
 // create a vector to define the camera's position
 function getCameraPosition() {
-    const r1 = -(torus.radius.large / zoom.val);
-    const r2 = -(view.camera.height + torus.radius.small / zoom.val);
+    const R = torus.radius.large / zoom.val;
+    const r = view.camera.height + torus.radius.small / zoom.val;
 
     return vec4.fromValues(
-        (Math.cos(pan.theta) * r2 + r1) * Math.sin(pan.phi),
-        (Math.sin(pan.theta) * -r2),
-        (Math.cos(pan.theta) * r2 + r1) * Math.cos(pan.phi),
+        (Math.cos(pan.theta) * r + R) * -Math.sin(pan.phi),
+        (Math.sin(pan.theta) * r),
+        (Math.cos(pan.theta) * r + R) * -Math.cos(pan.phi),
         0
     );
 }

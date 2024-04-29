@@ -15,28 +15,20 @@ export const query = {
 };
 
 export const pan = {
-    // angles defining the camera's position on the surface
     phi: query.params.has("phi") && !isNaN(query.params.get("phi")) ? Number(query.params.get("phi")) : 0,
     theta: query.params.has("theta") && !isNaN(query.params.get("theta")) ? Number(query.params.get("theta")) : 0,
-
-    sensitivity: {
-        base: 0.001 / window.innerHeight,
-        val: 0,
-        max: Math.exp(9),
-    },
 };
 
 export const zoom = {
-    // zoom values
-    precise: query.params.has("zoom") && !isNaN(query.params.get("zoom")) ? Number(query.params.get("zoom")) : 10,
+    precise: query.params.has("zoom") && !isNaN(query.params.get("zoom")) ? Number(query.params.get("zoom")) : 13,
 
     val: 0,
-    max: 12,
+    max: 14,
 };
 
 export const input = {
     // dictionary of key press data for first-person controls
-    key: {
+    keys: {
         "w": false,
         "a": false,
         "s": false,
@@ -44,9 +36,10 @@ export const input = {
     },
 
     // array of touch event data for touchscreen support
-    touch: [],
+    touches: [],
 
     sensitivity: {
+        mouse: 1 / window.innerHeight,
         scroll: 0.001,
         pinch: 0.002,
     },
@@ -66,12 +59,12 @@ export const torus = {
     terrain: {
         size: 1 / 1000, // inverse factor controlling the size of the terrain
         height: 500, // scale factor controlling the height of the terrain
-    },
 
-    terrainDetail: {
-        base: 15, // base level of detail of the terrain
-        min: 1, // minimum number of terrain detail levels to render
-        max: 8, // maximum number of terrain detail levels to render
+        detail: {
+            base: 17, // base level of detail of the terrain
+            min: 1, // minimum number of terrain detail levels to render
+            max: 8, // maximum number of terrain detail levels to render
+        },
     },
 
     axis: {
@@ -113,24 +106,29 @@ export const view = {
     // aspect ratio of the canvas
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
 
-    camera: {
-        distance: 1 / Math.tan(Math.PI / 8), // gives 45 degree fov
-        height: 1, // height of the camera above the surface (km)
-    },
+    pageTime: 0,
 
     // perspective type
     isFirstPerson: query.params.get("isfp") == "true",
+
+    camera: {
+        distance: 1 / Math.tan(Math.PI / 8), // gives 45 degree fov
+        height: 1, // height of the camera above the surface (km)
+
+        slope: {
+            phi: 0,
+            theta: 0,
+        },
+    },
 };
 
 export const look = {
     // movement speed of first-person controls
-    speed: 0.05,
+    speed: 0.001,
 
     // angles defining the first-person camera's direction
     phi: query.params.has("fphi") && !isNaN(query.params.get("fphi")) ? Number(query.params.get("fphi")) : 0,
     theta: query.params.has("ftheta") && !isNaN(query.params.get("ftheta")) ? Number(query.params.get("ftheta")) : -(Math.PI / 4),
-
-    sensitivity: 0.0025,
 };
 
 // information about the shader program
