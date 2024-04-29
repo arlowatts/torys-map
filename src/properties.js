@@ -48,7 +48,7 @@ export const input = {
 // planet dimensions and properties
 export const torus = {
     // world time (seconds)
-    time: query.params.has("time") && !isNaN(query.params.get("time")) ? Number(query.params.get("time")) : 0,
+    time: 0,
 
     // dimensions of the planet (km)
     radius: {

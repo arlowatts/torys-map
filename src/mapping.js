@@ -36,6 +36,8 @@ function main() {
 }
 
 function render(now) {
+    torus.time = Date.now() / 1000;
+
     // update the position of the camera if first-person mode is toggled
     if (view.isFirstPerson) moveFirstPersonCamera(now - view.pageTime);
 
@@ -60,7 +62,7 @@ function computeCameraSlope() {
     view.camera.slope.theta = r;
 }
 
-function moveFirstPersonCamera(time) {
+function moveFirstPersonCamera(deltaTime) {
     let deltaPhi = 0;
     let deltaTheta = 0;
 
@@ -88,8 +90,8 @@ function moveFirstPersonCamera(time) {
         deltaTheta += Math.sin(look.phi);
     }
 
-    pan.phi += deltaPhi * time * look.speed / view.camera.slope.phi;
-    pan.theta += deltaTheta * time * look.speed / view.camera.slope.theta;
+    pan.phi += deltaPhi * deltaTime * look.speed / view.camera.slope.phi;
+    pan.theta += deltaTheta * deltaTime * look.speed / view.camera.slope.theta;
 
     // wrap the values past a full rotation to avoid overflow
     pan.phi %= Math.TAU;
@@ -210,7 +212,6 @@ function onResize() {
 
 // update the url search params
 function updateQueryParameters() {
-    query.params.set("time", torus.time);
     query.params.set("zoom", zoom.precise.toFixed(4));
     query.params.set("isfp", view.isFirstPerson);
     query.params.set("phi", pan.phi.toFixed(4));
