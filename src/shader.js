@@ -15,7 +15,7 @@ export const fragmentSrc = `#version 300 es
 precision mediump float;
 
 float sdf(vec4, uint);
-vec4 getColor(float, float, float);
+vec4 getColor(vec4, vec4, vec4);
 float noise4(vec4, vec4, uvec4, uint);
 float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
@@ -49,6 +49,7 @@ float aspect = float(${view.aspect});
 float cameraDistance = float(${view.camera.distance});
 
 float seaLevel = 0.0;
+vec4 seaColor = vec4(${light.sea.color}, 1.0);
 
 float minDistance = 0.0001;
 float maxDistance = 100.0;
@@ -99,11 +100,8 @@ void main() {
         normal.w = 0.0;
         normal = normalize(normal);
 
-        // compute shading based on the surface normal and the light direction
-        float shade = dot(uLightDirectionMatrix * normal, sunPosition);
-
         // compute final pixel color
-        fragColor = getColor(sdf(pos, 0u), temperature, shade);
+        fragColor = getColor(pos, normal, ray);
     }
 
     // if the ray missed the surface, check for stars using the ray direction
@@ -165,14 +163,23 @@ float sdf(vec4 pos, uint maxOctaves) {
     return distance - max(height, -2.0 * minDistance);
 }
 
-vec4 getColor(float altitude, float temperature, float shade) {
+vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
-    if (altitude < seaLevel) {
-        color.b = temperature;
+    float height = sdf(pos, 0u);
+
+    // compute shading based on the surface normal and the light direction
+    float shade = dot(uLightDirectionMatrix * normal, sunPosition);
+
+    if (height < seaLevel) {
+        // compute the reflected view ray for specular highlights
+        vec4 reflectedRay = ray - 2.0 * normal * dot(ray, normal);
+        float highlight = pow(max(dot(uLightDirectionMatrix * reflectedRay, sunPosition), 0.0), 16.0);
+
+        color = mix(seaColor, sunColor, highlight);
     }
     else {
-        temperature -= (altitude - seaLevel) / ((1.0 - seaLevel) * uTerrainHeight);
+        temperature -= (height - seaLevel) / ((1.0 - seaLevel) * uTerrainHeight);
 
         if (temperature > 0.6) {
             color.r = temperature;
