@@ -58,6 +58,7 @@ float stepScale = 0.5;
 
 float temperature = 0.62;
 float ambience = float(${light.ambience});
+float highlightSize = 16.0;
 
 void main() {
     // create the ray for raymarching
@@ -174,7 +175,7 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     if (height < seaLevel) {
         // compute the reflected view ray for specular highlights
         vec4 reflectedRay = ray - 2.0 * normal * dot(ray, normal);
-        float highlight = pow(max(dot(uLightDirectionMatrix * reflectedRay, sunPosition), 0.0), 16.0);
+        float highlight = pow(max(dot(uLightDirectionMatrix * reflectedRay, sunPosition), 0.0), highlightSize);
 
         color = mix(seaColor, sunColor, highlight);
     }
