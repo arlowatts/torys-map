@@ -14,8 +14,7 @@ void main() {
 export const fragmentSrc = `#version 300 es
 precision mediump float;
 
-float sdf(vec4);
-float getAltitude(vec4);
+float sdf(vec4, uint);
 vec4 getColor(float, float, float);
 float noise4(vec4, vec4, uvec4, uint);
 float noise3(vec4, vec4, uvec4, uint);
@@ -29,7 +28,7 @@ uniform mat4 uLightDirectionMatrix;
 
 uniform float uLargeRadius;
 uniform float uSmallRadius;
-uniform int uTerrainDetail;
+uniform uint uTerrainDetail;
 uniform float uTerrainSize;
 uniform float uTerrainHeight;
 
@@ -74,12 +73,12 @@ void main() {
     vec4 pos = uCameraPosition;
 
     // march the ray
-    float distance = sdf(pos);
+    float distance = sdf(pos, uTerrainDetail);
     float closestDistance = distance;
 
     for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
         pos += distance / float(max(1, i - stepsUntilShuffle)) * ray;
-        distance = sdf(pos);
+        distance = sdf(pos, uTerrainDetail);
 
         if (abs(distance) < closestDistance) {
             closestDistance = abs(distance);
@@ -90,9 +89,9 @@ void main() {
     if (abs(distance) <= minDistance) {
         // compute the surface normal
         vec4 normal = vec4(
-            sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0)),
-            sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0)),
-            sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0)),
+            sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0), uTerrainDetail),
+            sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0), uTerrainDetail),
+            sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0), uTerrainDetail),
             0.0
         );
 
@@ -104,7 +103,7 @@ void main() {
         float shade = dot(uLightDirectionMatrix * normal, sunPosition);
 
         // compute final pixel color
-        fragColor = getColor(getAltitude(pos), temperature, shade);
+        fragColor = getColor(sdf(pos, 0u), temperature, shade);
     }
 
     // if the ray missed the surface, check for stars using the ray direction
@@ -137,38 +136,33 @@ void main() {
 }
 
 // returns the shortest distance from the pos to the scene
-float sdf(vec4 pos) {
-    float a = length(pos.xz) - uLargeRadius;
+float sdf(vec4 pos, uint maxOctaves) {
+    // compute the distance from the point to th surface of a smooth torus
+    float distance = length(pos.xz) - uLargeRadius;
+    distance = sqrt(distance * distance + pos.y * pos.y) - uSmallRadius;
 
-    return sqrt(a * a + pos.y * pos.y) - (uSmallRadius + max(getAltitude(pos), seaLevel));
-}
-
-float getAltitude(vec4 point) {
-    point *= uTerrainSize;
-
+    pos *= uTerrainSize;
     float height = 0.0;
-    int scale = 0;
-
-    vec4 pointFloor;
-
+    float amplitude = uTerrainHeight;
+    vec4 posFloor;
     uint channel = 0u;
 
-    for (int i = 0; i < uTerrainDetail; i++) {
-        pointFloor = floor(point);
+    // add octaves of terrain noise until the limit is reached or the remaining
+    // octaves could not reach the point
+    for (uint i = 0u; i < maxOctaves && distance - height < amplitude; i++) {
+        posFloor = floor(pos);
 
-        height *= 2.0;
-        height += noise3(point, point - pointFloor, uvec4(ivec4(pointFloor)), channel) * 2.0 - 1.0;
+        amplitude *= 0.5;
 
-        scale *= 2;
-        scale += 1;
+        height += amplitude * (noise3(pos, pos - posFloor, uvec4(ivec4(posFloor)), channel) * 2.0 - 1.0);
 
-        point *= 2.0;
-        point += 0.5;
+        pos *= 2.0;
+        pos += 0.5;
 
         channel += 1u;
     }
 
-    return uTerrainHeight * height / float(scale);
+    return distance - max(height, -minDistance);
 }
 
 vec4 getColor(float altitude, float temperature, float shade) {
