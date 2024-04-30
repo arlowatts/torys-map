@@ -53,7 +53,7 @@ float seaLevel = 0.0;
 float minDistance = 0.0001;
 float maxDistance = 100.0;
 int maxSteps = 100;
-int stepsUntilShuffle = 70;
+float stepScale = 0.5;
 
 float temperature = 0.62;
 float ambience = float(${light.ambience});
@@ -77,7 +77,7 @@ void main() {
     float closestDistance = distance;
 
     for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
-        pos += distance / float(max(1, i - stepsUntilShuffle)) * ray;
+        pos += stepScale * distance * ray;
         distance = sdf(pos, uTerrainDetail);
 
         if (abs(distance) < closestDistance) {
