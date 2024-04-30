@@ -162,7 +162,7 @@ float sdf(vec4 pos, uint maxOctaves) {
         channel += 1u;
     }
 
-    return distance - max(height, -minDistance);
+    return distance - max(height, -2.0 * minDistance);
 }
 
 vec4 getColor(float altitude, float temperature, float shade) {
