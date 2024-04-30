@@ -95,6 +95,10 @@ export const light = {
         color: [0.4, 0.65, 1.0], // color of the sky in rgb format
     },
 
+    sea: {
+        color: [0.1, 0.3, 0.6], // color of the sea in rgb format
+    },
+
     star: {
         resolution: 500, // higher resolution gives smaller stars
         frequency: 0.001, // approximate fraction of the screen that is white
