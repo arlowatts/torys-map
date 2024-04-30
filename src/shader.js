@@ -16,10 +16,10 @@ precision mediump float;
 
 float sdf(vec4, uint);
 vec4 getColor(vec4, vec4, vec4);
-float noise4(vec4, vec4, uvec4, uint);
-float noise3(vec4, vec4, uvec4, uint);
-float noise2(vec4, vec4, uvec4, uint);
-float noise(float, float, uint, uint);
+float noise4(vec4, uvec4, uint);
+float noise3(vec4, uvec4, uint);
+float noise2(vec4, uvec4, uint);
+float noise(float, uint, uint);
 float hash(uint);
 uvec3 pcg3d(uvec3);
 
@@ -156,7 +156,7 @@ float sdf(vec4 pos, uint maxOctaves) {
 
         amplitude *= 0.5;
 
-        height += amplitude * (noise3(pos, pos - posFloor, uvec4(ivec4(posFloor)), channel) * 2.0 - 1.0);
+        height += amplitude * (noise3(pos - posFloor, uvec4(ivec4(posFloor)), channel) * 2.0 - 1.0);
 
         pos *= 2.0;
         pos += 0.5;
@@ -207,37 +207,37 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     return color;
 }
 
-float noise4(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
+float noise4(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.w;
 
     return mix(
-        noise3(point, pointFrac, pointFloor, evalAt),
-        noise3(point, pointFrac, pointFloor, evalAt + 1u),
+        noise3(pointFrac, pointFloor, evalAt),
+        noise3(pointFrac, pointFloor, evalAt + 1u),
         smoothstep(0.0, 1.0, pointFrac.w)
     );
 }
 
-float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
+float noise3(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.z;
 
     return mix(
-        noise2(point, pointFrac, pointFloor, evalAt),
-        noise2(point, pointFrac, pointFloor, evalAt + 1u),
+        noise2(pointFrac, pointFloor, evalAt),
+        noise2(pointFrac, pointFloor, evalAt + 1u),
         smoothstep(0.0, 1.0, pointFrac.z)
     );
 }
 
-float noise2(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
+float noise2(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor.y;
 
     return mix(
-        noise(point.x, pointFrac.x, pointFloor.x, evalAt),
-        noise(point.x, pointFrac.x, pointFloor.x, evalAt + 1u),
+        noise(pointFrac.x, pointFloor.x, evalAt),
+        noise(pointFrac.x, pointFloor.x, evalAt + 1u),
         smoothstep(0.0, 1.0, pointFrac.y)
     );
 }
 
-float noise(float point, float pointFrac, uint pointFloor, uint evalAt) {
+float noise(float pointFrac, uint pointFloor, uint evalAt) {
     evalAt = evalAt * 0x05555555u + pointFloor;
 
     return mix(
