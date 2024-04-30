@@ -21,6 +21,7 @@ float noise3(vec4, vec4, uvec4, uint);
 float noise2(vec4, vec4, uvec4, uint);
 float noise(float, float, uint, uint);
 float hash(uint);
+uvec3 pcg3d(uvec3);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -37,7 +38,6 @@ in vec4 pointPosition;
 out vec4 fragColor;
 
 float starResolution = float(${light.star.resolution});
-int starfieldSize = 2 * ${Math.round(light.star.resolution)};
 float starFrequency = float(${light.star.frequency});
 
 vec4 sunPosition = vec4(${light.direction.base}, 0.0);
@@ -110,28 +110,31 @@ void main() {
     else {
         ray = uLightDirectionMatrix * ray;
 
-        ivec4 pointHash = ivec4(floor(ray * starResolution));
-
-        float val = hash(uint(
-            starfieldSize * (
-                pointHash.x + starfieldSize * (
-                    pointHash.y + starfieldSize * pointHash.z
-                )
-            )
-        ));
-
-        if (length(ray - sunPosition) < sunSize) {
+        // check if the ray hits the sun
+        if (dot(ray, sunPosition) > 1.0 - sunSize) {
             fragColor = sunColor;
-            return;
-        }
-        else if (val < starFrequency) {
-            fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-        else {
-            fragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
 
-        fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
+        // otherwise hash the ray's direction and see if it hits a star
+        else {
+            // use a three dimensional hash function on the ray direction
+            uvec3 hash = pcg3d(floatBitsToUint(floor(ray.xyz * starResolution)));
+
+            // convert the hashed value to a float between 0.5 and 1.0
+            float val = uintBitsToFloat((hash.x >> 9) | (126u << 23));
+
+            // check if it passes the threshold
+            if (val < 0.5 + starFrequency) {
+                fragColor = vec4(1.0);
+            }
+            else {
+                fragColor = vec4(0-0);
+            }
+
+            // blend with the atmosphere color
+            fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
+            fragColor.w = 1.0;
+        }
     }
 }
 
@@ -245,5 +248,21 @@ float hash(uint x) {
 
     // equal to float(x) / (2**32 - 1);
     return float((word >> 22u) ^ word) * 2.3283064370807974e-10;
+}
+
+uvec3 pcg3d(uvec3 v) {
+    v = v * 1664525u + 1013904223u;
+
+    v.x += v.y * v.z;
+    v.y += v.z * v.x;
+    v.z += v.x * v.y;
+
+    v ^= v >> 16u;
+
+    v.x += v.y * v.z;
+    v.y += v.z * v.x;
+    v.z += v.x * v.y;
+
+    return v;
 }
 `;

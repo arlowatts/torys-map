@@ -87,7 +87,7 @@ export const light = {
     },
 
     sun: {
-        size: 0.05, // approximate radius of the sun in the sky
+        size: 0.001, // parameter controlling the size of the sun
         color: [1.0, 0.9, 0.7], // color of the sun in rgb format
     },
 
