@@ -19,7 +19,7 @@ export function drawScene() {
     gl.uniform1f(uniforms.largeRadius, torus.radius.large / zoom.val);
     gl.uniform1f(uniforms.smallRadius, torus.radius.small / zoom.val);
 
-    gl.uniform1i(uniforms.terrainDetail, Math.min(Math.max(torus.terrain.detail.base - zoom.precise, torus.terrain.detail.min), torus.terrain.detail.max));
+    gl.uniform1ui(uniforms.terrainDetail, Math.min(Math.max(torus.terrain.detail.base - zoom.precise, torus.terrain.detail.min), torus.terrain.detail.max));
     gl.uniform1f(uniforms.terrainSize, torus.terrain.size * zoom.val);
     gl.uniform1f(uniforms.terrainHeight, torus.terrain.height / zoom.val);
 
