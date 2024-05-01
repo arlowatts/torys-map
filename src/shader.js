@@ -174,8 +174,7 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
 
     if (height < seaLevel) {
         // compute the reflected view ray for specular highlights
-        vec4 reflectedRay = ray - 2.0 * normal * dot(ray, normal);
-        float highlight = pow(max(dot(uLightDirectionMatrix * reflectedRay, sunPosition), 0.0), highlightSize);
+        float highlight = pow(max(dot(uLightDirectionMatrix * reflect(ray, normal), sunPosition), 0.0), highlightSize);
 
         color = mix(seaColor, sunColor, highlight);
     }
