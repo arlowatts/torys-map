@@ -124,10 +124,10 @@ void main() {
 
             // check if it passes the threshold
             if (val < 0.5 + starFrequency) {
-                fragColor = vec4(1.0);
+                fragColor = vec4(val);
             }
             else {
-                fragColor = vec4(0-0);
+                fragColor = vec4(0.0);
             }
 
             // blend with the atmosphere color
