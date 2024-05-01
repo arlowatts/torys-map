@@ -16,11 +16,9 @@ precision mediump float;
 
 float sdf(vec4, uint);
 vec4 getColor(vec4, vec4, vec4);
-float noise4(vec4, vec4, uvec4, uint);
-float noise3(vec4, vec4, uvec4, uint);
-float noise2(vec4, vec4, uvec4, uint);
-float noise(float, float, uint, uint);
-float hash(uint);
+vec3 noise3(vec3);
+uvec3 pcg3d(uvec3);
+vec3 uvec3ToVec3(uvec3);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -37,7 +35,6 @@ in vec4 pointPosition;
 out vec4 fragColor;
 
 float starResolution = float(${light.star.resolution});
-int starfieldSize = 2 * ${Math.round(light.star.resolution)};
 float starFrequency = float(${light.star.frequency});
 
 vec4 sunPosition = vec4(${light.direction.base}, 0.0);
@@ -109,28 +106,31 @@ void main() {
     else {
         ray = uLightDirectionMatrix * ray;
 
-        ivec4 pointHash = ivec4(floor(ray * starResolution));
-
-        float val = hash(uint(
-            starfieldSize * (
-                pointHash.x + starfieldSize * (
-                    pointHash.y + starfieldSize * pointHash.z
-                )
-            )
-        ));
-
-        if (length(ray - sunPosition) < sunSize) {
+        // check if the ray hits the sun
+        if (dot(ray, sunPosition) > 1.0 - sunSize) {
             fragColor = sunColor;
-            return;
-        }
-        else if (val < starFrequency) {
-            fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-        else {
-            fragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
 
-        fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
+        // otherwise hash the ray's direction and see if it hits a star
+        else {
+            // use a three dimensional hash function on the ray direction
+            uvec3 hash = pcg3d(floatBitsToUint(floor(ray.xyz * starResolution)));
+
+            // convert the hashed value to a float between 0.5 and 1.0
+            float val = uintBitsToFloat((hash.x >> 9) | (126u << 23));
+
+            // check if it passes the threshold
+            if (val < 0.5 + starFrequency) {
+                fragColor = vec4(val);
+            }
+            else {
+                fragColor = vec4(0.0);
+            }
+
+            // blend with the atmosphere color
+            fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
+            fragColor.w = 1.0;
+        }
     }
 }
 
@@ -153,7 +153,7 @@ float sdf(vec4 pos, uint maxOctaves) {
 
         amplitude *= 0.5;
 
-        height += amplitude * (noise3(pos, pos - posFloor, uvec4(ivec4(posFloor)), channel) * 2.0 - 1.0);
+        height += amplitude * noise3(pos.xyz).x;
 
         pos *= 2.0;
         pos += 0.5;
@@ -203,54 +203,63 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     return color;
 }
 
-float noise4(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.w;
+// return three smooth noise values between -1.0 and 1.0
+vec3 noise3(vec3 pos) {
+    uvec3 posFloor = uvec3(ivec3(floor(pos)));
+    vec3 posFract = smoothstep(0.0, 1.0, fract(pos));
 
     return mix(
-        noise3(point, pointFrac, pointFloor, evalAt),
-        noise3(point, pointFrac, pointFloor, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.w)
-    );
-}
-
-float noise3(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.z;
-
-    return mix(
-        noise2(point, pointFrac, pointFloor, evalAt),
-        noise2(point, pointFrac, pointFloor, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.z)
-    );
-}
-
-float noise2(vec4 point, vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.y;
-
-    return mix(
-        noise(point.x, pointFrac.x, pointFloor.x, evalAt),
-        noise(point.x, pointFrac.x, pointFloor.x, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.y)
-    );
-}
-
-float noise(float point, float pointFrac, uint pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor;
-
-    return mix(
-        hash(evalAt),
-        hash(evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac)
+        mix(
+            mix(
+                uvec3ToVec3(pcg3d(posFloor)),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.yz))),
+                posFract.x
+            ),
+            mix(
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z))),
+                posFract.x
+            ),
+            posFract.y
+        ),
+        mix(
+            mix(
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y, posFloor.z + 1u))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y, posFloor.z + 1u))),
+                posFract.x
+            ),
+            mix(
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z + 1u))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z + 1u))),
+                posFract.x
+            ),
+            posFract.y
+        ),
+        posFract.z
     );
 }
 
 // Mark Jarzynski and Marc Olano, Hash Functions for GPU Rendering, Journal of
 // Computer Graphics Techniques (JCGT), vol. 9, no. 3, 21-38, 2020
 // Available online http://jcgt.org/published/0009/03/02/
-float hash(uint x) {
-    uint state = x * 747796405u + 2891336453u;
-    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+uvec3 pcg3d(uvec3 v) {
+    v = v * 1664525u + 1013904223u;
 
-    // equal to float(x) / (2**32 - 1);
-    return float((word >> 22u) ^ word) * 2.3283064370807974e-10;
+    v.x += v.y * v.z;
+    v.y += v.z * v.x;
+    v.z += v.x * v.y;
+
+    v = v ^ (v >> 16);
+
+    v.x += v.y * v.z;
+    v.y += v.z * v.x;
+    v.z += v.x * v.y;
+
+    return v;
+}
+
+// convert a uvec3 to a vec3 with components between -1.0 and 1.0
+vec3 uvec3ToVec3(uvec3 v) {
+    return vec3(v) / 2147483647.0 - 1.0;
 }
 `;
