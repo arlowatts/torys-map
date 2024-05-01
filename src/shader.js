@@ -209,29 +209,29 @@ vec3 noise3(vec3 pos) {
     uvec3 posFloor = uvec3(ivec3(floor(pos)));
     vec3 posFract = smoothstep(0.0, 1.0, fract(pos));
 
-    return 3.0 - 4.0 * mix(
+    return mix(
         mix(
             mix(
                 uvec3ToVec3(pcg3d(posFloor)),
-                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 0, 0))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.yz))),
                 posFract.x
             ),
             mix(
-                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 1, 0))),
-                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 1, 0))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z))),
                 posFract.x
             ),
             posFract.y
         ),
         mix(
             mix(
-                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 0, 1))),
-                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 0, 1))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y, posFloor.z + 1u))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y, posFloor.z + 1u))),
                 posFract.x
             ),
             mix(
-                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 1, 1))),
-                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 1, 1))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z + 1u))),
+                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z + 1u))),
                 posFract.x
             ),
             posFract.y
@@ -250,7 +250,7 @@ uvec3 pcg3d(uvec3 v) {
     v.y += v.z * v.x;
     v.z += v.x * v.y;
 
-    v ^= v >> 16u;
+    v = v ^ (v >> 16);
 
     v.x += v.y * v.z;
     v.y += v.z * v.x;
@@ -259,8 +259,8 @@ uvec3 pcg3d(uvec3 v) {
     return v;
 }
 
-// convert a uvec3 to a vec3 with components between 0.5 and 1.0
+// convert a uvec3 to a vec3 with components between -1.0 and 1.0
 vec3 uvec3ToVec3(uvec3 v) {
-    return uintBitsToFloat((v >> 9) | (126u << 23));
+    return vec3(v) / 2147483647.0 - 1.0;
 }
 `;
