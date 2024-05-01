@@ -16,12 +16,9 @@ precision mediump float;
 
 float sdf(vec4, uint);
 vec4 getColor(vec4, vec4, vec4);
-float noise4(vec4, uvec4, uint);
-float noise3(vec4, uvec4, uint);
-float noise2(vec4, uvec4, uint);
-float noise(float, uint, uint);
-float hash(uint);
+vec3 noise3(vec3);
 uvec3 pcg3d(uvec3);
+vec3 uvec3ToVec3(uvec3);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -156,7 +153,7 @@ float sdf(vec4 pos, uint maxOctaves) {
 
         amplitude *= 0.5;
 
-        height += amplitude * (noise3(pos - posFloor, uvec4(ivec4(posFloor)), channel) * 2.0 - 1.0);
+        height += amplitude * noise3(pos.xyz).x;
 
         pos *= 2.0;
         pos += 0.5;
@@ -207,57 +204,45 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     return color;
 }
 
-float noise4(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.w;
+// return three smooth noise values between -1.0 and 1.0
+vec3 noise3(vec3 pos) {
+    uvec3 posFloor = uvec3(ivec3(floor(pos)));
+    vec3 posFract = smoothstep(0.0, 1.0, fract(pos));
 
-    return mix(
-        noise3(pointFrac, pointFloor, evalAt),
-        noise3(pointFrac, pointFloor, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.w)
-    );
-}
-
-float noise3(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.z;
-
-    return mix(
-        noise2(pointFrac, pointFloor, evalAt),
-        noise2(pointFrac, pointFloor, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.z)
-    );
-}
-
-float noise2(vec4 pointFrac, uvec4 pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor.y;
-
-    return mix(
-        noise(pointFrac.x, pointFloor.x, evalAt),
-        noise(pointFrac.x, pointFloor.x, evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac.y)
-    );
-}
-
-float noise(float pointFrac, uint pointFloor, uint evalAt) {
-    evalAt = evalAt * 0x05555555u + pointFloor;
-
-    return mix(
-        hash(evalAt),
-        hash(evalAt + 1u),
-        smoothstep(0.0, 1.0, pointFrac)
+    return 3.0 - 4.0 * mix(
+        mix(
+            mix(
+                uvec3ToVec3(pcg3d(posFloor)),
+                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 0, 0))),
+                posFract.x
+            ),
+            mix(
+                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 1, 0))),
+                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 1, 0))),
+                posFract.x
+            ),
+            posFract.y
+        ),
+        mix(
+            mix(
+                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 0, 1))),
+                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 0, 1))),
+                posFract.x
+            ),
+            mix(
+                uvec3ToVec3(pcg3d(posFloor + uvec3(0, 1, 1))),
+                uvec3ToVec3(pcg3d(posFloor + uvec3(1, 1, 1))),
+                posFract.x
+            ),
+            posFract.y
+        ),
+        posFract.z
     );
 }
 
 // Mark Jarzynski and Marc Olano, Hash Functions for GPU Rendering, Journal of
 // Computer Graphics Techniques (JCGT), vol. 9, no. 3, 21-38, 2020
 // Available online http://jcgt.org/published/0009/03/02/
-float hash(uint x) {
-    uint state = x * 747796405u + 2891336453u;
-    uint word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
-
-    // equal to float(x) / (2**32 - 1);
-    return float((word >> 22u) ^ word) * 2.3283064370807974e-10;
-}
-
 uvec3 pcg3d(uvec3 v) {
     v = v * 1664525u + 1013904223u;
 
@@ -272,5 +257,10 @@ uvec3 pcg3d(uvec3 v) {
     v.z += v.x * v.y;
 
     return v;
+}
+
+// convert a uvec3 to a vec3 with components between 0.5 and 1.0
+vec3 uvec3ToVec3(uvec3 v) {
+    return uintBitsToFloat((v >> 9) | (126u << 23));
 }
 `;
