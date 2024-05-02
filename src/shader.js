@@ -16,9 +16,8 @@ precision mediump float;
 
 float sdf(vec4, uint);
 vec4 getColor(vec4, vec4, vec4);
-vec3 noise3(vec3);
-uvec3 pcg3d(uvec3);
-vec3 uvec3ToVec3(uvec3);
+float noise3(vec3);
+uint iqint1(uint);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -56,6 +55,8 @@ float stepScale = 0.5;
 float temperature = 0.62;
 float ambience = float(${light.ambience});
 float highlightSize = 16.0;
+
+uvec4 primes = uvec4(19, 47, 101, 131);
 
 void main() {
     // create the ray for raymarching
@@ -113,15 +114,16 @@ void main() {
 
         // otherwise hash the ray's direction and see if it hits a star
         else {
-            // use a three dimensional hash function on the ray direction
-            uvec3 hash = pcg3d(floatBitsToUint(floor(ray.xyz * starResolution)));
+            // use a nested hash function on the ray direction
+            uvec3 n = uvec3(ivec3(floor(ray.xyz * starResolution)));
+            uint hash = iqint1(iqint1(iqint1(n.x) + n.y) + n.z);
 
-            // convert the hashed value to a float between 0.5 and 1.0
-            float val = uintBitsToFloat((hash.x >> 9) | (126u << 23));
+            // convert the hashed value to a float between 0.0 and 1.0
+            float val = float(hash) / 4294967295.0;
 
             // check if it passes the threshold
-            if (val < 0.5 + starFrequency) {
-                fragColor = vec4(val);
+            if (val < starFrequency) {
+                fragColor = vec4(0.5);
             }
             else {
                 fragColor = vec4(0.0);
@@ -153,7 +155,7 @@ float sdf(vec4 pos, uint maxOctaves) {
 
         amplitude *= 0.5;
 
-        height += amplitude * noise3(pos.xyz).x;
+        height += amplitude * noise3(pos.xyz);
 
         pos *= 2.0;
         pos += 0.5;
@@ -203,63 +205,55 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     return color;
 }
 
-// return three smooth noise values between -1.0 and 1.0
-vec3 noise3(vec3 pos) {
+// return a smooth noise value between -1.0 and 1.0
+float noise3(vec3 pos) {
     uvec3 posFloor = uvec3(ivec3(floor(pos)));
     vec3 posFract = smoothstep(0.0, 1.0, fract(pos));
 
-    return mix(
+    // use a linear combination as the input to the hash function
+    uint val = primes.x * posFloor.x + primes.y * posFloor.y + primes.z * posFloor.z + primes.w;
+
+    // linearly interpolate between eight adjacent values
+    float noise = mix(
         mix(
             mix(
-                uvec3ToVec3(pcg3d(posFloor)),
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.yz))),
+                float(iqint1(val)),
+                float(iqint1(val + primes.x)),
                 posFract.x
             ),
             mix(
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z))),
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z))),
+                float(iqint1(val + primes.y)),
+                float(iqint1(val + primes.x + primes.y)),
                 posFract.x
             ),
             posFract.y
         ),
         mix(
             mix(
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y, posFloor.z + 1u))),
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y, posFloor.z + 1u))),
+                float(iqint1(val + primes.z)),
+                float(iqint1(val + primes.x + primes.z)),
                 posFract.x
             ),
             mix(
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x, posFloor.y + 1u, posFloor.z + 1u))),
-                uvec3ToVec3(pcg3d(uvec3(posFloor.x + 1u, posFloor.y + 1u, posFloor.z + 1u))),
+                float(iqint1(val + primes.y + primes.z)),
+                float(iqint1(val + primes.x + primes.y + primes.z)),
                 posFract.x
             ),
             posFract.y
         ),
         posFract.z
     );
+    
+    return noise / 2147483647.0 - 1.0;
 }
 
 // Mark Jarzynski and Marc Olano, Hash Functions for GPU Rendering, Journal of
 // Computer Graphics Techniques (JCGT), vol. 9, no. 3, 21-38, 2020
 // Available online http://jcgt.org/published/0009/03/02/
-uvec3 pcg3d(uvec3 v) {
-    v = v * 1664525u + 1013904223u;
+uint iqint1(uint n) {
+    n = (n << 13) ^ n;
+    n = n * (n * n * 15731u + 789221u) + 1376312589u;
 
-    v.x += v.y * v.z;
-    v.y += v.z * v.x;
-    v.z += v.x * v.y;
-
-    v = v ^ (v >> 16);
-
-    v.x += v.y * v.z;
-    v.y += v.z * v.x;
-    v.z += v.x * v.y;
-
-    return v;
-}
-
-// convert a uvec3 to a vec3 with components between -1.0 and 1.0
-vec3 uvec3ToVec3(uvec3 v) {
-    return vec3(v) / 2147483647.0 - 1.0;
+    return n;
 }
 `;
