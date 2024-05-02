@@ -18,7 +18,6 @@ float sdf(vec4, uint);
 vec4 getColor(vec4, vec4, vec4);
 float noise3(vec3);
 uint iqint1(uint);
-float uintToFloat(uint);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
@@ -120,7 +119,7 @@ void main() {
             uint hash = iqint1(iqint1(iqint1(n.x) + n.y) + n.z);
 
             // convert the hashed value to a float between 0.0 and 1.0
-            float val = uintToFloat(hash);
+            float val = float(hash) / 4294967295.0;
 
             // check if it passes the threshold
             if (val < starFrequency) {
@@ -215,35 +214,37 @@ float noise3(vec3 pos) {
     uint val = primes.x * posFloor.x + primes.y * posFloor.y + primes.z * posFloor.z + primes.w;
 
     // linearly interpolate between eight adjacent values
-    return 1.0 - 2.0 * mix(
+    float noise = mix(
         mix(
             mix(
-                uintToFloat(iqint1(val)),
-                uintToFloat(iqint1(val + primes.x)),
+                float(iqint1(val)),
+                float(iqint1(val + primes.x)),
                 posFract.x
             ),
             mix(
-                uintToFloat(iqint1(val + primes.y)),
-                uintToFloat(iqint1(val + primes.x + primes.y)),
+                float(iqint1(val + primes.y)),
+                float(iqint1(val + primes.x + primes.y)),
                 posFract.x
             ),
             posFract.y
         ),
         mix(
             mix(
-                uintToFloat(iqint1(val + primes.z)),
-                uintToFloat(iqint1(val + primes.x + primes.z)),
+                float(iqint1(val + primes.z)),
+                float(iqint1(val + primes.x + primes.z)),
                 posFract.x
             ),
             mix(
-                uintToFloat(iqint1(val + primes.y + primes.z)),
-                uintToFloat(iqint1(val + primes.x + primes.y + primes.z)),
+                float(iqint1(val + primes.y + primes.z)),
+                float(iqint1(val + primes.x + primes.y + primes.z)),
                 posFract.x
             ),
             posFract.y
         ),
         posFract.z
     );
+    
+    return noise / 2147483647.0 - 1.0;
 }
 
 // Mark Jarzynski and Marc Olano, Hash Functions for GPU Rendering, Journal of
@@ -254,10 +255,5 @@ uint iqint1(uint n) {
     n = n * (n * n * 15731u + 789221u) + 1376312589u;
 
     return n;
-}
-
-// convert a uint to a float between 0.0 and 1.0
-float uintToFloat(uint u) {
-    return float(u) / 4294967295.0;
 }
 `;
