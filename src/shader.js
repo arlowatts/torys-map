@@ -71,18 +71,15 @@ void main() {
 
     // initialize the starting point for the ray
     vec4 pos = uCameraPosition;
+    float distance = sdf(pos, uTerrainDetail);
+    float leastHeight = sdf(pos, 0u);
 
     // march the ray
-    float distance = sdf(pos, uTerrainDetail);
-    float closestDistance = distance;
-
     for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
         pos += stepScale * distance * ray;
         distance = sdf(pos, uTerrainDetail);
 
-        if (abs(distance) < closestDistance) {
-            closestDistance = abs(distance);
-        }
+        leastHeight = min(leastHeight, sdf(pos, 0u));
     }
 
     // if the ray hit the surface, compute color and shadow
@@ -105,17 +102,17 @@ void main() {
 
     // if the ray missed the surface, check for stars using the ray direction
     else {
-        ray = uLightDirectionMatrix * ray;
+        vec4 rotatedRay = uLightDirectionMatrix * ray;
 
         // check if the ray hits the sun
-        if (dot(ray, sunPosition) > 1.0 - sunSize) {
+        if (dot(rotatedRay, sunPosition) > 1.0 - sunSize) {
             fragColor = sunColor;
         }
 
         // otherwise hash the ray's direction and see if it hits a star
         else {
             // use a nested hash function on the ray direction
-            uvec3 n = uvec3(ivec3(floor(ray.xyz * starResolution)));
+            uvec3 n = uvec3(ivec3(floor(rotatedRay.xyz * starResolution)));
             uint hash = iqint1(iqint1(iqint1(n.x) + n.y) + n.z);
 
             // convert the hashed value to a float between 0.0 and 1.0
@@ -129,8 +126,10 @@ void main() {
                 fragColor = vec4(0.0);
             }
 
-            // blend with the atmosphere color
-            fragColor = mix(fragColor, skyColor, min(max(uTerrainHeight - closestDistance, 0.0), 1.0));
+            // apply atmoshpere effect
+            float light = dot(rotatedRay, sunPosition) * exp(-0.5 * leastHeight / uTerrainHeight);
+            fragColor = mix(fragColor, skyColor, light);
+
             fragColor.w = 1.0;
         }
     }
