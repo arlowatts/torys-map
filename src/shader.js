@@ -1,8 +1,7 @@
-import { light, view } from "./properties.js";
+import { light, ray, view } from "./properties.js";
 
 export const vertexSrc = `#version 300 es
 in vec4 aVertexPosition;
-
 out vec4 pointPosition;
 
 void main() {
@@ -33,8 +32,13 @@ uniform float uTerrainSize;
 uniform float uTerrainHeight;
 
 in vec4 pointPosition;
-
 out vec4 fragColor;
+
+float aspect = float(${view.aspect});
+float cameraDistance = float(${view.camera.distance});
+
+float ambience = float(${light.ambience});
+float highlightSize = float(${light.highlightSize});
 
 float starResolution = float(${light.star.resolution});
 float starFrequency = float(${light.star.frequency});
@@ -42,21 +46,12 @@ float starFrequency = float(${light.star.frequency});
 float sunSize = float(${light.sun.size});
 vec4 sunColor = vec4(${light.sun.color}, 1.0);
 vec4 skyColor = vec4(${light.sky.color}, 1.0);
-
-float aspect = float(${view.aspect});
-float cameraDistance = float(${view.camera.distance});
-
-float seaLevel = 0.0;
 vec4 seaColor = vec4(${light.sea.color}, 1.0);
 
-float minDistance = 0.0001;
-float maxDistance = 100.0;
-int maxSteps = 100;
-float stepScale = 0.5;
-
-float temperature = 0.62;
-float ambience = float(${light.ambience});
-float highlightSize = 16.0;
+float minDistance = float(${ray.distance.min});
+float maxDistance = float(${ray.distance.max});
+int maxSteps = ${Math.round(ray.steps.max)};
+float stepScale = float(${ray.steps.scale});
 
 uvec4 primes = uvec4(19, 47, 101, 131);
 
@@ -131,10 +126,10 @@ void main() {
             // apply atmoshpere effect
             float light = dot(ray, uLightDirection) * exp(-0.5 * leastHeight / uTerrainHeight);
             fragColor = mix(fragColor, skyColor, light);
-
-            fragColor.w = 1.0;
         }
     }
+
+    fragColor.w = 1.0;
 }
 
 // returns the shortest distance from the pos to the scene
@@ -167,31 +162,33 @@ float sdf(vec4 pos, uint maxOctaves) {
     return distance - max(height, -2.0 * minDistance);
 }
 
+// compute the color of the terrain at a point on the surface
 vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
-    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+    vec4 color = vec4(0.0);
 
+    // compute the height of the point above the surface
     float height = sdf(pos, 0u);
 
     // compute shading based on the surface normal and the light direction
     float shade = dot(normal, uLightDirection);
 
-    if (height < seaLevel) {
+    if (height < 0.0) {
         // compute the reflected view ray for specular highlights
         float highlight = pow(max(dot(reflect(ray, normal), uLightDirection), 0.0), highlightSize);
 
         color = mix(seaColor, sunColor, highlight);
     }
     else {
-        temperature -= (height - seaLevel) / ((1.0 - seaLevel) * uTerrainHeight);
+        height /= uTerrainHeight;
 
-        if (temperature > 0.6) {
-            color.r = temperature;
-            color.g = temperature;
-            color.b = temperature / 1.5;
+        if (height < 0.025) {
+            color.r = 0.8;
+            color.g = 0.8;
+            color.b = 0.6;
         }
-        else if (temperature > 0.2) {
-            color.g = 1.0 - temperature;
-            color.b = 1.0 - temperature;
+        else if (height < 0.4) {
+            color.g = height + 0.4;
+            color.b = height + 0.4;
         }
         else {
             color.r = 0.8;
@@ -201,7 +198,6 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     }
 
     color *= shade + ambience;
-    color.w = 1.0;
 
     return color;
 }
@@ -214,6 +210,7 @@ float noise3(vec3 pos) {
     // use a linear combination as the input to the hash function
     uint val = primes.x * posFloor.x + primes.y * posFloor.y + primes.z * posFloor.z + primes.w;
 
+    // compute the eight random values to mix
     float val000 = float(iqint1(val));
     float val100 = float(iqint1(val + primes.x));
 
@@ -226,7 +223,7 @@ float noise3(vec3 pos) {
     float val011 = float(iqint1(val + primes.y + primes.z));
     float val111 = float(iqint1(val + primes.x + primes.y + primes.z));
 
-    // linearly interpolate between eight adjacent values
+    // linearly interpolate between the eight adjacent values
     float noise = mix(
         mix(
             mix(val000, val100, posFract.x),
@@ -240,7 +237,8 @@ float noise3(vec3 pos) {
         ),
         posFract.z
     );
-    
+
+    // scale back down to range between -1.0 and 1.0
     return noise / 2147483647.0 - 1.0;
 }
 

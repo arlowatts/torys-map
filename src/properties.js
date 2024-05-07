@@ -26,6 +26,18 @@ export const zoom = {
     max: 14,
 };
 
+export const ray = {
+    distance: {
+        min: 0.0001,
+        max: 20,
+    },
+
+    steps: {
+        scale: 0.5,
+        max: 100,
+    },
+}
+
 export const input = {
     // dictionary of key press data for first-person controls
     keys: {
@@ -81,6 +93,7 @@ export const torus = {
 // light direction and ambience
 export const light = {
     ambience: 0.5, // ambient light brightness
+    highlightSize: 16, // parameter controlling the size of specular highlights
 
     direction: {
         base: vec4.fromValues(1, 0, 0, 0),
