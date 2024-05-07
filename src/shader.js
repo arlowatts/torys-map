@@ -21,10 +21,13 @@ uint iqint1(uint);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
+
+uniform vec4 uLightDirection;
 uniform mat4 uLightDirectionMatrix;
 
 uniform float uLargeRadius;
 uniform float uSmallRadius;
+
 uniform uint uTerrainDetail;
 uniform float uTerrainSize;
 uniform float uTerrainHeight;
@@ -36,7 +39,6 @@ out vec4 fragColor;
 float starResolution = float(${light.star.resolution});
 float starFrequency = float(${light.star.frequency});
 
-vec4 sunPosition = vec4(${light.direction.base}, 0.0);
 float sunSize = float(${light.sun.size});
 vec4 sunColor = vec4(${light.sun.color}, 1.0);
 vec4 skyColor = vec4(${light.sky.color}, 1.0);
@@ -102,15 +104,15 @@ void main() {
 
     // if the ray missed the surface, check for stars using the ray direction
     else {
-        vec4 rotatedRay = uLightDirectionMatrix * ray;
-
         // check if the ray hits the sun
-        if (dot(rotatedRay, sunPosition) > 1.0 - sunSize) {
+        if (dot(ray, uLightDirection) > 1.0 - sunSize) {
             fragColor = sunColor;
         }
 
         // otherwise hash the ray's direction and see if it hits a star
         else {
+            vec4 rotatedRay = uLightDirectionMatrix * ray;
+
             // use a nested hash function on the ray direction
             uvec3 n = uvec3(ivec3(floor(rotatedRay.xyz * starResolution)));
             uint hash = iqint1(iqint1(iqint1(n.x) + n.y) + n.z);
@@ -127,7 +129,7 @@ void main() {
             }
 
             // apply atmoshpere effect
-            float light = dot(rotatedRay, sunPosition) * exp(-0.5 * leastHeight / uTerrainHeight);
+            float light = dot(ray, uLightDirection) * exp(-0.5 * leastHeight / uTerrainHeight);
             fragColor = mix(fragColor, skyColor, light);
 
             fragColor.w = 1.0;
@@ -171,11 +173,11 @@ vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     float height = sdf(pos, 0u);
 
     // compute shading based on the surface normal and the light direction
-    float shade = dot(uLightDirectionMatrix * normal, sunPosition);
+    float shade = dot(normal, uLightDirection);
 
     if (height < seaLevel) {
         // compute the reflected view ray for specular highlights
-        float highlight = pow(max(dot(uLightDirectionMatrix * reflect(ray, normal), sunPosition), 0.0), highlightSize);
+        float highlight = pow(max(dot(reflect(ray, normal), uLightDirection), 0.0), highlightSize);
 
         color = mix(seaColor, sunColor, highlight);
     }

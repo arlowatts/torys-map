@@ -1,4 +1,4 @@
-import { gl, programInfo, buffer, torus, view, zoom, pan, look } from "./properties.js";
+import { gl, programInfo, buffer, torus, view, zoom, pan, look, light } from "./properties.js";
 
 // draw the scene
 export function drawScene() {
@@ -12,8 +12,9 @@ export function drawScene() {
 
     // set the shader uniforms
     gl.uniform4fv(uniforms.cameraPosition, getCameraPosition());
-
     gl.uniformMatrix4fv(uniforms.viewDirectionMatrix, false, getViewDirectionMatrix());
+
+    gl.uniform4fv(uniforms.lightDirection, getLightDirection());
     gl.uniformMatrix4fv(uniforms.lightDirectionMatrix, false, getLightDirectionMatrix());
 
     gl.uniform1f(uniforms.largeRadius, torus.radius.large / zoom.val);
@@ -53,6 +54,16 @@ function getViewDirectionMatrix() {
     }
 
     return matrix;
+}
+
+function getLightDirection() {
+    const vector = vec4.clone(light.direction.base);
+    const matrix = getLightDirectionMatrix();
+
+    mat4.invert(matrix, matrix);
+    vec4.transformMat4(vector, vector, matrix);
+
+    return vector;
 }
 
 // create a light direction matrix to define the position of the sun
