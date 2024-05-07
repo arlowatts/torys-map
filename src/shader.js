@@ -214,32 +214,28 @@ float noise3(vec3 pos) {
     // use a linear combination as the input to the hash function
     uint val = primes.x * posFloor.x + primes.y * posFloor.y + primes.z * posFloor.z + primes.w;
 
+    float val000 = float(iqint1(val));
+    float val100 = float(iqint1(val + primes.x));
+
+    float val010 = float(iqint1(val + primes.y));
+    float val110 = float(iqint1(val + primes.x + primes.y));
+
+    float val001 = float(iqint1(val + primes.z));
+    float val101 = float(iqint1(val + primes.x + primes.z));
+
+    float val011 = float(iqint1(val + primes.y + primes.z));
+    float val111 = float(iqint1(val + primes.x + primes.y + primes.z));
+
     // linearly interpolate between eight adjacent values
     float noise = mix(
         mix(
-            mix(
-                float(iqint1(val)),
-                float(iqint1(val + primes.x)),
-                posFract.x
-            ),
-            mix(
-                float(iqint1(val + primes.y)),
-                float(iqint1(val + primes.x + primes.y)),
-                posFract.x
-            ),
+            mix(val000, val100, posFract.x),
+            mix(val010, val110, posFract.x),
             posFract.y
         ),
         mix(
-            mix(
-                float(iqint1(val + primes.z)),
-                float(iqint1(val + primes.x + primes.z)),
-                posFract.x
-            ),
-            mix(
-                float(iqint1(val + primes.y + primes.z)),
-                float(iqint1(val + primes.x + primes.y + primes.z)),
-                posFract.x
-            ),
+            mix(val001, val101, posFract.x),
+            mix(val011, val111, posFract.x),
             posFract.y
         ),
         posFract.z
