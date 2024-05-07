@@ -83,7 +83,7 @@ export const light = {
     ambience: 0.5, // ambient light brightness
 
     direction: {
-        base: [1, 0, 0],
+        base: vec4.fromValues(1, 0, 0, 0),
     },
 
     sun: {

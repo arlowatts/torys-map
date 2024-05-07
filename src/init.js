@@ -28,6 +28,7 @@ export function initShaders() {
     programInfo.uniformLocations = {
         cameraPosition: gl.getUniformLocation(programInfo.program, "uCameraPosition"),
         viewDirectionMatrix: gl.getUniformLocation(programInfo.program, "uViewDirectionMatrix"),
+        lightDirection: gl.getUniformLocation(programInfo.program, "uLightDirection"),
         lightDirectionMatrix: gl.getUniformLocation(programInfo.program, "uLightDirectionMatrix"),
         largeRadius: gl.getUniformLocation(programInfo.program, "uLargeRadius"),
         smallRadius: gl.getUniformLocation(programInfo.program, "uSmallRadius"),
