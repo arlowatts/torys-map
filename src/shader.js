@@ -49,7 +49,6 @@ vec4 skyColor = vec4(${light.sky.color}, 1.0);
 vec4 seaColor = vec4(${light.sea.color}, 1.0);
 
 float minDistance = float(${ray.distance.min});
-float maxDistance = float(${ray.distance.max});
 int maxSteps = ${Math.round(ray.steps.max)};
 float stepScale = float(${ray.steps.scale});
 
@@ -70,6 +69,7 @@ void main() {
     vec4 pos = uCameraPosition;
     float distance = sdf(pos, uTerrainDetail);
     float leastHeight = sdf(pos, 0u);
+    float maxDistance = max(uLargeRadius, cameraDistance);
 
     // march the ray
     for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {

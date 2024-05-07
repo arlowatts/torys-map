@@ -36,19 +36,17 @@ function main() {
 }
 
 function render(now) {
-    torus.time = Date.now() / 1000;
-
     // update the position of the camera if first-person mode is toggled
     if (view.isFirstPerson) moveFirstPersonCamera(now - view.pageTime);
 
-    // update fps with exponential averaging
-    let rate = 1000 / (now - view.pageTime);
-    view.fps.val = rate + view.fps.averaging * (view.fps.val - rate);
-
     // update fps indicator
-    document.getElementById("fps").innerText = view.fps.val.toFixed(1) + " FPS";
+    document.getElementById("fps").innerText = (1000 / (now - view.pageTime)).toFixed(1) + " FPS";
 
+    // update time since page was loaded
     view.pageTime = now;
+
+    // update current time
+    torus.time = Date.now() / 1000;
 
     // render the scene
     drawScene();

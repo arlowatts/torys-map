@@ -9,16 +9,19 @@ export const gl = canvas.getContext("webgl2");
 
 if (gl === null) alert("Unable to initialize WebGL. Your browser or machine may not support it.");
 
+// properties used for updating the url query string
 export const query = {
     params: new URLSearchParams(window.location.search),
     refreshRate: 1000,
 };
 
+// properties used for computing the camera's position in space
 export const pan = {
     phi: query.params.has("phi") && !isNaN(query.params.get("phi")) ? Number(query.params.get("phi")) : 0,
     theta: query.params.has("theta") && !isNaN(query.params.get("theta")) ? Number(query.params.get("theta")) : 0,
 };
 
+// properties used for controlling the size and level of detail
 export const zoom = {
     precise: query.params.has("zoom") && !isNaN(query.params.get("zoom")) ? Number(query.params.get("zoom")) : 13,
 
@@ -26,43 +29,40 @@ export const zoom = {
     max: 14,
 };
 
+// properties controlling how the shader performs raymarching
 export const ray = {
     distance: {
-        min: 0.0001,
-        max: 20,
+        min: 0.0001, // the distance threshold for detecting a collision
     },
 
     steps: {
-        scale: 0.5,
-        max: 100,
+        scale: 0.5, // the multiplier used when computing step size
+        max: 1000, // the maximum number of steps per ray
     },
 }
 
+// properties to track and control user inputs
 export const input = {
     // dictionary of key press data for first-person controls
-    keys: {
-        "w": false,
-        "a": false,
-        "s": false,
-        "d": false,
-    },
+    keys: { "w": false, "a": false, "s": false, "d": false },
 
     // array of touch event data for touchscreen support
     touches: [],
 
+    // parameters controlling the sensitivity of different input devices
     sensitivity: {
         mouse: 1 / window.innerHeight,
-        scroll: 0.001,
-        pinch: 0.002,
+        scroll: 0.002,
+        pinch: 0.003,
     },
 };
 
-// planet dimensions and properties
+// properties defining the planet's dimensions and other characteristics
 export const torus = {
-    // world time (seconds)
+    // current time (seconds)
     time: 0,
 
-    // dimensions of the planet (km)
+    // dimensions (kilometers)
     radius: {
         large: 5096.8,
         small: 1274.2,
@@ -90,53 +90,54 @@ export const torus = {
     },
 };
 
-// light direction and ambience
+// properties defining the direction, color, and other characteristics of light
 export const light = {
     ambience: 0.5, // ambient light brightness
     highlightSize: 16, // parameter controlling the size of specular highlights
 
     direction: {
-        base: vec4.fromValues(1, 0, 0, 0),
+        base: vec4.fromValues(1, 0, 0, 0), // the direction of light at time 0
     },
 
     sun: {
         size: 0.001, // parameter controlling the size of the sun
-        color: [1.0, 0.9, 0.7], // color of the sun in rgb format
+        color: [1.0, 0.9, 0.7], // color of the sun (rgb)
     },
 
     sky: {
-        color: [0.4, 0.65, 1.0], // color of the sky in rgb format
+        color: [0.4, 0.65, 1.0], // color of the sky (rgb)
     },
 
     sea: {
-        color: [0.1, 0.3, 0.6], // color of the sea in rgb format
+        color: [0.1, 0.3, 0.6], // color of the sea (rgb)
     },
 
     star: {
-        resolution: 500, // higher resolution gives smaller stars
-        frequency: 0.001, // approximate fraction of the screen that is white
+        resolution: 500, // parameter controlling the size of the stars
+        frequency: 0.001, // approximate fraction of the screen that is stars
     },
 };
 
-// the initial camera view
+// properties used to position and move the camera
 export const view = {
     // aspect ratio of the canvas
     aspect: gl.canvas.clientWidth / gl.canvas.clientHeight,
 
+    // time since the page was loaded
     pageTime: 0,
 
-    fps: {
-        val: 0,
-        averaging: 0.9,
-    },
-
-    // perspective type
+    // property indicating whether the user is in a first-person view or not
     isFirstPerson: query.params.get("isfp") == "true",
 
     camera: {
-        distance: 1 / Math.tan(Math.PI / 8), // gives 45 degree fov
-        height: 1, // height of the camera above the surface (km)
+        // parameter controlling the field of view
+        distance: 1 / Math.tan(Math.PI / 8),
 
+        // height of the camera above the surface of the planet (kilometers)
+        height: 1,
+
+        // current rate of change of the camera's position with respect to phi
+        // and theta
         slope: {
             phi: 0,
             theta: 0,
@@ -144,6 +145,7 @@ export const view = {
     },
 };
 
+// properties used to move and rotate the camera in a first-person view
 export const look = {
     // movement speed of first-person controls
     speed: 0.001,
