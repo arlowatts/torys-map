@@ -127,7 +127,7 @@ export const view = {
     pageTime: 0,
 
     // property indicating whether the user is in a first-person view or not
-    isFirstPerson: query.params.get("isfp") == "true",
+    isFirstPerson: query.params.get("isfp") === "true",
 
     camera: {
         // parameter controlling the field of view

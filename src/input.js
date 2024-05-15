@@ -68,7 +68,7 @@ export function moveFirstPersonCamera(deltaTime) {
 
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
-    if (event.buttons == 1) {
+    if (event.buttons === 1) {
         // when in a first-person view, change only the view direction
         if (view.isFirstPerson) {
             look.phi += event.movementX * input.sensitivity.mouse;
@@ -109,7 +109,7 @@ function onKeyDown(event) {
 function onKeyUp(event) {
     input.keys[event.key] = false;
 
-    if (event.key == " ") view.isFirstPerson = !view.isFirstPerson;
+    if (event.key === " ") view.isFirstPerson = !view.isFirstPerson;
 }
 
 // when a touch gesture begins, record all finger contacts
@@ -127,7 +127,7 @@ function onTouchEnd() {
 // when a touch gesture moves, trigger a pan or zoom accordingly
 function onTouchMove(event) {
     // if only a single finger is on the screen, perform a pan
-    if (input.touches.length == 1 && event.touches.length == 1) {
+    if (input.touches.length === 1 && event.touches.length === 1) {
         let touch0 = event.touches.item(0);
 
         // invoke the pan function
@@ -142,7 +142,7 @@ function onTouchMove(event) {
     }
 
     // if exactly two fingers are on the screen, perform a zoom
-    else if (input.touches.length == 2 && event.touches.length == 2) {
+    else if (input.touches.length === 2 && event.touches.length === 2) {
         let touch0 = event.touches.item(0);
         let touch1 = event.touches.item(1);
 
