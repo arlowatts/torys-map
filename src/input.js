@@ -66,6 +66,25 @@ export function moveFirstPersonCamera(deltaTime) {
     pan.theta %= Math.TAU;
 }
 
+// compute the derivative of the camera's position with respect to phi and theta
+function computeCameraSlope() {
+    const R = torus.radius.large / zoom.val;
+    const r = torus.radius.small / zoom.val;
+
+    view.camera.slope.phi = Math.hypot(
+        (Math.cos(pan.theta) * r + R) * Math.cos(pan.phi),
+        (Math.cos(pan.theta) * r + R) * Math.sin(pan.phi)
+    );
+
+    view.camera.slope.theta = r;
+}
+
+// compute the exponential zoom value
+function computeZoom() {
+    zoom.precise = Math.min(Math.max(zoom.precise, 0), zoom.max);
+    zoom.val = Math.pow(2, zoom.precise - (view.isFirstPerson ? 2 : 0));
+}
+
 // adjust the view location when the mouse is dragged
 function onMouseMove(event) {
     if (event.buttons === 1) {
@@ -94,22 +113,8 @@ function onMouseMove(event) {
 function onWheel(event) {
     // track the precise zoom value to avoid loss of precision
     zoom.precise -= event.wheelDelta * input.sensitivity.scroll;
-    zoom.precise = Math.min(Math.max(zoom.precise, 0), zoom.max);
 
-    // compute the exponential zoom value
-    zoom.val = Math.pow(2, zoom.precise);
-}
-
-// update first-person movement controls when the WASD keys are pressed
-function onKeyDown(event) {
-    input.keys[event.key] = true;
-}
-
-// toggle first-person view when the spacebar is pressed
-function onKeyUp(event) {
-    input.keys[event.key] = false;
-
-    if (event.key === " ") view.isFirstPerson = !view.isFirstPerson;
+    computeZoom();
 }
 
 // when a touch gesture begins, record all finger contacts
@@ -159,7 +164,8 @@ function onTouchMove(event) {
         );
 
         // invoke the zoom function
-        onWheel({ wheelDelta: (newTouchDistance - oldTouchDistance) * input.sensitivity.pinch / input.sensitivity.scroll });
+        zoom.precise -= (newTouchDistance - oldTouchDistance) * input.sensitivity.pinch;
+        computeZoom();
 
         // update to the latest touch points
         input.touches[0] = touch0;
@@ -169,6 +175,21 @@ function onTouchMove(event) {
     // otherwise something has gone wrong with the tracking, clear all touches
     else {
         onTouchEnd();
+    }
+}
+
+// update first-person movement controls when the WASD keys are pressed
+function onKeyDown(event) {
+    input.keys[event.key] = true;
+}
+
+// toggle first-person view when the spacebar is pressed
+function onKeyUp(event) {
+    input.keys[event.key] = false;
+
+    if (event.key === " ") {
+        view.isFirstPerson = !view.isFirstPerson;
+        computeZoom();
     }
 }
 
@@ -188,17 +209,4 @@ function updateQueryParameters() {
     query.params.set("ftheta", look.theta.toFixed(4));
 
     history.replaceState(null, "", window.location.pathname + "?" + query.params);
-}
-
-// compute the derivative of the camera's position with respect to phi and theta
-function computeCameraSlope() {
-    const R = torus.radius.large / zoom.val;
-    const r = torus.radius.small / zoom.val;
-
-    view.camera.slope.phi = Math.hypot(
-        (Math.cos(pan.theta) * r + R) * Math.cos(pan.phi),
-        (Math.cos(pan.theta) * r + R) * Math.sin(pan.phi)
-    );
-
-    view.camera.slope.theta = r;
 }
