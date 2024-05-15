@@ -1,5 +1,5 @@
 import { gl, buffer, programInfo } from "./properties.js";
-import { vertexSrc, fragmentSrc } from "./shader.js";
+import { vertexSrc, fragmentSrc } from "./shader/main.js";
 
 // initialize the shader program
 export function initShaders() {
