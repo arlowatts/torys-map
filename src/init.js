@@ -1,7 +1,7 @@
 import { gl, buffer, programInfo } from "./properties.js";
 import { vertexSrc, fragmentSrc } from "./shader.js";
 
-// initialize the shader program with a vertex shader and a fragment shader
+// initialize the shader program
 export function initShaders() {
     // compile the shaders
     const vertexShader = loadShader(gl.VERTEX_SHADER, vertexSrc);
