@@ -33,6 +33,7 @@ function getCameraPosition() {
     const R = torus.radius.large / zoom.val;
     const r = view.camera.height + torus.radius.small / zoom.val;
 
+    // position the camera according to the pan values and the torus radii
     return vec4.fromValues(
         (Math.cos(pan.theta) * r + R) * -Math.sin(pan.phi),
         (Math.sin(pan.theta) * r),
@@ -45,9 +46,11 @@ function getCameraPosition() {
 function getViewDirectionMatrix() {
     const matrix = mat4.create();
 
+    // rotate the camera to look at the surface
     mat4.rotate(matrix, matrix, pan.phi, [0, 1, 0]);
     mat4.rotate(matrix, matrix, pan.theta, [1, 0, 0]);
 
+    // apply the first-person camera angle
     if (view.isFirstPerson) {
         mat4.rotate(matrix, matrix, look.phi, [0, 0, 1]);
         mat4.rotate(matrix, matrix, look.theta, [1, 0, 0]);
@@ -56,10 +59,12 @@ function getViewDirectionMatrix() {
     return matrix;
 }
 
+// compute the direction of the light from the sun
 function getLightDirection() {
     const vector = vec4.clone(light.direction.base);
     const matrix = getLightDirectionMatrix();
 
+    // apply the inverse of the light direction matrix
     mat4.invert(matrix, matrix);
     vec4.transformMat4(vector, vector, matrix);
 
@@ -70,6 +75,7 @@ function getLightDirection() {
 function getLightDirectionMatrix() {
     const matrix = mat4.create();
 
+    // apply the rotations around the local and orbit axes
     mat4.rotate(matrix, matrix, torus.time / torus.length.day * Math.TAU, torus.axis.day);
     mat4.rotate(matrix, matrix, torus.time / (torus.length.day * torus.length.year) * Math.TAU, torus.axis.year);
 
