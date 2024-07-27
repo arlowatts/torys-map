@@ -21,6 +21,8 @@ uniform uint uTerrainDetail;
 uniform float uTerrainSize;
 uniform float uTerrainHeight;
 
+uniform sampler2D uSampler;
+
 in vec4 pointPosition;
 out vec4 fragColor;
 

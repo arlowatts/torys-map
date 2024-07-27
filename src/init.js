@@ -1,5 +1,6 @@
 import { gl, buffer, programInfo } from "./properties.js";
 import { vertexSrc, fragmentSrc } from "./shader/main.js";
+import { loadTerrainTexture } from "./textures.js";
 
 // initialize the shader program
 export function initShaders() {
@@ -21,7 +22,7 @@ export function initShaders() {
 
     // collect attribute locations
     programInfo.attribLocations = {
-        vertexPosition: gl.getAttribLocation(programInfo.program, "aVertexPosition")
+        vertexPosition: gl.getAttribLocation(programInfo.program, "aVertexPosition"),
     };
 
     // collect uniform locations
@@ -34,7 +35,8 @@ export function initShaders() {
         smallRadius: gl.getUniformLocation(programInfo.program, "uSmallRadius"),
         terrainDetail: gl.getUniformLocation(programInfo.program, "uTerrainDetail"),
         terrainSize: gl.getUniformLocation(programInfo.program, "uTerrainSize"),
-        terrainHeight: gl.getUniformLocation(programInfo.program, "uTerrainHeight")
+        terrainHeight: gl.getUniformLocation(programInfo.program, "uTerrainHeight"),
+        uSampler: gl.getUniformLocation(programInfo.program, "uSampler"),
     };
 
     // initialize the data buffer for the scene
@@ -45,6 +47,9 @@ export function initShaders() {
 
     // convert the array to a Float32Array, then populate the buffer
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
+
+    // load the terrain texture
+    loadTerrainTexture();
 }
 
 // compiles and loads a shader

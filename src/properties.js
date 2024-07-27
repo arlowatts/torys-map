@@ -172,3 +172,7 @@ export const buffer = {
     stride: 0,
     offset: 0,
 };
+
+export const texture = {
+    data: null,
+};

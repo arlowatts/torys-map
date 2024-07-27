@@ -1,4 +1,4 @@
-import { gl, programInfo, buffer, torus, view, zoom, pan, look, light } from "./properties.js";
+import { gl, programInfo, buffer, texture, torus, view, zoom, pan, look, light } from "./properties.js";
 
 // draw the scene
 export function drawScene() {
@@ -26,6 +26,11 @@ export function drawScene() {
 
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.vertexCount);
+
+    // load the textures
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture.data);
+    gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 }
 
 // create a vector to define the camera's position
