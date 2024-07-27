@@ -3,6 +3,9 @@ export const color = `
 vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
     vec4 color = vec4(0.0);
 
+    vec2 surfacePos = vec2(pos.x, pos.z);
+    return texture(uSampler, surfacePos);
+
     // compute the height of the point above the surface
     float height = sdf(pos, 0u);
 

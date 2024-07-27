@@ -10,9 +10,6 @@ void main() {
     ray.w = 0.0;
     ray = normalize(ray);
 
-    fragColor = texture(uSampler, ray.xy);
-    return;
-
     // initialize the starting point for the ray
     vec4 pos = uCameraPosition;
     float distance = sdf(pos, uTerrainDetail);
