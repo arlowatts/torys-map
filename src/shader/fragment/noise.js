@@ -1,24 +1,26 @@
 export const noise = `
+uvec4 PRIMES = uvec4(19, 47, 101, 131);
+
 // return a smooth noise value between -1.0 and 1.0
 float noise3(vec3 pos) {
     uvec3 posFloor = uvec3(ivec3(floor(pos)));
     vec3 posFract = smoothstep(0.0, 1.0, fract(pos));
 
     // use a linear combination as the input to the hash function
-    uint val = primes.x * posFloor.x + primes.y * posFloor.y + primes.z * posFloor.z + primes.w;
+    uint val = PRIMES.x * posFloor.x + PRIMES.y * posFloor.y + PRIMES.z * posFloor.z + PRIMES.w;
 
     // compute the eight random values to mix
     float val000 = float(iqint1(val));
-    float val100 = float(iqint1(val + primes.x));
+    float val100 = float(iqint1(val + PRIMES.x));
 
-    float val010 = float(iqint1(val + primes.y));
-    float val110 = float(iqint1(val + primes.x + primes.y));
+    float val010 = float(iqint1(val + PRIMES.y));
+    float val110 = float(iqint1(val + PRIMES.x + PRIMES.y));
 
-    float val001 = float(iqint1(val + primes.z));
-    float val101 = float(iqint1(val + primes.x + primes.z));
+    float val001 = float(iqint1(val + PRIMES.z));
+    float val101 = float(iqint1(val + PRIMES.x + PRIMES.z));
 
-    float val011 = float(iqint1(val + primes.y + primes.z));
-    float val111 = float(iqint1(val + primes.x + primes.y + primes.z));
+    float val011 = float(iqint1(val + PRIMES.y + PRIMES.z));
+    float val111 = float(iqint1(val + PRIMES.x + PRIMES.y + PRIMES.z));
 
     // linearly interpolate between the eight adjacent values
     float noise = mix(

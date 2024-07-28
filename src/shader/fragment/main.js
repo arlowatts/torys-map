@@ -1,36 +1,56 @@
+import { view, ray, light } from "../../properties.js";
+
 export const main = `
+float CAMERA_ASPECT_RATIO = float(${view.aspect});
+float CAMERA_SCREEN_DISTANCE = float(${view.camera.distance});
+
+float MARCH_MIN_DISTANCE = float(${ray.distance.min});
+int MARCH_MAX_STEPS = ${Math.round(ray.steps.max)};
+float MARCH_STEP_SCALE = float(${ray.steps.scale});
+
+float STAR_RESOLUTION = float(${light.star.resolution});
+float STAR_FREQUENCY = float(${light.star.frequency});
+
+vec4 SKY_COLOR = vec4(${light.sky.color}, 1.0);
+float SUN_SIZE = float(${light.sun.size});
+vec4 SUN_COLOR = vec4(${light.sun.color}, 1.0);
+
+in vec4 pointPosition;
+out vec4 fragColor;
+
 void main() {
     // create the ray for raymarching
     vec4 ray = pointPosition;
 
     // adjust and normalize the ray according to scene properties
-    ray.x *= aspect;
-    ray.z = cameraDistance;
+    ray.x *= CAMERA_ASPECT_RATIO;
+    ray.z = CAMERA_SCREEN_DISTANCE;
     ray = uViewDirectionMatrix * ray;
     ray.w = 0.0;
     ray = normalize(ray);
 
     // initialize the starting point for the ray
     vec4 pos = uCameraPosition;
-    float distance = sdf(pos, uTerrainDetail);
-    float leastHeight = sdf(pos, 0u);
-    float maxDistance = max(uLargeRadius, cameraDistance);
+    float distance = sdf(pos);
+    float leastDistance = distance;
+
+    float maxDistance = max(uLargeRadius, CAMERA_SCREEN_DISTANCE);
 
     // march the ray
-    for (int i = 0; i < maxSteps && abs(distance) > minDistance && distance < maxDistance; i++) {
-        pos += stepScale * distance * ray;
-        distance = sdf(pos, uTerrainDetail);
+    for (int i = 0; i < MARCH_MAX_STEPS && abs(distance) > MARCH_MIN_DISTANCE && distance < maxDistance; i++) {
+        pos += MARCH_STEP_SCALE * distance * ray;
+        distance = sdf(pos);
 
-        leastHeight = min(leastHeight, sdf(pos, 0u));
+        leastDistance = min(leastDistance, distance);
     }
 
     // if the ray hit the surface, compute color and shadow
-    if (abs(distance) <= minDistance) {
+    if (abs(distance) <= MARCH_MIN_DISTANCE) {
         // compute the surface normal
         vec4 normal = vec4(
-            sdf(vec4(pos.x + minDistance, pos.y, pos.z, 0.0), uTerrainDetail),
-            sdf(vec4(pos.x, pos.y + minDistance, pos.z, 0.0), uTerrainDetail),
-            sdf(vec4(pos.x, pos.y, pos.z + minDistance, 0.0), uTerrainDetail),
+            sdf(vec4(pos.x + MARCH_MIN_DISTANCE, pos.y, pos.z, 0.0)),
+            sdf(vec4(pos.x, pos.y + MARCH_MIN_DISTANCE, pos.z, 0.0)),
+            sdf(vec4(pos.x, pos.y, pos.z + MARCH_MIN_DISTANCE, 0.0)),
             0.0
         );
 
@@ -45,8 +65,8 @@ void main() {
     // if the ray missed the surface, check for stars using the ray direction
     else {
         // check if the ray hits the sun
-        if (dot(ray, uLightDirection) > 1.0 - sunSize) {
-            fragColor = sunColor;
+        if (dot(ray, uLightDirection) > 1.0 - SUN_SIZE) {
+            fragColor = SUN_COLOR;
         }
 
         // otherwise hash the ray's direction and see if it hits a star
@@ -54,14 +74,14 @@ void main() {
             vec4 rotatedRay = uLightDirectionMatrix * ray;
 
             // use a nested hash function on the ray direction
-            uvec3 n = uvec3(ivec3(floor(rotatedRay.xyz * starResolution)));
+            uvec3 n = uvec3(ivec3(floor(rotatedRay.xyz * STAR_RESOLUTION)));
             uint hash = iqint1(iqint1(iqint1(n.x) + n.y) + n.z);
 
             // convert the hashed value to a float between 0.0 and 1.0
             float val = float(hash) / 4294967295.0;
 
             // check if it passes the threshold
-            if (val < starFrequency) {
+            if (val < STAR_FREQUENCY) {
                 fragColor = vec4(0.5);
             }
             else {
@@ -69,8 +89,8 @@ void main() {
             }
 
             // apply atmoshpere effect
-            float light = dot(ray, uLightDirection) * exp(-0.5 * leastHeight / uTerrainHeight);
-            fragColor = mix(fragColor, skyColor, light);
+            float light = dot(ray, uLightDirection) * exp(-0.5 * leastDistance / uTerrainHeight);
+            fragColor = mix(fragColor, SKY_COLOR, light);
         }
     }
 
