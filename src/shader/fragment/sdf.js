@@ -13,6 +13,6 @@ float sdf(vec4 pos, uint maxOctaves) {
     surfacePos.y *= sign(xzShort);
 
     // sample the terrain height texture
-    return height - uSmallRadius - texture(uSampler, surfacePos).x / 25.0;
+    return height - uSmallRadius - texture(uSampler, surfacePos).x * uTerrainHeight;
 }
 `;
