@@ -1,20 +1,23 @@
 import { gl, texture } from "./properties.js";
 
+// generate the terrain and store it in a single-channel floating-point texture
 export function loadTerrainTexture() {
+    // initialize the texture
     texture.data = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture.data);
 
     const data = [];
 
-    for (let i = 0; i < 128; i++) {
-        for (let j = 0; j < 128; j++) {
-            data.push(i);
-            data.push(j);
-            data.push(0);
-            data.push(255);
+    // generate the terrain height
+    for (let i = 0; i < 64; i++) {
+        for (let j = 0; j < 16; j++) {
+            data.push(Math.random());
         }
     }
 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 128, 128, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(data));
-    gl.generateMipmap(gl.TEXTURE_2D);
+    // load the texture data
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.R16F, 64, 16, 0, gl.RED, gl.FLOAT, new Float32Array(data));
+
+    // set the min filter to linear to avoid using a mipmap
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 }

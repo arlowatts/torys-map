@@ -45,4 +45,6 @@ int maxSteps = ${Math.round(ray.steps.max)};
 float stepScale = float(${ray.steps.scale});
 
 uvec4 primes = uvec4(19, 47, 101, 131);
+
+float tauInverse = 0.15915494309189535;
 `;

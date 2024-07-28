@@ -1,31 +1,18 @@
 export const sdf = `
-// returns the shortest distance from the pos to the scene
+// returns the shortest distance from the given point to the scene
 float sdf(vec4 pos, uint maxOctaves) {
-    // compute the distance from the point to th surface of a smooth torus
-    float distance = length(pos.xz) - uLargeRadius;
-    distance = sqrt(distance * distance + pos.y * pos.y) - uSmallRadius;
+    float xzLong = length(pos.xz);
+    float xzShort = xzLong - uLargeRadius;
 
-    pos *= uTerrainSize;
-    float height = 0.0;
-    float amplitude = uTerrainHeight;
-    vec4 posFloor;
-    uint channel = 0u;
+    float height = sqrt(pos.y * pos.y + xzShort * xzShort);
 
-    // add octaves of terrain noise until the limit is reached or the remaining
-    // octaves could not reach the point
-    for (uint i = 0u; i < maxOctaves && distance - height < amplitude; i++) {
-        posFloor = floor(pos);
+    // compute the coordinates above the surface
+    vec2 surfacePos = acos(vec2(pos.x / xzLong, pos.y / height)) * tauInverse;
 
-        amplitude *= 0.5;
+    surfacePos.x *= sign(pos.z);
+    surfacePos.y *= sign(xzShort);
 
-        height += amplitude * noise3(pos.xyz);
-
-        pos *= 2.0;
-        pos += 0.5;
-
-        channel += 1u;
-    }
-
-    return distance - max(height, -2.0 * minDistance);
+    // sample the terrain height texture
+    return height - uSmallRadius - texture(uSampler, surfacePos).x / 25.0;
 }
 `;

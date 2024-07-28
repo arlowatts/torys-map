@@ -27,7 +27,7 @@ export function drawScene() {
     // set the shapes to draw
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffer.vertexCount);
 
-    // load the textures
+    // load the terrain texture
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture.data);
     gl.uniform1i(programInfo.uniformLocations.uSampler, 0);

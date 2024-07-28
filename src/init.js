@@ -39,13 +39,9 @@ export function initShaders() {
         uSampler: gl.getUniformLocation(programInfo.program, "uSampler"),
     };
 
-    // initialize the data buffer for the scene
+    // load the vertex buffer
     buffer.data = gl.createBuffer();
-
-    // select the position buffer for subsequent operations
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
-
-    // convert the array to a Float32Array, then populate the buffer
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
 
     // load the terrain texture
