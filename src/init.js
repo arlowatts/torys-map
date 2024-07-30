@@ -40,9 +40,9 @@ export function initShaders() {
     };
 
     // load the vertex buffer
-    buffer.data = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
+    buffer.reference = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.reference);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buffer.data), gl.STATIC_DRAW);
 
     // load the terrain texture
     loadTerrainTexture();

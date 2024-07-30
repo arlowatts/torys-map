@@ -3,6 +3,7 @@ import { gl, programInfo, buffer, texture, torus, view, zoom, pan, look, light }
 // draw the scene
 export function drawScene() {
     gl.useProgram(programInfo.program);
+
     setPositionAttribute();
 
     // disable depth testing
@@ -29,7 +30,7 @@ export function drawScene() {
 
     // load the terrain texture
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture.data);
+    gl.bindTexture(gl.TEXTURE_2D, texture.reference);
     gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 }
 
@@ -89,7 +90,7 @@ function getLightDirectionMatrix() {
 
 // define the mapping from the buffers to the attributes
 function setPositionAttribute() {
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.data);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer.reference);
 
     gl.vertexAttribPointer(
         programInfo.attribLocations.vertexPosition,

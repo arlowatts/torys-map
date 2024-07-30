@@ -164,15 +164,23 @@ export const programInfo = {
 
 // information about the mesh buffer
 export const buffer = {
-    data: null,
+    reference: null,
     vertexCount: 4,
     numComponents: 2,
     type: gl.FLOAT,
     normalize: false,
     stride: 0,
     offset: 0,
+    data: [-1, 1, -1, -1, 1, 1, 1, -1],
 };
 
 export const texture = {
+    reference: null,
+    level: 0,
+    internalFormat: gl.R16F,
+    width: 1024,
+    height: 256,
+    format: gl.RED,
+    type: gl.FLOAT,
     data: null,
 };
