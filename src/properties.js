@@ -33,11 +33,12 @@ export const zoom = {
 export const ray = {
     distance: {
         min: 0.0001, // the distance threshold for detecting a collision
+        max: 6000,   // the distance beyond which a ray is considered missed
     },
 
     steps: {
         scale: 0.5, // the multiplier used when computing step size
-        max: 1000, // the maximum number of steps per ray
+        max: 1000, // the maximum number of steps a ray can take
     },
 }
 

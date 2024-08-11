@@ -5,6 +5,7 @@ float CAMERA_ASPECT_RATIO = float(${view.aspect});
 float CAMERA_SCREEN_DISTANCE = float(${view.camera.distance});
 
 float MARCH_MIN_DISTANCE = float(${ray.distance.min});
+float MARCH_MAX_DISTANCE = float(${ray.distance.max});
 int MARCH_MAX_STEPS = ${Math.round(ray.steps.max)};
 float MARCH_STEP_SCALE = float(${ray.steps.scale});
 
@@ -19,10 +20,8 @@ in vec4 pointPosition;
 out vec4 fragColor;
 
 void main() {
-    // create the ray for raymarching
+    // create and normalize the ray
     vec4 ray = pointPosition;
-
-    // adjust and normalize the ray according to scene properties
     ray.x *= CAMERA_ASPECT_RATIO;
     ray.z = CAMERA_SCREEN_DISTANCE;
     ray = uViewDirectionMatrix * ray;
@@ -30,16 +29,18 @@ void main() {
     ray = normalize(ray);
 
     // initialize the starting point for the ray
-    vec4 pos = uCameraPosition;
-    float distance = sdf(pos);
+    vec4 cpos = uCameraPosition;
+    vec3 tpos = getTpos(cpos);
+
+    float distance = sdf(tpos);
     float leastDistance = distance;
 
-    float maxDistance = max(uLargeRadius, CAMERA_SCREEN_DISTANCE);
-
     // march the ray
-    for (int i = 0; i < MARCH_MAX_STEPS && abs(distance) > MARCH_MIN_DISTANCE && distance < maxDistance; i++) {
-        pos += MARCH_STEP_SCALE * distance * ray;
-        distance = sdf(pos);
+    for (int i = 0; i < MARCH_MAX_STEPS && abs(distance) > MARCH_MIN_DISTANCE && distance < MARCH_MAX_DISTANCE; i++) {
+        cpos += MARCH_STEP_SCALE * distance * ray;
+        tpos = getTpos(cpos);
+
+        distance = sdf(tpos);
 
         leastDistance = min(leastDistance, distance);
     }
@@ -48,9 +49,9 @@ void main() {
     if (abs(distance) <= MARCH_MIN_DISTANCE) {
         // compute the surface normal
         vec4 normal = vec4(
-            sdf(vec4(pos.x + MARCH_MIN_DISTANCE, pos.y, pos.z, 0.0)),
-            sdf(vec4(pos.x, pos.y + MARCH_MIN_DISTANCE, pos.z, 0.0)),
-            sdf(vec4(pos.x, pos.y, pos.z + MARCH_MIN_DISTANCE, 0.0)),
+            sdf(getTpos(vec4(cpos.x + MARCH_MIN_DISTANCE, cpos.y, cpos.z, 0.0))),
+            sdf(getTpos(vec4(cpos.x, cpos.y + MARCH_MIN_DISTANCE, cpos.z, 0.0))),
+            sdf(getTpos(vec4(cpos.x, cpos.y, cpos.z + MARCH_MIN_DISTANCE, 0.0))),
             0.0
         );
 
@@ -59,7 +60,7 @@ void main() {
         normal = normalize(normal);
 
         // compute final pixel color
-        fragColor = getColor(pos, normal, ray);
+        fragColor = getColor(tpos, normal, ray);
     }
 
     // if the ray missed the surface, check for stars using the ray direction

@@ -7,23 +7,20 @@ float LIGHT_AMBIENCE = float(${light.ambience});
 float SPECULAR_HIGHLIGHT_SIZE = float(${light.highlightSize});
 
 // compute the color of the terrain at a point on the surface
-vec4 getColor(vec4 pos, vec4 normal, vec4 ray) {
+vec4 getColor(vec3 tpos, vec4 normal, vec4 ray) {
     vec4 color = vec4(0.0);
-
-    // compute the height of the point above the surface
-    float height = sdf(pos);
 
     // compute shading based on the surface normal and the light direction
     float shade = dot(normal, uLightDirection);
 
-    if (height < 0.0) {
+    if (tpos.z - uSmallRadius < 0.0) {
         // compute the reflected view ray for specular highlights
         float highlight = pow(max(dot(reflect(ray, normal), uLightDirection), 0.0), SPECULAR_HIGHLIGHT_SIZE);
 
         color = mix(SEA_COLOR, SUN_COLOR, highlight);
     }
     else {
-        height /= uTerrainHeight;
+        float height = (tpos.z - uSmallRadius) / uTerrainHeight;
 
         if (height < 0.025) {
             color.r = 0.8;

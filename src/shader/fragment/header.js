@@ -1,10 +1,10 @@
 export const header = `#version 300 es
 precision mediump float;
 
-float sdf(vec4);
-vec4 getColor(vec4, vec4, vec4);
-float noise3(vec3);
-uint iqint1(uint);
+vec3 getTpos(vec4 cpos);
+uint iqint1(uint n);
+float sdf(vec3 tpos);
+vec4 getColor(vec3 tpos, vec4 normal, vec4 ray);
 
 uniform vec4 uCameraPosition;
 uniform mat4 uViewDirectionMatrix;
