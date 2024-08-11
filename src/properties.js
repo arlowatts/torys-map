@@ -175,12 +175,13 @@ export const buffer = {
 };
 
 export const texture = {
+    imageUrl: "assets/images/terrain.png",
     reference: null,
     level: 0,
     internalFormat: gl.R16F,
-    width: 1024,
-    height: 256,
+    width: 3600,
+    height: 1800,
     format: gl.RED,
-    type: gl.FLOAT,
+    type: gl.HALF_FLOAT,
     data: null,
 };
