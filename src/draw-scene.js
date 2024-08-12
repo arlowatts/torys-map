@@ -1,4 +1,4 @@
-import { gl, programInfo, buffer, texture, torus, view, zoom, pan, look, light } from "./properties.js";
+import { gl, programInfo, buffer, textures, torus, view, zoom, pan, look, light } from "./properties.js";
 
 // draw the scene
 export function drawScene() {
@@ -30,8 +30,13 @@ export function drawScene() {
 
     // load the terrain texture
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture.reference);
-    gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+    gl.bindTexture(gl.TEXTURE_2D, textures.terrain.reference);
+    gl.uniform1i(programInfo.uniformLocations.uSamplerTerrain, 0);
+
+    // load the normal texture
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, textures.normal.reference);
+    gl.uniform1i(programInfo.uniformLocations.uSamplerNormal, 1);
 }
 
 // create a vector to define the camera's position

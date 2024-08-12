@@ -47,17 +47,8 @@ void main() {
 
     // if the ray hit the surface, compute color and shadow
     if (abs(distance) <= MARCH_MIN_DISTANCE) {
-        // compute the surface normal
-        vec4 normal = vec4(
-            sdf(getTpos(vec4(cpos.x + MARCH_MIN_DISTANCE, cpos.y, cpos.z, 0.0))),
-            sdf(getTpos(vec4(cpos.x, cpos.y + MARCH_MIN_DISTANCE, cpos.z, 0.0))),
-            sdf(getTpos(vec4(cpos.x, cpos.y, cpos.z + MARCH_MIN_DISTANCE, 0.0))),
-            0.0
-        );
-
-        normal -= distance;
-        normal.w = 0.0;
-        normal = normalize(normal);
+        // get the surface normal
+        vec4 normal = texture(uSamplerNormal, tpos.xy);
 
         // compute final pixel color
         fragColor = getColor(tpos, normal, ray);

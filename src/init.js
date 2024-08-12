@@ -1,6 +1,6 @@
 import { gl, buffer, programInfo } from "./properties.js";
 import { vertexSrc, fragmentSrc } from "./shader/main.js";
-import { loadTerrainTexture } from "./textures.js";
+import { loadTerrainTexture, loadNormalTexture } from "./textures.js";
 
 // initialize the shader program
 export function initShaders() {
@@ -36,7 +36,8 @@ export function initShaders() {
         terrainDetail: gl.getUniformLocation(programInfo.program, "uTerrainDetail"),
         terrainSize: gl.getUniformLocation(programInfo.program, "uTerrainSize"),
         terrainHeight: gl.getUniformLocation(programInfo.program, "uTerrainHeight"),
-        uSampler: gl.getUniformLocation(programInfo.program, "uSampler"),
+        uSamplerTerrain: gl.getUniformLocation(programInfo.program, "uSamplerTerrain"),
+        uSamplerNormal: gl.getUniformLocation(programInfo.program, "uSamplerNormal"),
     };
 
     // load the vertex buffer
@@ -44,8 +45,9 @@ export function initShaders() {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer.reference);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buffer.data), gl.STATIC_DRAW);
 
-    // load the terrain texture
+    // load the textures
     loadTerrainTexture();
+    loadNormalTexture();
 }
 
 // compiles and loads a shader

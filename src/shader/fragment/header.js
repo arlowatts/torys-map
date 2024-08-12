@@ -19,5 +19,6 @@ uniform uint uTerrainDetail;
 uniform float uTerrainSize;
 uniform float uTerrainHeight;
 
-uniform sampler2D uSampler;
+uniform sampler2D uSamplerTerrain;
+uniform sampler2D uSamplerNormal;
 `;

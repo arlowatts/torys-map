@@ -175,14 +175,27 @@ export const buffer = {
     data: [-1, 1, -1, -1, 1, 1, 1, -1],
 };
 
-export const texture = {
-    imageUrl: "assets/images/terrain.png",
-    reference: null,
-    level: 0,
-    internalFormat: gl.R16F,
-    width: 3600,
-    height: 1800,
-    format: gl.RED,
-    type: gl.HALF_FLOAT,
-    data: null,
+export const textures = {
+    terrain: {
+        imageUrl: "assets/images/terrain.png",
+        reference: null,
+        level: 0,
+        internalFormat: gl.R16F,
+        width: 3600,
+        height: 1800,
+        format: gl.RED,
+        type: gl.FLOAT,
+        data: null,
+    },
+    normal: {
+        imageUrl: "",
+        reference: null,
+        level: 0,
+        internalFormat: gl.RGB16F,
+        width: 256,
+        height: 64,
+        format: gl.RGB,
+        type: gl.FLOAT,
+        data: null,
+    },
 };

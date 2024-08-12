@@ -1,14 +1,15 @@
-import { gl, texture, torus } from "./properties.js";
+import { gl, textures, torus } from "./properties.js";
 
-// load the image and store it in a single-channel floating-point texture
+// load the terrain image into a single-channel floating-point texture
 export function loadTerrainTexture() {
-    texture.reference = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture.reference);
+    textures.terrain.reference = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, textures.terrain.reference);
 
+    // create an empty placeholder texture until the image loads
     gl.texImage2D(
         gl.TEXTURE_2D,
-        texture.level,
-        texture.internalFormat,
+        textures.terrain.level,
+        textures.terrain.internalFormat,
         1, // width
         1, // height
         0, // border
@@ -17,26 +18,61 @@ export function loadTerrainTexture() {
         new Float32Array([0])
     );
 
-    // set the texture to load once the image is loaded
-    texture.data = new Image();
-    texture.data.onload = () => {
-        gl.bindTexture(gl.TEXTURE_2D, texture.reference);
+    // load the image into the texture once it's been downloaded from the server
+    textures.terrain.data = new Image();
+    textures.terrain.data.onload = () => {
+        gl.bindTexture(gl.TEXTURE_2D, textures.terrain.reference);
 
         gl.texImage2D(
             gl.TEXTURE_2D,
-            texture.level,
-            texture.internalFormat,
-            texture.width,
-            texture.height,
+            textures.terrain.level,
+            textures.terrain.internalFormat,
+            textures.terrain.width,
+            textures.terrain.height,
             0, // border
-            texture.format,
-            texture.type,
-            texture.data
+            textures.terrain.format,
+            textures.terrain.type,
+            textures.terrain.data
         );
     };
 
-    texture.data.src = texture.imageUrl;
+    textures.terrain.data.src = textures.terrain.imageUrl;
 
     // set the min filter to linear to avoid using a mipmap
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+}
+
+// load the normal map into a three-channel floating-point texture
+export function loadNormalTexture() {
+    textures.normal.reference = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, textures.normal.reference);
+
+    textures.normal.data = new Array(3 * textures.normal.width * textures.normal.height);
+
+    for (let y = 0; y < textures.normal.height; y++) {
+        for (let x = 0; x < textures.normal.width; x++) {
+            let i = 3 * (x + y * textures.normal.width);
+
+            let x1 = x * Math.TAU / textures.normal.width;
+            let y1 = y * Math.TAU / textures.normal.height;
+
+            textures.normal.data[i] = Math.cos(x1) * Math.sin(y1);
+            textures.normal.data[i + 1] = Math.cos(y1);
+            textures.normal.data[i + 2] = Math.sin(x1) * Math.sin(y1);
+        }
+    }
+
+    gl.texImage2D(
+        gl.TEXTURE_2D,
+        textures.normal.level,
+        textures.normal.internalFormat,
+        textures.normal.width,
+        textures.normal.height,
+        0, // border
+        textures.normal.format,
+        textures.normal.type,
+        new Float32Array(textures.normal.data)
+    );
+
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 }
