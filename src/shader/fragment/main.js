@@ -49,6 +49,7 @@ void main() {
     if (abs(distance) <= MARCH_MIN_DISTANCE) {
         // get the surface normal
         vec4 normal = texture(uSamplerNormal, tpos.xy);
+        normal.w = 0.0;
 
         // compute final pixel color
         fragColor = getColor(tpos, normal, ray);
