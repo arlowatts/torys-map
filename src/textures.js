@@ -8,7 +8,7 @@ export function loadTerrainTexture() {
     // create an empty placeholder texture until the image loads
     gl.texImage2D(
         gl.TEXTURE_2D,
-        textures.terrain.level,
+        0, // level
         textures.terrain.internalFormat,
         1, // width
         1, // height
@@ -19,13 +19,16 @@ export function loadTerrainTexture() {
     );
 
     // load the image into the texture once it's been downloaded from the server
-    textures.terrain.data = new Image();
-    textures.terrain.data.onload = () => {
+    const request = new XMLHttpRequest();
+
+    request.onload = () => {
+        textures.terrain.data = new Float32Array(request.response);
+
         gl.bindTexture(gl.TEXTURE_2D, textures.terrain.reference);
 
         gl.texImage2D(
             gl.TEXTURE_2D,
-            textures.terrain.level,
+            0, // level
             textures.terrain.internalFormat,
             textures.terrain.width,
             textures.terrain.height,
@@ -36,7 +39,9 @@ export function loadTerrainTexture() {
         );
     };
 
-    textures.terrain.data.src = textures.terrain.imageUrl;
+    request.open("GET", textures.terrain.imageUrl);
+    request.responseType = "arraybuffer";
+    request.send();
 
     // set the min filter to linear to avoid using a mipmap
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -64,7 +69,7 @@ export function loadNormalTexture() {
 
     gl.texImage2D(
         gl.TEXTURE_2D,
-        textures.normal.level,
+        0, // level
         textures.normal.internalFormat,
         textures.normal.width,
         textures.normal.height,
