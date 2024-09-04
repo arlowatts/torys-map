@@ -9,13 +9,20 @@ TEXTURE_HEIGHT = 256
 KEPLER_NEWTON_STEPS = 8
 
 def main():
-    createTexture()
+    createTexture(generateTerrain())
+
+# generate the terrain as a list of height values
+def generateTerrain():
+    data = [0 for i in range(TEXTURE_HEIGHT * TEXTURE_WIDTH)]
+
+    for i in range(10000):
+        point = randomPoint()
+        data[math.floor(point[0] * TEXTURE_WIDTH) + math.floor(point[1] * TEXTURE_HEIGHT) * TEXTURE_WIDTH] = 0.1
+
+    return data
 
 # write the terrain texture data to a file
-def createTexture():
-    # generate the terrain data
-    data = [math.sin(8 * math.pi * (i % TEXTURE_WIDTH) / TEXTURE_WIDTH) for i in range(TEXTURE_HEIGHT * TEXTURE_WIDTH)]
-
+def createTexture(data):
     # form the data into an array
     dataArray = array.array("f")
     dataArray.fromlist(data)
@@ -26,9 +33,10 @@ def createTexture():
 
 # return a random uniformly distributed surface point in torus coordinates
 def randomPoint():
-    phi = random.random() * 2 * math.pi
+    phi = random.random()
 
-    theta = keplerInverse(random.random() * 2 * math.pi, SMALL_RADIUS / LARGE_RADIUS)
+    theta = keplerInverse(random.random() * 2 * math.pi, SMALL_RADIUS / LARGE_RADIUS) / (2 * math.pi)
+    theta = (theta + 0.25) % 1
 
     return (phi, theta)
 
