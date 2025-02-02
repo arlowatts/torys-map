@@ -37,7 +37,7 @@ export const ray = {
     },
 
     steps: {
-        scale: 0.5, // the multiplier used when computing step size
+        scale: 0.25, // the multiplier used when computing step size
         max: 1000, // the maximum number of steps a ray can take
     },
 }

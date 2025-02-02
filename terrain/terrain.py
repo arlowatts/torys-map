@@ -15,9 +15,16 @@ def main():
 def generateTerrain():
     data = [0 for i in range(TEXTURE_HEIGHT * TEXTURE_WIDTH)]
 
-    for i in range(10000):
-        point = randomPoint()
-        data[math.floor(point[0] * TEXTURE_WIDTH) + math.floor(point[1] * TEXTURE_HEIGHT) * TEXTURE_WIDTH] = 0.1
+    randomValues = [[[random.random() for k in range((TEXTURE_WIDTH >> i) + 1)] for j in range((TEXTURE_HEIGHT >> i) + 1)] for i in range(2,10)]
+
+    for r in range(TEXTURE_HEIGHT):
+        for c in range(TEXTURE_WIDTH):
+            for i in range(2, 10):
+                data[r + c * TEXTURE_HEIGHT] += -0.5 / (10 - i) + 1 / (10 - i) * lerp(
+                        lerp(randomValues[i - 2][r >> i][c >> i], randomValues[i - 2][r >> i][c >> i + 1], 1 - (c % 2**i) / (2**i - 1)),
+                        lerp(randomValues[i - 2][r >> i + 1][c >> i], randomValues[i - 2][r >> i + 1][c >> i + 1], 1 - (c % 2**i) / (2**i - 1)),
+                        1 - (r % 2**i) / (2**i - 1)
+                )
 
     return data
 
@@ -58,5 +65,9 @@ def keplerInverse(x, a):
         value = value - (kepler(value, a) - x) / keplerDerivative(value, a)
 
     return value
+
+# evaluate a + t * (b - a)
+def lerp(a, b, t):
+    return a + t * (b - a)
 
 if __name__ == "__main__": main()
